@@ -24,6 +24,7 @@ import com.example.fitnesstracker.services.NotificationHelper;
 import com.example.fitnesstracker.services.ReminderScheduler;
 import com.example.fitnesstracker.utils.FormatUtils;
 import com.example.fitnesstracker.utils.OperationResult;
+import com.example.fitnesstracker.views.FloatingNavView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
@@ -73,6 +74,8 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         loadSettings();
+
+        FloatingNavView.bind(this, FloatingNavView.DEST_SETTINGS);
     }
 
     @Override

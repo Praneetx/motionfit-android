@@ -1,62 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Workout row: 60dp minimum, hairline divider, subtle circular actions. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingStart="@dimen/spacing_m"
-    android:paddingTop="@dimen/spacing_s"
-    android:paddingEnd="@dimen/spacing_xs"
-    android:paddingBottom="@dimen/spacing_s">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/row_height"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_md"
+        android:paddingBottom="@dimen/spacing_md">
 
-        <TextView
-            android:id="@+id/itemWorkoutType"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_body"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/itemWorkoutMeta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_label" />
+            <TextView
+                android:id="@+id/itemWorkoutType"
+                style="@style/Text.Wise.BodyStrong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/itemWorkoutNotes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_label"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/itemWorkoutMeta"
+                style="@style/Text.Wise.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxs" />
+
+            <TextView
+                android:id="@+id/itemWorkoutNotes"
+                style="@style/Text.Wise.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxs"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/itemEdit"
+            android:layout_width="@dimen/icon_button_small"
+            android:layout_height="@dimen/icon_button_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_edit"
+            android:padding="@dimen/spacing_sm"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/ink" />
+
+        <ImageButton
+            android:id="@+id/itemDelete"
+            android:layout_width="@dimen/icon_button_small"
+            android:layout_height="@dimen/icon_button_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_delete"
+            android:padding="@dimen/spacing_sm"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/negative" />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/itemEdit"
-        android:layout_width="@dimen/touch_min"
-        android:layout_height="@dimen/touch_min"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/action_edit"
-        android:src="@drawable/ic_edit"
-        android:tint="@color/primary" />
-
-    <ImageButton
-        android:id="@+id/itemDelete"
-        android:layout_width="@dimen/touch_min"
-        android:layout_height="@dimen/touch_min"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/action_delete"
-        android:src="@drawable/ic_delete"
-        android:tint="@color/error" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/hairline"
+        android:background="@color/canvas_soft" />
 </LinearLayout>

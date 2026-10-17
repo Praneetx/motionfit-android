@@ -3,8 +3,6 @@ package com.example.fitnesstracker.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,14 +20,20 @@ import com.example.fitnesstracker.repositories.WorkoutRepository;
 import com.example.fitnesstracker.utils.DateUtils;
 import com.example.fitnesstracker.utils.FormatUtils;
 import com.example.fitnesstracker.utils.OperationResult;
+import com.example.fitnesstracker.utils.UiAnimations;
+import com.example.fitnesstracker.views.FloatingNavView;
+import com.example.fitnesstracker.views.StepsRingView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Dashboard: shows the selected day's steps, workout totals, goal progress and
- * the most recent workouts, all read from SQLite.
+ * Today screen (Wise restyle).
+ *
+ * <p>Hero dark card with the lime steps ring, a white card for workout time +
+ * count, and the Recent card. Behaviour and data access are unchanged; only the
+ * presentation, the ring animation and the floating nav are new.</p>
  */
 public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Listener {
 
@@ -40,15 +44,18 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
     /** Selected calendar day in YYYY-MM-DD form. */
     private String selectedDate;
 
+    /** Last step value drawn, so the count-up starts from the visible number. */
+    private int lastStepsShown;
+
     private TextView dateView;
     private TextView stepsValue;
     private TextView stepsGoalView;
-    private ProgressBar stepsProgress;
+    private StepsRingView stepsProgress;
     private TextView stepsPercentView;
     private TextView workoutCountValue;
     private TextView workoutMinutesValue;
     private TextView workoutGoalView;
-    private ProgressBar workoutProgress;
+    private android.widget.ProgressBar workoutProgress;
     private TextView workoutPercentView;
     private TextView recentEmpty;
     private RecyclerView recentWorkouts;
@@ -92,23 +99,23 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
 
     private void setUpRecycler() {
         workoutAdapter = new WorkoutAdapter(this);
+        // The dashboard Recent list shows type / day / duration only.
+        workoutAdapter.setShowActions(false);
         recentWorkouts.setLayoutManager(new LinearLayoutManager(this));
         recentWorkouts.setAdapter(workoutAdapter);
     }
 
     private void setUpActions() {
-        ImageButton settings = findViewById(R.id.btnSettings);
-        settings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
+        // Round "+" quick-add for a new workout.
+        findViewById(R.id.btnQuickAdd).setOnClickListener(v -> openWorkoutEditor(0L));
 
         findViewById(R.id.btnPrevDay).setOnClickListener(v -> shiftSelectedDate(-1));
         findViewById(R.id.btnNextDay).setOnClickListener(v -> shiftSelectedDate(1));
 
-        findViewById(R.id.btnLogSteps).setOnClickListener(v -> openSteps());
-        findViewById(R.id.btnAddWorkout).setOnClickListener(v -> openWorkoutEditor(0L));
-        findViewById(R.id.btnGoals).setOnClickListener(
-                v -> startActivity(new Intent(this, GoalsActivity.class)));
-        findViewById(R.id.btnProgress).setOnClickListener(
-                v -> startActivity(new Intent(this, SummaryActivity.class)));
+        FloatingNavView nav = findViewById(R.id.floatingNav);
+        if (nav != null) {
+            nav.setActiveDestination(FloatingNavView.DEST_TODAY);
+        }
     }
 
     private void shiftSelectedDate(int days) {
@@ -126,17 +133,20 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
 
         dateView.setText(DateUtils.formatForDisplay(data.dateIso));
 
-        // Steps card
-        stepsValue.setText(FormatUtils.intText(data.steps));
-        stepsGoalView.setText(getString(R.string.dashboard_goal_of_steps,
+        // Hero ring: fills once per load; the figure counts up to the total.
+        stepsProgress.setProgressAnimated(
+                GoalProgressCalculator.clampedPercent(data.steps, data.stepGoal));
+        UiAnimations.countUp(stepsValue, lastStepsShown, data.steps);
+        lastStepsShown = data.steps;
+        stepsGoalView.setText(getString(R.string.of_steps_goal,
                 FormatUtils.intText(data.stepGoal)));
-        stepsProgress.setProgress(GoalProgressCalculator.clampedPercent(data.steps, data.stepGoal));
         stepsPercentView.setText(GoalProgressCalculator.formatPercent(data.steps, data.stepGoal));
 
-        // Workouts card
+        // Workout card
         workoutCountValue.setText(FormatUtils.intText(data.workoutCount));
         workoutMinutesValue.setText(FormatUtils.intText(data.workoutMinutes));
-        workoutGoalView.setText(getString(R.string.dashboard_goal_of_minutes,
+        workoutGoalView.setText(getString(R.string.workout_time_ratio,
+                FormatUtils.intText(data.workoutMinutes),
                 FormatUtils.intText(data.workoutMinutesGoal)));
         workoutProgress.setProgress(
                 GoalProgressCalculator.clampedPercent(data.workoutMinutes, data.workoutMinutesGoal));
@@ -155,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
         Intent intent = new Intent(this, StepsActivity.class);
         intent.putExtra(StepsActivity.EXTRA_DATE, selectedDate);
         startActivity(intent);
+        UiAnimations.fadeTransition(this);
     }
 
     private void openWorkoutEditor(long workoutId) {
@@ -165,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
             intent.putExtra(WorkoutEditActivity.EXTRA_DATE, selectedDate);
         }
         startActivity(intent);
+        UiAnimations.fadeTransition(this);
     }
 
     // ----- WorkoutAdapter.Listener -----

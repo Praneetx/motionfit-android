@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Active segment = ink; inactive = transparent (the sage track shows through). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="@color/ink" />
+    <item android:color="@color/transparent" />
+</selector>

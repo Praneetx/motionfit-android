@@ -1,275 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!-- Settings (main destination, floating nav present). Grouped white cards. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
-
-    <!-- Top bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/top_bar_height"
-        android:background="@color/primary"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/spacing_s"
-        android:paddingEnd="@dimen/spacing_s">
-
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="@dimen/touch_min"
-            android:layout_height="@dimen/touch_min"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/action_back"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/white" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingStart="@dimen/spacing_s"
-            android:text="@string/title_settings"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_title"
-            android:textStyle="bold" />
-    </LinearLayout>
+    android:background="@color/canvas_soft">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/nav_content_padding"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_m">
+            android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/spacing_xl"
+            android:paddingEnd="@dimen/screen_margin">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="@dimen/icon_button_small"
+                    android:layout_height="@dimen/icon_button_small"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_back"
+                    android:padding="@dimen/spacing_sm"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/ink"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/Text.Wise.ScreenTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="@dimen/spacing_xs"
+                    android:text="@string/title_settings" />
+            </LinearLayout>
 
             <!-- Goals -->
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="@dimen/card_corner"
-                app:cardElevation="@dimen/card_elevation">
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
 
-                <LinearLayout
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_m">
+                    android:text="@string/settings_goals_section" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_goals_section"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_title"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnEditGoals"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:minHeight="@dimen/touch_min"
-                        android:text="@string/settings_go_goals"
-                        style="@style/Widget.Material3.Button.OutlinedButton" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditGoals"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="@string/settings_go_goals" />
+            </LinearLayout>
 
             <!-- Reminders -->
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
-                app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="@dimen/card_corner"
-                app:cardElevation="@dimen/card_elevation">
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_m">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        style="@style/Text.Wise.SectionTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/settings_reminders_section"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_title"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"
+                        android:text="@string/settings_reminders_section" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchReminder"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:contentDescription="@string/settings_reminder_switch"
+                        android:minHeight="@dimen/touch_min" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/settings_reminder_switch"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body" />
-
-                        <com.google.android.material.materialswitch.MaterialSwitch
-                            android:id="@+id/switchReminder"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minHeight="@dimen/touch_min" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_reminder_time"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/reminderTimeValue"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/spacing_s"
-                            android:layout_weight="1"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnChangeTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minHeight="@dimen/touch_min"
-                            android:text="@string/settings_change_time"
-                            style="@style/Widget.Material3.Button.TextButton" />
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/notificationsBlocked"
-                        android:layout_width="match_parent"
+                        style="@style/Text.Wise.Secondary"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:text="@string/settings_notifications_blocked"
-                        android:textColor="@color/error"
-                        android:textSize="@dimen/text_label"
-                        android:visibility="gone" />
+                        android:layout_weight="1"
+                        android:text="@string/settings_reminder_time" />
+
+                    <TextView
+                        android:id="@+id/reminderTimeValue"
+                        style="@style/Text.Wise.Metric"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnTestNotification"
-                        android:layout_width="match_parent"
+                        android:id="@+id/btnChangeTime"
+                        style="@style/Widget.Wise.Button.Text"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:minHeight="@dimen/touch_min"
-                        android:text="@string/settings_test_notification"
-                        style="@style/Widget.Material3.Button.OutlinedButton" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:text="@string/settings_reminder_test_hint"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_label" />
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:text="@string/settings_change_time" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/notificationsBlocked"
+                    style="@style/Text.Wise.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/settings_notifications_blocked"
+                    android:textColor="@color/negative"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTestNotification"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="@string/settings_test_notification" />
+
+                <TextView
+                    style="@style/Text.Wise.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/settings_reminder_test_hint" />
+
+                <TextView
+                    style="@style/Text.Wise.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/settings_permission_caption" />
+            </LinearLayout>
 
             <!-- Local data -->
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
-                app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="@dimen/card_corner"
-                app:cardElevation="@dimen/card_elevation">
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
 
-                <LinearLayout
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_m">
+                    android:text="@string/settings_data_section" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_data_section"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_title"
-                        android:textStyle="bold" />
+                <TextView
+                    style="@style/Text.Wise.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/settings_clear_subtitle" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnClearData"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:minHeight="@dimen/touch_min"
-                        android:text="@string/settings_clear_data"
-                        android:textColor="@color/error"
-                        style="@style/Widget.Material3.Button.OutlinedButton" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnClearData"
+                    style="@style/Widget.Wise.Button.Destructive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="@string/settings_clear_data" />
+            </LinearLayout>
 
-            <!-- About -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Footer -->
+            <TextView
+                style="@style/Text.Wise.Caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
-                app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="@dimen/card_corner"
-                app:cardElevation="@dimen/card_elevation">
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:gravity="center"
+                android:text="@string/settings_stays" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_m">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_about_section"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_title"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:text="@string/settings_version"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_body" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/settings_built_with"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_body" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_s"
-                        android:text="@string/settings_about_text"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_body" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                style="@style/Text.Wise.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:gravity="center"
+                android:text="@string/settings_version" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <com.example.fitnesstracker.views.FloatingNavView
+        android:id="@+id/floatingNav"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_height"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/nav_margin_side"
+        android:layout_marginEnd="@dimen/nav_margin_side"
+        android:layout_marginBottom="@dimen/nav_margin_bottom" />
+</FrameLayout>

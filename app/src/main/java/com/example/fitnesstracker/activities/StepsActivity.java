@@ -26,6 +26,7 @@ import com.example.fitnesstracker.utils.DateUtils;
 import com.example.fitnesstracker.utils.FormatUtils;
 import com.example.fitnesstracker.utils.OperationResult;
 import com.example.fitnesstracker.utils.ValidationUtils;
+import com.example.fitnesstracker.views.FloatingNavView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -71,6 +72,8 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
         setUpRecycler();
         setUpSensor();
         setUpActions();
+
+        FloatingNavView.bind(this, FloatingNavView.DEST_STEPS);
     }
 
     @Override

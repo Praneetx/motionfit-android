@@ -18,6 +18,9 @@ import java.util.List;
 
 /**
  * RecyclerView adapter for workout history rows.
+ *
+ * <p>The row actions (edit / delete) can be hidden for the dashboard "Recent"
+ * list, which only needs to show type, day and duration.</p>
  */
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder> {
 
@@ -32,6 +35,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     private final List<Workout> items = new ArrayList<>();
     private final Listener listener;
+    private boolean showActions = true;
 
     public WorkoutAdapter(Listener listener) {
         this.listener = listener;
@@ -42,6 +46,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         if (newItems != null) {
             items.addAll(newItems);
         }
+        notifyDataSetChanged();
+    }
+
+    /** Hides the per-row edit/delete icons when {@code false} (dashboard Recent). */
+    public void setShowActions(boolean showActions) {
+        this.showActions = showActions;
         notifyDataSetChanged();
     }
 
@@ -94,6 +104,10 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
                 notesView.setText(note);
                 notesView.setVisibility(View.VISIBLE);
             }
+
+            int actionVisibility = showActions ? View.VISIBLE : View.GONE;
+            editButton.setVisibility(actionVisibility);
+            deleteButton.setVisibility(actionVisibility);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {

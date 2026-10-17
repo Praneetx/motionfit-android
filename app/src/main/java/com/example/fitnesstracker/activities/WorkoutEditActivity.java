@@ -45,6 +45,7 @@ public class WorkoutEditActivity extends AppCompatActivity {
     private TextInputEditText durationInput;
     private TextInputEditText notesInput;
     private MaterialButton deleteButton;
+    private TextView metaCaptionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class WorkoutEditActivity extends AppCompatActivity {
         durationInput = findViewById(R.id.durationInput);
         notesInput = findViewById(R.id.notesInput);
         deleteButton = findViewById(R.id.btnDeleteWorkout);
+        metaCaptionView = findViewById(R.id.editMetaCaption);
 
         setUpTypeSpinner();
 
@@ -104,6 +106,35 @@ public class WorkoutEditActivity extends AppCompatActivity {
             notesInput.setText(existingWorkout.getNotes());
         }
         updateDateButton();
+        showMetaCaption();
+    }
+
+    /** Shows the "Added / Updated" caption for an existing workout (details view). */
+    private void showMetaCaption() {
+        if (metaCaptionView == null || existingWorkout == null) {
+            return;
+        }
+        String created = formatTimestamp(existingWorkout.getCreatedAt());
+        String caption = getString(R.string.workout_added, created);
+        String updated = formatTimestamp(existingWorkout.getUpdatedAt());
+        if (updated != null && !updated.equals(created)) {
+            caption = caption + "   " + getString(R.string.workout_updated_at, updated);
+        }
+        metaCaptionView.setText(caption);
+        metaCaptionView.setVisibility(View.VISIBLE);
+    }
+
+    /** Formats a stored YYYY-MM-DDTHH:mm:ss timestamp for display. */
+    private String formatTimestamp(String iso) {
+        if (iso == null || iso.trim().isEmpty()) {
+            return "-";
+        }
+        try {
+            return java.time.LocalDateTime.parse(iso, DateUtils.TIMESTAMP)
+                    .format(java.time.format.DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm"));
+        } catch (RuntimeException e) {
+            return iso;
+        }
     }
 
     private void selectType(String type) {

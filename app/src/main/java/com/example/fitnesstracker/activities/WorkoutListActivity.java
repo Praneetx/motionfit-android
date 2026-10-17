@@ -19,6 +19,7 @@ import com.example.fitnesstracker.models.Workout;
 import com.example.fitnesstracker.repositories.WorkoutRepository;
 import com.example.fitnesstracker.utils.DateUtils;
 import com.example.fitnesstracker.utils.OperationResult;
+import com.example.fitnesstracker.views.FloatingNavView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         findViewById(R.id.btnAddWorkout).setOnClickListener(v -> openEditor(0L));
+
+        FloatingNavView.bind(this, FloatingNavView.DEST_WORKOUTS);
     }
 
     @Override

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Floating pill navigation.
+    The root FrameLayout is the pill itself (ink background set in code);
+    this file only declares the sliding lime highlight and the five items.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <View
+        android:id="@+id/navHighlight"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_nav_highlight"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/navItems"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/navToday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/nav_today"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIcon"
+                android:layout_width="@dimen/nav_icon"
+                android:layout_height="@dimen/nav_icon"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home" />
+
+            <TextView
+                android:id="@+id/navLabel"
+                style="@style/Text.Wise.NavLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@string/nav_today" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navSteps"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/nav_steps"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIcon"
+                android:layout_width="@dimen/nav_icon"
+                android:layout_height="@dimen/nav_icon"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_walk" />
+
+            <TextView
+                android:id="@+id/navLabel"
+                style="@style/Text.Wise.NavLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@string/nav_steps" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navWorkouts"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/nav_workouts"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIcon"
+                android:layout_width="@dimen/nav_icon"
+                android:layout_height="@dimen/nav_icon"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_dumbbell" />
+
+            <TextView
+                android:id="@+id/navLabel"
+                style="@style/Text.Wise.NavLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@string/nav_workouts" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navProgress"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/nav_progress"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIcon"
+                android:layout_width="@dimen/nav_icon"
+                android:layout_height="@dimen/nav_icon"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_chart" />
+
+            <TextView
+                android:id="@+id/navLabel"
+                style="@style/Text.Wise.NavLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@string/nav_progress" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/nav_settings"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIcon"
+                android:layout_width="@dimen/nav_icon"
+                android:layout_height="@dimen/nav_icon"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_settings" />
+
+            <TextView
+                android:id="@+id/navLabel"
+                style="@style/Text.Wise.NavLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@string/nav_settings" />
+        </LinearLayout>
+    </LinearLayout>
+</merge>

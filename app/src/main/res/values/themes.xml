@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.FitnessTracker" parent="Theme.Material3.DayNight.NoActionBar">
+
+    <!--
+        Light-first Wise theme. DESIGN-wise.md has no dark mode, so the
+        DayNight parent is deliberately replaced with a Light parent.
+        Status bar and navigation bar use the sage canvas as requested.
+    -->
+    <style name="Theme.FitnessTracker" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/primary_container</item>
-        <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">@color/secondary_container</item>
-        <item name="colorOnSecondaryContainer">@color/on_secondary_container</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimaryContainer">@color/primary_pale</item>
+        <item name="colorOnPrimaryContainer">@color/ink_deep</item>
+
+        <item name="colorSecondary">@color/ink</item>
+        <item name="colorOnSecondary">@color/canvas</item>
+        <item name="colorSecondaryContainer">@color/canvas_soft</item>
+        <item name="colorOnSecondaryContainer">@color/ink</item>
+
+        <item name="colorSurface">@color/canvas</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorSurfaceVariant">@color/canvas_soft</item>
+        <item name="colorOnSurfaceVariant">@color/body</item>
+        <item name="colorOutline">@color/ink</item>
+        <item name="colorOutlineVariant">@color/canvas_soft</item>
+        <item name="colorError">@color/negative</item>
+        <item name="colorOnError">@color/canvas</item>
+
+        <item name="android:colorBackground">@color/canvas_soft</item>
+        <item name="android:windowBackground">@color/canvas_soft</item>
+        <item name="android:statusBarColor">@color/canvas_soft</item>
+        <item name="android:navigationBarColor">@color/canvas_soft</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <!-- Inter is bundled in res/font so the app stays fully offline. -->
+        <item name="android:fontFamily">@font/inter_regular</item>
+
+        <!-- Every MaterialButton defaults to the Wise lime pill. -->
+        <item name="materialButtonStyle">@style/Widget.Wise.Button.Primary</item>
+        <item name="textInputStyle">@style/Widget.Wise.TextInputLayout</item>
+        <item name="materialAlertDialogTheme">@style/Theme.FitnessTracker.Dialog</item>
     </style>
+
+    <!-- Dialog chrome follows ex-modal-card: white, 24dp radius, no shadow. -->
+    <style name="Theme.FitnessTracker.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurface">@color/canvas</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.Wise.DialogTitle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.Wise.DialogBody</item>
+    </style>
+
+    <style name="TextAppearance.Wise.DialogTitle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/ink</item>
+        <item name="android:textSize">@dimen/text_section</item>
+    </style>
+
+    <style name="TextAppearance.Wise.DialogBody" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:textColor">@color/body</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
 </resources>

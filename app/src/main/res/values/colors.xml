@@ -1,28 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand colours (Material-ish palette) -->
-    <color name="primary">#2E7D32</color>
-    <color name="primary_dark">#1B5E20</color>
-    <color name="primary_light">#A5D6A7</color>
-    <color name="primary_container">#C8E6C9</color>
-    <color name="on_primary_container">#0B3D11</color>
-    <color name="secondary">#00897B</color>
-    <color name="secondary_container">#B2DFDB</color>
-    <color name="on_secondary_container">#00332E</color>
+    <!-- ============================================================
+         Wise palette — values taken from DESIGN-wise.md (source of truth)
+         ============================================================ -->
 
-    <!-- Neutrals -->
+    <!-- Brand & accent -->
+    <color name="primary">#9FE870</color>
+    <color name="on_primary">#0E0F0C</color>
+    <color name="primary_active">#CDFFAD</color>
+    <color name="primary_neutral">#C5EDAB</color>
+    <color name="primary_pale">#E2F6D5</color>
+
+    <!-- Surface -->
+    <color name="canvas">#FFFFFF</color>
+    <color name="canvas_soft">#E8EBE6</color>
+
+    <!-- Text -->
+    <color name="ink">#0E0F0C</color>
+    <color name="ink_deep">#163300</color>
+    <color name="body">#454745</color>
+    <color name="mute">#868685</color>
+
+    <!-- Semantic -->
+    <color name="positive">#2EAD4B</color>
+    <color name="positive_deep">#054D28</color>
+    <color name="warning">#FFD11A</color>
+    <color name="warning_deep">#B86700</color>
+    <color name="warning_content">#4A3B1C</color>
+    <color name="negative">#D03238</color>
+    <color name="negative_deep">#A72027</color>
+    <color name="negative_darkest">#A7000D</color>
+    <color name="negative_bg">#320707</color>
+
+    <!-- Illustrative accents (charts / progress only, never buttons or nav) -->
+    <color name="accent_orange">#FFC091</color>
+    <color name="accent_cyan">#38C8FF</color>
+
+    <!-- Absolute neutrals -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="background">#F4F7F4</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="surface_variant">#E7EFE7</color>
-    <color name="text_primary">#1B1B1B</color>
-    <color name="text_secondary">#5F6B5F</color>
-    <color name="divider">#DCE5DC</color>
+    <color name="transparent">#00000000</color>
 
-    <!-- State colours -->
-    <color name="success">#2E7D32</color>
-    <color name="warning">#EF6C00</color>
-    <color name="error">#C62828</color>
-    <color name="progress_track">#D7E3D7</color>
+    <!-- ============================================================
+         Backward-compatible aliases.
+         Some Java/older resources still reference these names; they are
+         re-pointed at the Wise tokens so nothing dangles.
+         ============================================================ -->
+    <color name="primary_dark">@color/ink</color>
+    <color name="primary_light">@color/primary_pale</color>
+    <color name="primary_container">@color/primary_pale</color>
+    <color name="on_primary_container">@color/ink_deep</color>
+    <color name="secondary">@color/accent_cyan</color>
+    <color name="secondary_container">@color/canvas_soft</color>
+    <color name="on_secondary_container">@color/ink</color>
+    <color name="background">@color/canvas_soft</color>
+    <color name="surface">@color/canvas</color>
+    <color name="surface_variant">@color/canvas_soft</color>
+    <color name="text_primary">@color/ink</color>
+    <color name="text_secondary">@color/body</color>
+    <color name="divider">@color/canvas_soft</color>
+    <color name="success">@color/positive</color>
+    <color name="error">@color/negative</color>
+    <color name="progress_track">@color/canvas_soft</color>
+
+    <!-- 70% white for inactive floating-nav icons/labels -->
+    <color name="nav_inactive">#B3FFFFFF</color>
 </resources>

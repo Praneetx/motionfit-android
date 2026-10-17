@@ -1,22 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Spacing scale -->
+    <!-- ============================================================
+         Spacing — 4dp grid from DESIGN-wise.md
+         ============================================================ -->
+    <dimen name="spacing_xxs">2dp</dimen>
     <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="spacing_2xl">32dp</dimen>
+    <dimen name="spacing_3xl">48dp</dimen>
+
+    <!-- ============================================================
+         Radii
+         ============================================================ -->
+    <dimen name="radius_sm">8dp</dimen>
+    <dimen name="radius_md">12dp</dimen>
+    <dimen name="radius_lg">16dp</dimen>
+    <dimen name="radius_xl">24dp</dimen>
+    <dimen name="radius_pill">999dp</dimen>
+    <dimen name="radius_full">999dp</dimen>
+
+    <!-- ============================================================
+         Type scale for phones (the spec's 126px hero is a web size)
+         ============================================================ -->
+    <dimen name="text_hero">64sp</dimen>
+    <dimen name="text_screen_title">32sp</dimen>
+    <dimen name="text_section">24sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_secondary">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_button">16sp</dimen>
+
+    <!-- ============================================================
+         Layout metrics
+         ============================================================ -->
+    <dimen name="screen_margin">16dp</dimen>
+    <dimen name="card_padding">24dp</dimen>
+    <dimen name="touch_min">48dp</dimen>
+    <dimen name="row_height">60dp</dimen>
+    <dimen name="hairline">1dp</dimen>
+    <dimen name="ring_size">228dp</dimen>
+    <dimen name="ring_stroke">10dp</dimen>
+    <dimen name="ring_value_width">180dp</dimen>
+    <dimen name="chart_height">160dp</dimen>
+    <dimen name="chart_height_small">96dp</dimen>
+    <dimen name="progress_bar_height">8dp</dimen>
+    <dimen name="icon_button_small">40dp</dimen>
+
+    <!-- Floating pill navigation -->
+    <dimen name="nav_height">64dp</dimen>
+    <dimen name="nav_margin_side">20dp</dimen>
+    <dimen name="nav_margin_bottom">16dp</dimen>
+    <dimen name="nav_icon">24dp</dimen>
+    <dimen name="nav_content_padding">104dp</dimen>
+
+    <!-- ============================================================
+         Legacy aliases (distinct names only, so nothing is redefined).
+         All layouts are restyled, but these keep older references valid.
+         ============================================================ -->
     <dimen name="spacing_s">8dp</dimen>
     <dimen name="spacing_m">16dp</dimen>
     <dimen name="spacing_l">24dp</dimen>
-    <dimen name="spacing_xl">32dp</dimen>
-
-    <!-- Shapes -->
-    <dimen name="card_corner">14dp</dimen>
-    <dimen name="card_elevation">1dp</dimen>
-    <dimen name="touch_min">48dp</dimen>
+    <dimen name="card_corner">24dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
     <dimen name="top_bar_height">56dp</dimen>
-
-    <!-- Type scale -->
     <dimen name="text_display">40sp</dimen>
     <dimen name="text_headline">22sp</dimen>
     <dimen name="text_title">18sp</dimen>
-    <dimen name="text_body">14sp</dimen>
     <dimen name="text_label">12sp</dimen>
 </resources>

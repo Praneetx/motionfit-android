@@ -1,89 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Progress screen (main destination, floating nav present).
+    Hero dark card carries the period total + average + lime bar chart.
+    Two white cards show the cyan (minutes) and orange (workout count) charts.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
-
-    <!-- Top bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/top_bar_height"
-        android:background="@color/primary"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/spacing_s"
-        android:paddingEnd="@dimen/spacing_s">
-
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="@dimen/touch_min"
-            android:layout_height="@dimen/touch_min"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/action_back"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/white" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingStart="@dimen/spacing_s"
-            android:text="@string/title_progress"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_title"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <!-- Day / Week / Month switch -->
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/modeToggle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_m"
-        android:layout_marginTop="@dimen/spacing_m"
-        android:layout_marginEnd="@dimen/spacing_m"
-        app:selectionRequired="true"
-        app:singleSelection="true">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/tabDaily"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/progress_tab_daily"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/tabWeekly"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/progress_tab_weekly"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/tabMonthly"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/progress_tab_monthly"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+    android:background="@color/canvas_soft">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/nav_content_padding"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_m">
+            android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/spacing_xl"
+            android:paddingEnd="@dimen/screen_margin">
 
-            <!-- Period navigation -->
+            <!-- Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,216 +33,297 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/btnPrevPeriod"
+                    android:id="@+id/btnBack"
                     android:layout_width="@dimen/touch_min"
                     android:layout_height="@dimen/touch_min"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/progress_prev"
-                    android:src="@drawable/ic_chevron_left"
-                    android:tint="@color/primary" />
+                    android:background="@drawable/bg_icon_circular"
+                    android:contentDescription="@string/action_back"
+                    android:padding="@dimen/spacing_sm"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/ink"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/periodLabel"
+                    style="@style/Text.Wise.ScreenTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/text_title"
-                    android:textStyle="bold" />
+                    android:paddingStart="@dimen/spacing_xs"
+                    android:text="@string/title_progress" />
+            </LinearLayout>
+
+            <!-- Segmented control: active segment is ink with white text -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/modeToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="@drawable/bg_segment_track"
+                android:padding="@dimen/spacing_xs"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tabDaily"
+                    style="@style/Widget.Wise.Segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/progress_tab_daily" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tabWeekly"
+                    style="@style/Widget.Wise.Segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/progress_tab_weekly" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tabMonthly"
+                    style="@style/Widget.Wise.Segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/progress_tab_monthly" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- Period navigation -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnPrevPeriod"
+                    android:layout_width="@dimen/touch_min"
+                    android:layout_height="@dimen/touch_min"
+                    android:background="@drawable/bg_icon_circular"
+                    android:contentDescription="@string/progress_prev"
+                    android:padding="@dimen/spacing_sm"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_chevron_left"
+                    android:tint="@color/ink" />
+
+                <TextView
+                    android:id="@+id/periodLabel"
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center" />
 
                 <ImageButton
                     android:id="@+id/btnNextPeriod"
                     android:layout_width="@dimen/touch_min"
                     android:layout_height="@dimen/touch_min"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="@drawable/bg_icon_circular"
                     android:contentDescription="@string/progress_next"
+                    android:padding="@dimen/spacing_sm"
+                    android:scaleType="centerInside"
                     android:src="@drawable/ic_chevron_right"
-                    android:tint="@color/primary" />
+                    android:tint="@color/ink" />
             </LinearLayout>
 
-            <com.example.fitnesstracker.views.BarChartView
-                android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginTop="@dimen/spacing_s" />
-
-            <TextView
+            <!-- HERO: period steps -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/progress_chart_title"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_label" />
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:background="@drawable/bg_wise_card_dark"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
-                app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="@dimen/card_corner"
-                app:cardElevation="@dimen/card_elevation">
+                <TextView
+                    style="@style/Text.Wise.Caption.OnDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.8"
+                    android:text="@string/progress_steps_this_period" />
+
+                <TextView
+                    android:id="@+id/totalSteps"
+                    style="@style/Text.Wise.Hero.OnDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_m">
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        style="@style/Text.Wise.Caption.OnDark"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingBottom="@dimen/spacing_xs">
+                        android:alpha="0.8"
+                        android:text="@string/progress_average" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/progress_total_steps"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/totalSteps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/avgSteps"
+                        style="@style/Text.Wise.Caption.OnDark"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingBottom="@dimen/spacing_xs">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/progress_total_minutes"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/totalMinutes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingBottom="@dimen/spacing_xs">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/progress_total_workouts"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/totalWorkouts"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingBottom="@dimen/spacing_xs">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/progress_average_steps"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/avgSteps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingBottom="@dimen/spacing_xs">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/progress_best_day"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/bestDay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingBottom="@dimen/spacing_xs">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/progress_active_days"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="@dimen/text_body" />
-
-                        <TextView
-                            android:id="@+id/activeDays"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_body"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:textColor="@color/primary" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+
+                <com.example.fitnesstracker.views.BarChartView
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/chart_height"
+                    android:layout_marginTop="@dimen/spacing_lg" />
+            </LinearLayout>
+
+            <!-- Two chart cards: workout time (cyan) and count (orange) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_sm"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_wise_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chart_minutes_title" />
+
+                    <TextView
+                        android:id="@+id/totalMinutes"
+                        style="@style/Text.Wise.MetricLarge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs" />
+
+                    <com.example.fitnesstracker.views.BarChartView
+                        android:id="@+id/minutesChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/chart_height_small"
+                        android:layout_marginTop="@dimen/spacing_sm" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_sm"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_wise_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chart_workouts_title" />
+
+                    <TextView
+                        android:id="@+id/totalWorkouts"
+                        style="@style/Text.Wise.MetricLarge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs" />
+
+                    <com.example.fitnesstracker.views.BarChartView
+                        android:id="@+id/workoutsChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/chart_height_small"
+                        android:layout_marginTop="@dimen/spacing_sm" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Best day + active days -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/spacing_xs"
+                    android:paddingBottom="@dimen/spacing_xs">
+
+                    <TextView
+                        style="@style/Text.Wise.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/progress_best_day" />
+
+                    <TextView
+                        android:id="@+id/bestDay"
+                        style="@style/Text.Wise.Metric"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hairline"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:layout_marginBottom="@dimen/spacing_xs"
+                    android:background="@color/canvas_soft" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/spacing_xs"
+                    android:paddingBottom="@dimen/spacing_xs">
+
+                    <TextView
+                        style="@style/Text.Wise.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/progress_active_days" />
+
+                    <TextView
+                        android:id="@+id/activeDays"
+                        style="@style/Text.Wise.Metric"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/summaryEmpty"
+                style="@style/Text.Wise.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_m"
+                android:layout_marginTop="@dimen/spacing_lg"
                 android:text="@string/progress_empty"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_body"
                 android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <com.example.fitnesstracker.views.FloatingNavView
+        android:id="@+id/floatingNav"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_height"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/nav_margin_side"
+        android:layout_marginEnd="@dimen/nav_margin_side"
+        android:layout_marginBottom="@dimen/nav_margin_bottom" />
+</FrameLayout>

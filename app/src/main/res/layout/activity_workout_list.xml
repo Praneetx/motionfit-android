@@ -1,89 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Workouts history (main destination, floating nav present). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+    android:background="@color/canvas_soft">
 
-    <!-- Top bar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/top_bar_height"
-        android:background="@color/primary"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/spacing_s"
-        android:paddingEnd="@dimen/spacing_s">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="@dimen/touch_min"
-            android:layout_height="@dimen/touch_min"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/action_back"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/white" />
-
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/spacing_xl"
+            android:paddingEnd="@dimen/screen_margin">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="@dimen/icon_button_small"
+                    android:layout_height="@dimen/icon_button_small"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_back"
+                    android:padding="@dimen/spacing_sm"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/ink"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/Text.Wise.ScreenTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="@dimen/spacing_xs"
+                    android:text="@string/title_workouts" />
+
+                <ImageButton
+                    android:id="@+id/btnAddWorkout"
+                    android:layout_width="@dimen/touch_min"
+                    android:layout_height="@dimen/touch_min"
+                    android:background="@drawable/bg_icon_circular"
+                    android:contentDescription="@string/content_desc_add"
+                    android:padding="@dimen/spacing_md"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/ink" />
+            </LinearLayout>
+
+            <!-- Type filter styled as a text-input-like field -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="@drawable/bg_wise_input"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/spacing_lg"
+                android:paddingEnd="@dimen/spacing_sm">
+
+                <TextView
+                    style="@style/Text.Wise.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/workout_type_label" />
+
+                <Spinner
+                    android:id="@+id/typeFilter"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/touch_min"
+                    android:layout_marginStart="@dimen/spacing_sm"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/workout_type_label" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Grouped list card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/screen_margin"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:layout_marginEnd="@dimen/screen_margin"
+            android:layout_marginBottom="@dimen/nav_content_padding"
             android:layout_weight="1"
-            android:paddingStart="@dimen/spacing_s"
-            android:text="@string/title_workouts"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_title"
-            android:textStyle="bold" />
+            android:background="@drawable/bg_wise_card"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/card_padding"
+            android:paddingTop="@dimen/spacing_md"
+            android:paddingEnd="@dimen/card_padding"
+            android:paddingBottom="@dimen/spacing_md">
 
-        <ImageButton
-            android:id="@+id/btnAddWorkout"
-            android:layout_width="@dimen/touch_min"
-            android:layout_height="@dimen/touch_min"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/action_add_workout"
-            android:src="@drawable/ic_add"
-            android:tint="@color/white" />
+            <TextView
+                android:id="@+id/workoutsEmpty"
+                style="@style/Text.Wise.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/spacing_lg"
+                android:paddingBottom="@dimen/spacing_lg"
+                android:text="@string/workouts_empty" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/workoutList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Filter row -->
-    <LinearLayout
+    <com.example.fitnesstracker.views.FloatingNavView
+        android:id="@+id/floatingNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/spacing_m"
-        android:paddingTop="@dimen/spacing_s"
-        android:paddingEnd="@dimen/spacing_m"
-        android:paddingBottom="@dimen/spacing_s">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/workout_type_label"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_body" />
-
-        <Spinner
-            android:id="@+id/typeFilter"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/touch_min"
-            android:layout_marginStart="@dimen/spacing_s"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/workoutsEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/spacing_m"
-        android:paddingTop="@dimen/spacing_xl"
-        android:paddingEnd="@dimen/spacing_m"
-        android:text="@string/workouts_empty"
-        android:textColor="@color/text_secondary"
-        android:textSize="@dimen/text_body" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/workoutList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-</LinearLayout>
+        android:layout_height="@dimen/nav_height"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/nav_margin_side"
+        android:layout_marginEnd="@dimen/nav_margin_side"
+        android:layout_marginBottom="@dimen/nav_margin_bottom" />
+</FrameLayout>

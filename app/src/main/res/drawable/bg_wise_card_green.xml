@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- card-feature-green: goal met / highlighted summary card. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/primary_pale" />
+    <corners android:radius="@dimen/radius_xl" />
+</shape>
