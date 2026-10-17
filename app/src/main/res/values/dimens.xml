@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing scale -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_s">8dp</dimen>
+    <dimen name="spacing_m">16dp</dimen>
+    <dimen name="spacing_l">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+
+    <!-- Shapes -->
+    <dimen name="card_corner">14dp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="touch_min">48dp</dimen>
+    <dimen name="top_bar_height">56dp</dimen>
+
+    <!-- Type scale -->
+    <dimen name="text_display">40sp</dimen>
+    <dimen name="text_headline">22sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_label">12sp</dimen>
+</resources>

@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Fitness Tracker</string>
 
+    <!-- Screen titles -->
     <string name="title_dashboard">Dashboard</string>
     <string name="title_steps">Daily Steps</string>
     <string name="title_workouts">Workouts</string>
@@ -10,4 +11,147 @@
     <string name="title_goals">Fitness Goals</string>
     <string name="title_progress">Progress</string>
     <string name="title_settings">Settings</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_ok">OK</string>
+    <string name="action_log_steps">Log steps</string>
+    <string name="action_add_workout">Add workout</string>
+    <string name="action_goals">Goals</string>
+    <string name="action_progress">Progress</string>
+    <string name="generic_error">Something went wrong. Please try again.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_steps_label">STEPS</string>
+    <string name="dashboard_workouts_label">WORKOUTS</string>
+    <string name="dashboard_minutes_label">MINUTES</string>
+    <string name="dashboard_goal_of_steps">of %1$s steps goal</string>
+    <string name="dashboard_goal_of_minutes">of %1$s min goal</string>
+    <string name="dashboard_recent_title">Recent workouts</string>
+    <string name="dashboard_empty_recent">No workouts recorded yet.\nTap “Add workout” to start.</string>
+    <string name="dashboard_error">Could not load your activity data. Please try again.</string>
+    <string name="dashboard_no_steps_yet">No steps logged for this day yet.</string>
+    <string name="content_desc_previous_day">Previous day</string>
+    <string name="content_desc_next_day">Next day</string>
+    <string name="dashboard_edit_steps">Edit steps</string>
+
+    <!-- Steps screen -->
+    <string name="steps_history_title">Step history</string>
+    <string name="steps_empty">No step records yet.\nTap “Log steps” to add a total.</string>
+    <string name="steps_dialog_title">Log steps</string>
+    <string name="steps_field_label">Step total</string>
+    <string name="steps_hint">e.g. 6500</string>
+    <string name="steps_source_manual">Manual</string>
+    <string name="steps_source_sensor">Sensor</string>
+    <string name="steps_error_empty">Please enter a step count.</string>
+    <string name="steps_error_not_number">Please enter digits only.</string>
+    <string name="steps_error_negative">Steps cannot be negative.</string>
+    <string name="steps_error_too_large">That number is too large.</string>
+    <string name="steps_saved">Step total saved.</string>
+    <string name="steps_save_failed">Could not save the step total. Please try again.</string>
+    <string name="steps_go_hint">Tap a day in the history to edit its total.</string>
+
+    <string name="sensor_title">Automatic step counting</string>
+    <string name="sensor_experimental_badge">EXPERIMENTAL</string>
+    <string name="sensor_unavailable">No step-counter sensor was found on this device. Manual entry still works.</string>
+    <string name="sensor_permission_required">Activity recognition permission is required for automatic counting.</string>
+    <string name="sensor_permission_denied">Permission denied. Automatic counting is off; manual entry still works.</string>
+    <string name="sensor_start">Start</string>
+    <string name="sensor_stop">Stop</string>
+    <string name="sensor_reading">%1$s steps this session</string>
+    <string name="sensor_add_steps">Add %1$s steps to this day</string>
+    <string name="sensor_note">Readings are only collected while this screen is open.</string>
+
+    <!-- Workouts -->
+    <string name="workouts_empty">No workouts yet.\nTap + to add your first workout.</string>
+    <string name="workouts_filter_all">All types</string>
+    <string name="workout_duration_value">%1$d min</string>
+    <string name="workout_notes_label">Notes: %1$s</string>
+    <string name="workout_delete_title">Delete workout?</string>
+    <string name="workout_delete_message">This workout will be permanently removed. This cannot be undone.</string>
+    <string name="workout_deleted">Workout deleted.</string>
+    <string name="workout_delete_failed">Could not delete the workout.</string>
+    <string name="workout_missing">This workout could not be found.</string>
+
+    <!-- Workout editor -->
+    <string name="workout_type_label">Workout type</string>
+    <string name="workout_duration_label">Duration (minutes)</string>
+    <string name="workout_duration_hint">e.g. 30</string>
+    <string name="workout_date_label">Date</string>
+    <string name="workout_notes_field">Notes (optional)</string>
+    <string name="workout_notes_hint">Optional notes</string>
+    <string name="workout_btn_save">Save workout</string>
+    <string name="workout_type_required">Please choose a workout type.</string>
+    <string name="workout_duration_required">Duration must be a whole number greater than zero.</string>
+    <string name="workout_date_invalid">Please choose a valid date.</string>
+    <string name="workout_notes_too_long">Notes are too long (maximum 500 characters).</string>
+    <string name="workout_saved">Workout saved.</string>
+    <string name="workout_saved_failed">Could not save the workout. Please try again.</string>
+    <string name="workout_updated">Workout updated.</string>
+
+    <!-- Goals -->
+    <string name="goals_step_label">Daily step goal</string>
+    <string name="goals_minutes_label">Daily workout minutes goal</string>
+    <string name="goals_help">Goals drive the dashboard progress bars. Changing a goal never changes past records.</string>
+    <string name="goals_saved">Goals updated.</string>
+    <string name="goals_save_failed">Could not save the goals.</string>
+    <string name="goals_invalid">Goals must be whole numbers greater than zero.</string>
+
+    <!-- Progress -->
+    <string name="progress_tab_daily">Day</string>
+    <string name="progress_tab_weekly">Week</string>
+    <string name="progress_tab_monthly">Month</string>
+    <string name="progress_total_steps">Total steps</string>
+    <string name="progress_total_minutes">Total minutes</string>
+    <string name="progress_total_workouts">Workouts</string>
+    <string name="progress_average_steps">Average steps / day</string>
+    <string name="progress_best_day">Best step day</string>
+    <string name="progress_active_days">Active days</string>
+    <string name="progress_chart_title">Steps per day</string>
+    <string name="progress_empty">No activity recorded for this period.</string>
+    <string name="progress_prev">Previous period</string>
+    <string name="progress_next">Next period</string>
+
+    <!-- Settings -->
+    <string name="settings_goals_section">Fitness goals</string>
+    <string name="settings_reminders_section">Reminders</string>
+    <string name="settings_data_section">Local data</string>
+    <string name="settings_about_section">About</string>
+    <string name="settings_reminder_switch">Daily activity reminder</string>
+    <string name="settings_reminder_time">Reminder time</string>
+    <string name="settings_change_time">Change time</string>
+    <string name="settings_reminder_saved">Reminder settings saved.</string>
+    <string name="settings_reminder_save_failed">Could not save reminder settings.</string>
+    <string name="settings_notifications_blocked">Notifications are blocked. Allow them in system settings to receive reminders.</string>
+    <string name="settings_test_notification">Send test notification</string>
+    <string name="settings_reminder_test_hint">Reminders are scheduled locally. Android may delay them to save battery, and they stop if the app is force-stopped.</string>
+    <string name="settings_clear_data">Clear all local data</string>
+    <string name="settings_clear_title">Clear all data?</string>
+    <string name="settings_clear_message">This permanently deletes every step record and workout, and resets goals and reminder settings. This cannot be undone.</string>
+    <string name="settings_clear_confirm">Delete everything</string>
+    <string name="settings_cleared">All local data cleared.</string>
+    <string name="settings_clear_failed">Could not clear the data.</string>
+    <string name="settings_version">Version 1.0</string>
+    <string name="settings_built_with">Java + Kotlin + XML + SQLite — fully offline</string>
+    <string name="settings_about_text">Fitness Tracker is a college project that records daily steps and workouts completely offline.\n\nIt does not use the internet, does not track distance, and does not estimate calories.</string>
+    <string name="settings_go_goals">Edit fitness goals</string>
+    <string name="settings_go_progress">View progress summaries</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Activity reminders</string>
+    <string name="notification_channel_desc">Local reminders to log your daily activity.</string>
+    <string name="notification_title">Time to get active!</string>
+    <string name="notification_text">Open Fitness Tracker and log today’s activity.</string>
+    <string name="notification_test_title">Test reminder</string>
+    <string name="notification_test_text">If you can see this, local notifications work on this device.</string>
+    <string name="pick_time_title">Choose reminder time</string>
+
+    <!-- Formatting helpers -->
+    <string name="format_number">%1$s</string>
+    <string name="format_percent">%1$s%%</string>
 </resources>

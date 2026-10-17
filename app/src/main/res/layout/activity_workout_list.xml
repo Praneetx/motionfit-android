@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <!-- Top bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_bar_height"
+        android:background="@color/primary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_s"
+        android:paddingEnd="@dimen/spacing_s">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/touch_min"
+            android:layout_height="@dimen/touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_back"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/white" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/spacing_s"
+            android:text="@string/title_workouts"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnAddWorkout"
+            android:layout_width="@dimen/touch_min"
+            android:layout_height="@dimen/touch_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_add_workout"
+            android:src="@drawable/ic_add"
+            android:tint="@color/white" />
+    </LinearLayout>
+
+    <!-- Filter row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_m"
+        android:paddingTop="@dimen/spacing_s"
+        android:paddingEnd="@dimen/spacing_m"
+        android:paddingBottom="@dimen/spacing_s">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/workout_type_label"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body" />
+
+        <Spinner
+            android:id="@+id/typeFilter"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/touch_min"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/workoutsEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/spacing_m"
+        android:paddingTop="@dimen/spacing_xl"
+        android:paddingEnd="@dimen/spacing_m"
+        android:text="@string/workouts_empty"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_body" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workoutList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
