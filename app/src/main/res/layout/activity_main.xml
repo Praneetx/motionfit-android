@@ -154,6 +154,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_lg"
                     android:alpha="0.8" />
+
+                <!-- badge-positive, shown only when the step goal is met -->
+                <TextView
+                    android:id="@+id/stepsGoalBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:background="@drawable/bg_badge_positive"
+                    android:fontFamily="@font/inter_semibold"
+                    android:paddingStart="@dimen/spacing_md"
+                    android:paddingTop="@dimen/spacing_xs"
+                    android:paddingEnd="@dimen/spacing_md"
+                    android:paddingBottom="@dimen/spacing_xs"
+                    android:text="@string/goal_met"
+                    android:textColor="@color/positive_deep"
+                    android:textSize="@dimen/text_secondary"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Workout time + count card -->

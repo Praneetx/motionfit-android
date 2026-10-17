@@ -142,6 +142,14 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
                 FormatUtils.intText(data.stepGoal)));
         stepsPercentView.setText(GoalProgressCalculator.formatPercent(data.steps, data.stepGoal));
 
+        // badge-positive: only when the daily step goal is actually reached.
+        View goalBadge = findViewById(R.id.stepsGoalBadge);
+        if (goalBadge != null) {
+            goalBadge.setVisibility(GoalProgressCalculator.isReached(data.steps, data.stepGoal)
+                    ? View.VISIBLE
+                    : View.GONE);
+        }
+
         // Workout card
         workoutCountValue.setText(FormatUtils.intText(data.workoutCount));
         workoutMinutesValue.setText(FormatUtils.intText(data.workoutMinutes));

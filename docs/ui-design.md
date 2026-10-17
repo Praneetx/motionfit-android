@@ -165,6 +165,11 @@ rounded shape and the sliding highlight are exact.
    display, so only Inter ships.
 5. Web-only parts of the spec (126px hero band, footer band, marketing grids,
    currency-converter layout, pricing tiers, desktop breakpoints) were ignored.
+6. **`badge-negative` contrast.** `DESIGN-wise.md` pairs `negative-bg` (`#320707`)
+   with `on-primary` text (`#0E0F0C`) — near-black on dark maroon is unreadable.
+   Following the file's own accessibility intent, that badge uses white
+   (`canvas`) text instead. `badge-positive` is used for the "Goal met" chip on
+   the hero card, shown only when the step goal is reached.
 
 ## 10. Verification status
 
