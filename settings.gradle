@@ -1,0 +1,22 @@
+// Root Gradle settings for the Fitness Tracker Android project.
+// This file tells Gradle where to find plugins and dependencies and which
+// modules belong to the build.
+
+pluginManagement {
+    repositories {
+        google()            // Android Gradle Plugin + AndroidX artifacts
+        mavenCentral()      // Kotlin stdlib and general Java libraries
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "FitnessTracker"
+include ":app"

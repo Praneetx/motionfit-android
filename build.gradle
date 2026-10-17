@@ -1,0 +1,7 @@
+// Root build file.
+// The Android application plugin is declared once here (with its version) and
+// then applied without a version inside the :app module. AGP 9.x also provides
+// built-in Kotlin compilation, so no separate Kotlin Gradle plugin is needed.
+plugins {
+    id 'com.android.application' version '9.4.0' apply false
+}

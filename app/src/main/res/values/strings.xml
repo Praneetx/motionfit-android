@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fitness Tracker</string>
+
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_steps">Daily Steps</string>
+    <string name="title_workouts">Workouts</string>
+    <string name="title_add_workout">Add Workout</string>
+    <string name="title_edit_workout">Edit Workout</string>
+    <string name="title_goals">Fitness Goals</string>
+    <string name="title_progress">Progress</string>
+    <string name="title_settings">Settings</string>
+</resources>
