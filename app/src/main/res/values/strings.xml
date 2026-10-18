@@ -136,9 +136,9 @@
     <string name="settings_clear_confirm">Delete everything</string>
     <string name="settings_cleared">All local data cleared.</string>
     <string name="settings_clear_failed">Could not clear the data.</string>
-    <string name="settings_version">Version 1.0</string>
+    <string name="settings_version">Version 0.1.0</string>
     <string name="settings_built_with">Java + Kotlin + XML + SQLite — fully offline</string>
-    <string name="settings_about_text">Motionfit is a college project that records daily steps and workouts completely offline.\n\nIt does not use the internet, does not track distance, and does not estimate calories.</string>
+    <string name="settings_about_text">Motionfit records your daily steps, workouts and goals entirely on your device.\n\nNo account, no analytics, no internet permission. Distance tracking and calorie estimation are not included.</string>
     <string name="settings_go_goals">Edit fitness goals</string>
     <string name="settings_go_progress">View progress summaries</string>
 

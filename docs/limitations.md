@@ -1,96 +1,86 @@
 # Known limitations
 
-This is an **educational MVP**, not production software. The limitations below are
-deliberate or environmental. Nothing here is claimed to work beyond what was
-actually built and tested.
+Motionfit is a working but early-stage app (`0.1.0`). The limitations below are known
+and deliberate unless stated otherwise.
 
 ## Local-only storage
 
-* All data lives in one SQLite file (`fitness_tracker.db`) inside the app's private
-  storage. It is **not** encrypted (no SQLCipher or similar was added).
-* There is no cloud database, no backend server and no account system.
-* There is no synchronisation between devices.
+* All data lives in one SQLite file in app-private storage. It is **not encrypted**.
+* There is no cloud database, backend or account system, and no sync between devices.
 
 ## Data loss
 
-* Uninstalling the app, or using Android's *Clear storage* setting, deletes the
+* Uninstalling the app, or clearing its storage in Android settings, deletes the
   database permanently.
-* The in-app **Clear all local data** action also deletes every record after an
-  explicit confirmation dialog. This cannot be undone.
-* Records survive ordinary app restarts and device reboots, because SQLite writes to
-  app-private storage.
+* The in-app "Clear all local data" action deletes every record after confirmation and
+  cannot be undone.
+* Records survive ordinary app restarts and device reboots.
+* Android system backup may copy the app database if the user's device backup is on
+  (see [PRIVACY.md](../PRIVACY.md)).
 
 ## No internet, by design
 
-* The app declares **no INTERNET permission**.
-* Distance tracking and calorie estimation are intentionally **not implemented**.
-  Cycling exists only as a workout *category*.
+* The app declares no `INTERNET` permission and makes no network calls.
+* Distance tracking and calorie estimation are not implemented. Cycling is only a
+  workout category.
 
-## Automatic step counting (EXPERIMENTAL)
+## Automatic step counting (experimental)
 
-* Uses `Sensor.TYPE_STEP_COUNTER`, which reports steps **since the last reboot**,
-  not a per-day figure.
-* Readings are only collected **while the Daily Steps screen is open**. There is no
-  background service and no continuous tracking.
-* Some devices have no step-counter sensor; the app detects this and clearly
-  disables the sensor section while keeping manual entry working.
-* On Android 10+ the `ACTIVITY_RECOGNITION` runtime permission is required. If the
-  user denies it, automatic counting is unavailable but manual entry still works.
-* To avoid silent double counting, the sensor never writes to the database on its
-  own. The user must press *"Add N steps to this day"*, which performs one explicit
-  write and then stops the sensor.
-* This feature has **not** been verified on a physical phone with a real sensor.
-  It is tested only for its "sensor unavailable" fallback path on the emulator.
+* Uses `Sensor.TYPE_STEP_COUNTER`, which reports steps since the last reboot, not a
+  per-day figure.
+* Readings are only collected **while the Steps screen is open**; there is no
+  background service.
+* Many devices have no step-counter sensor. The app detects this and disables the
+  sensor section while keeping manual entry.
+* Android 10+ requires the `ACTIVITY_RECOGNITION` runtime permission. If denied,
+  automatic counting is unavailable but manual entry still works.
+* To avoid silent double counting the sensor never writes on its own; the user must
+  press "Add N steps to this day", which performs one write and then stops the sensor.
+* Not verified on a physical device with a real sensor; only the "sensor unavailable"
+  fallback has been exercised.
 
 ## Reminders
 
-* Reminders use a local `AlarmManager` alarm plus a `BroadcastReceiver`. No cloud
-  push service is involved.
-* The alarm is deliberately **inexact** (`setAndAllowWhileIdle`), so Android may
-  deliver the notification a little late to save battery.
-* Reminders are re-scheduled by a `BOOT_COMPLETED` receiver after a reboot, but a
-  user **force-stop** of the app cancels the alarm and it will not fire until the
-  app is opened again.
-* Aggressive battery optimisation by some phone manufacturers can suppress alarms.
-* On Android 13+ the user must grant the `POST_NOTIFICATIONS` permission. If it is
-  denied, the app shows a warning and the "Send test notification" button explains
-  the problem instead of silently doing nothing.
-* The reminder timing behaviour has **not** been verified across reboots,
-  force-stops, and every Android version.
+* Local `AlarmManager` alarm plus a `BroadcastReceiver`; no cloud push.
+* The alarm is intentionally inexact, so delivery may be slightly late.
+* A `BOOT_COMPLETED` receiver restores the schedule after a restart, but a user
+  **force-stop** cancels it until the app is opened again.
+* Aggressive OEM battery optimisation can suppress alarms.
+* Android 13+ requires `POST_NOTIFICATIONS`. If denied, the app warns and the test
+  notification button explains the problem instead of silently failing.
+* Not verified across reboots, force-stops and every Android version.
 
 ## Database migrations
 
-* The schema is version 1. `onUpgrade` contains the hook for future migrations and
-  can safely re-run the additive create statements, but genuine breaking migrations
-  have not been written or tested yet.
-* `onDowngrade` recreates the schema (destroys data). This is a deliberate MVP
-  choice and is not user-friendly.
+* Schema version is 1. `onUpgrade` has the hook for future migrations and can safely
+  re-run additive create statements, but no breaking migration has been written or
+  tested.
+* `onDowngrade` recreates the schema, which destroys data.
 
-## UI / UX
+## UI
 
-* The UI is optimised for ordinary phone sizes; large tablets and landscape layouts
-  were not specifically designed or tested.
-* Accessibility: content descriptions and 48dp touch targets are provided, but the
-  app has not been audited with TalkBack end-to-end.
-* Time zone: "today" is the device's local date. Changing the device time zone can
-  therefore move what counts as "today" for new entries.
+* Designed for ordinary phone sizes; tablets and landscape are not specifically
+  designed.
+* Content descriptions and 48dp touch targets are present, but the app has not been
+  audited end-to-end with TalkBack.
+* "Today" uses the device's local date, so changing the time zone changes which day
+  new entries belong to.
+* The UI has not yet been visually verified on a device (see
+  [testing.md](testing.md)); expect small layout adjustments after the first run.
 
 ## Testing gaps
 
-* Unit tests (JVM) are executed and passing.
-* Instrumented tests were written and run on the emulator; see
-  `docs/testing.md` for the real results.
-* No automated UI (Espresso interaction) test suite was completed; UI checks were
-  performed manually on the emulator.
-* No physical-device testing was possible in this environment, so sensor and
-  notification behaviour on real hardware remains unverified.
+* 34 JVM unit tests pass; the app builds and installs.
+* Instrumented SQLite tests compile but have **not been executed**.
+* No Espresso UI test suite and no CI pipeline yet.
+* No physical-device testing yet, so sensor and notification behaviour on real
+  hardware is unverified.
 
-## What production readiness would additionally require
+## Before production
 
-* Encrypted local storage and a documented backup/restore policy.
-* Robust, tested schema migrations.
+* Encrypted storage and a documented export/backup policy.
+* Tested schema migrations.
+* A release signing config and R8 build.
 * A full accessibility and localisation pass.
-* A complete Espresso UI test suite and CI pipeline.
-* Verified background step tracking (e.g. a foreground service) if that feature is
-  desired.
-* Proper handling of exact vs inexact alarms and OEM-specific battery restrictions.
+* A CI pipeline plus an Espresso UI suite.
+* Store listing, data-safety form and a reviewed privacy policy.
