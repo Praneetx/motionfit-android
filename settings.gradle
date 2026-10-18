@@ -1,4 +1,4 @@
-// Root Gradle settings for the Fitness Tracker Android project.
+// Root Gradle settings for the Motionfit Android project.
 // This file tells Gradle where to find plugins and dependencies and which
 // modules belong to the build.
 
@@ -18,5 +18,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FitnessTracker"
+rootProject.name = "Motionfit"
 include ":app"

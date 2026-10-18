@@ -89,7 +89,7 @@ $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
 & "$env:ANDROID_HOME\platform-tools\adb.exe" install -r app\build\outputs\apk\debug\app-debug.apk
 
 # Launch the dashboard
-& "$env:ANDROID_HOME\platform-tools\adb.exe" shell am start -n com.example.fitnesstracker/.activities.MainActivity
+& "$env:ANDROID_HOME\platform-tools\adb.exe" shell am start -n io.github.praneetx.motionfit/.activities.MainActivity
 ```
 
 The debug APK is written to:

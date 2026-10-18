@@ -6,7 +6,7 @@
         DayNight parent is deliberately replaced with a Light parent.
         Status bar and navigation bar use the sage canvas as requested.
     -->
-    <style name="Theme.FitnessTracker" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.Motionfit" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
         <item name="colorPrimaryContainer">@color/primary_pale</item>
@@ -39,11 +39,11 @@
         <!-- Every MaterialButton defaults to the Wise lime pill. -->
         <item name="materialButtonStyle">@style/Widget.Wise.Button.Primary</item>
         <item name="textInputStyle">@style/Widget.Wise.TextInputLayout</item>
-        <item name="materialAlertDialogTheme">@style/Theme.FitnessTracker.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/Theme.Motionfit.Dialog</item>
     </style>
 
     <!-- Dialog chrome follows ex-modal-card: white, 24dp radius, no shadow. -->
-    <style name="Theme.FitnessTracker.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    <style name="Theme.Motionfit.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorSurface">@color/canvas</item>
         <item name="colorOnSurface">@color/ink</item>
         <item name="android:fontFamily">@font/inter_regular</item>

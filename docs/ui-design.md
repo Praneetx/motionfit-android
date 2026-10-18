@@ -92,7 +92,7 @@ rounded shape and the sliding highlight are exact.
 | `button-primary/secondary/tertiary/icon-circular` | `Widget.Wise.Button.Primary/Secondary/Tertiary` + `bg_icon_circular` |
 | `badge-positive` / `badge-negative` | `bg_badge_positive` / `bg_badge_negative` (EXPERIMENTAL badge) |
 | `ex-empty-state-card` | empty-state captions inside the white cards |
-| `ex-modal-card` | `Theme.FitnessTracker.Dialog` (white, 24dp, no shadow) |
+| `ex-modal-card` | `Theme.Motionfit.Dialog` (white, 24dp, no shadow) |
 | `ex-toast` | the app keeps its existing chat-style toasts/dialogs |
 
 ## 6. Screens

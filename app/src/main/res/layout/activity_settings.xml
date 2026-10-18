@@ -214,7 +214,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.example.fitnesstracker.views.FloatingNavView
+    <io.github.praneetx.motionfit.views.FloatingNavView
         android:id="@+id/floatingNav"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_height"

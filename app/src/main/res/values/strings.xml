@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fitness Tracker</string>
+    <string name="app_name">Motionfit</string>
 
     <!-- Screen titles -->
     <string name="title_dashboard">Dashboard</string>
@@ -138,7 +138,7 @@
     <string name="settings_clear_failed">Could not clear the data.</string>
     <string name="settings_version">Version 1.0</string>
     <string name="settings_built_with">Java + Kotlin + XML + SQLite — fully offline</string>
-    <string name="settings_about_text">Fitness Tracker is a college project that records daily steps and workouts completely offline.\n\nIt does not use the internet, does not track distance, and does not estimate calories.</string>
+    <string name="settings_about_text">Motionfit is a college project that records daily steps and workouts completely offline.\n\nIt does not use the internet, does not track distance, and does not estimate calories.</string>
     <string name="settings_go_goals">Edit fitness goals</string>
     <string name="settings_go_progress">View progress summaries</string>
 
@@ -146,7 +146,7 @@
     <string name="notification_channel_name">Activity reminders</string>
     <string name="notification_channel_desc">Local reminders to log your daily activity.</string>
     <string name="notification_title">Time to get active!</string>
-    <string name="notification_text">Open Fitness Tracker and log today’s activity.</string>
+    <string name="notification_text">Open Motionfit and log today’s activity.</string>
     <string name="notification_test_title">Test reminder</string>
     <string name="notification_test_text">If you can see this, local notifications work on this device.</string>
     <string name="pick_time_title">Choose reminder time</string>

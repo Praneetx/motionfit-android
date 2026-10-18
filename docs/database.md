@@ -4,7 +4,7 @@ The app stores everything in one local SQLite database, `fitness_tracker.db`,
 managed by `FitnessDatabaseHelper` (a `SQLiteOpenHelper`). The schema is version 1.
 
 All table and column names are defined once in
-`com.example.fitnesstracker.database.DatabaseContract`.
+`io.github.praneetx.motionfit.database.DatabaseContract`.
 
 ## Date & timestamp formats
 

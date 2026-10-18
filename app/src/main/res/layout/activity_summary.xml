@@ -175,7 +175,7 @@
                         android:textColor="@color/primary" />
                 </LinearLayout>
 
-                <com.example.fitnesstracker.views.BarChartView
+                <io.github.praneetx.motionfit.views.BarChartView
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/chart_height"
@@ -211,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xs" />
 
-                    <com.example.fitnesstracker.views.BarChartView
+                    <io.github.praneetx.motionfit.views.BarChartView
                         android:id="@+id/minutesChart"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/chart_height_small"
@@ -240,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xs" />
 
-                    <com.example.fitnesstracker.views.BarChartView
+                    <io.github.praneetx.motionfit.views.BarChartView
                         android:id="@+id/workoutsChart"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/chart_height_small"
@@ -318,7 +318,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.example.fitnesstracker.views.FloatingNavView
+    <io.github.praneetx.motionfit.views.FloatingNavView
         android:id="@+id/floatingNav"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_height"

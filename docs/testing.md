@@ -88,13 +88,13 @@ Command used for install/launch:
 
 ```powershell
 adb install -r app\build\outputs\apk\debug\app-debug.apk
-adb shell am start -n com.example.fitnesstracker/.activities.MainActivity
+adb shell am start -n io.github.praneetx.motionfit/.activities.MainActivity
 ```
 
 | Test name | Expected | Actual | Status |
 |---|---|---|---|
 | APK installs on emulator | Install succeeds | `Performing Streamed Install` → `Success` | **PASS** |
-| App process starts without crashing | Process runs, no app `FATAL EXCEPTION` | App process started (`pid 16860`); logcat showed **no** `FATAL EXCEPTION` from `com.example.fitnesstracker` | **PASS** |
+| App process starts without crashing | Process runs, no app `FATAL EXCEPTION` | App process started (`pid 16860`); logcat showed **no** `FATAL EXCEPTION` from `io.github.praneetx.motionfit` | **PASS** |
 | Dashboard visible on screen | UI drawn | Screen captures were solid black; `mCurrentFocus=null`; ActivityManager logged `Activity pause timeout` / `top resumed state loss timeout` | **NOT RUN** |
 | Airplane-mode offline behaviour | Core features still work | Emulator became unusable before this could be exercised | **NOT RUN** |
 

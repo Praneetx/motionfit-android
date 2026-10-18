@@ -14,17 +14,17 @@ plugins {
 
 android {
     // Java package used for the generated R class and manifest namespace.
-    namespace 'com.example.fitnesstracker'
+    namespace 'io.github.praneetx.motionfit'
 
     // compileSdk 37 is the Android platform installed on this machine.
     compileSdk 37
 
     defaultConfig {
-        applicationId "com.example.fitnesstracker"
+        applicationId "io.github.praneetx.motionfit"
         minSdk 26              // Android 8.0 - gives us java.time and notification channels natively
         targetSdk 34           // kept at 34 so the simple XML UI is not forced into edge-to-edge mode
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
