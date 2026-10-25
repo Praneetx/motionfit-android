@@ -138,7 +138,9 @@ public class DatabaseInstrumentedTest {
         assertEquals(10000, ActivitySummaryCalculator.totalSteps(series));
         assertEquals(50, ActivitySummaryCalculator.totalMinutes(series));
         assertEquals(2, ActivitySummaryCalculator.totalWorkouts(series));
-        assertEquals(5, ActivitySummaryCalculator.activeDays(series));
+        // Only the two days that received steps/workouts are active; zero-filled
+        // days must not inflate this count.
+        assertEquals(2, ActivitySummaryCalculator.activeDays(series));
     }
 
     @Test

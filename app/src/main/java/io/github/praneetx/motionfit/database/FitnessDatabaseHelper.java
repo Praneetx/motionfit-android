@@ -10,8 +10,7 @@ import io.github.praneetx.motionfit.utils.DateUtils;
 
 /**
  * Owns the SQLite database file. It creates every table on first launch, seeds
- * sensible defaults (goals + reminder settings) and contains the (currently
- * empty) migration hook for future schema versions.
+ * sensible defaults (goals + settings) and performs additive schema migrations.
  *
  * <p>A single shared instance is used across the whole app so that we never
  * open the database file from several helpers at once.</p>
@@ -38,6 +37,14 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper {
         super(context, DatabaseContract.DATABASE_NAME, null, DatabaseContract.DATABASE_VERSION);
     }
 
+    /**
+     * Test seam: opens a named database at an explicit target version so a
+     * migration can be exercised without touching the production singleton.
+     */
+    FitnessDatabaseHelper(Context context, String databaseName, int targetVersion) {
+        super(context, databaseName, null, targetVersion);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.i(TAG, "Creating database schema (version " + DatabaseContract.DATABASE_VERSION + ")");
@@ -45,6 +52,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DatabaseContract.SQL_CREATE_WORKOUTS);
         db.execSQL(DatabaseContract.SQL_CREATE_FITNESS_GOALS);
         db.execSQL(DatabaseContract.SQL_CREATE_APP_SETTINGS);
+        db.execSQL(DatabaseContract.SQL_CREATE_RUNNING_SESSIONS);
         db.execSQL(DatabaseContract.SQL_INDEX_WORKOUT_DATE);
         db.execSQL(DatabaseContract.SQL_INDEX_WORKOUT_TYPE);
 
@@ -56,18 +64,29 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Upgrading database " + oldVersion + " -> " + newVersion);
-        // Every CREATE uses "IF NOT EXISTS" and every seed uses "INSERT OR IGNORE",
-        // so re-running onCreate is safe and handles purely additive schema changes.
-        // When a real breaking change is introduced, add a numbered migration below.
-        switch (oldVersion) {
-            case 1:
-                // Example for the future:
-                // db.execSQL("ALTER TABLE workouts ADD COLUMN ...");
-                break;
-            default:
-                break;
+        if (oldVersion < 2) {
+            migrateV1ToV2(db);
         }
-        onCreate(db);
+    }
+
+    /**
+     * Additive 1 -> 2 migration. It must never call onCreate as a shortcut:
+     * doing so would hide migration mistakes and make the upgrade test pass for
+     * the wrong reason.
+     */
+    private static void migrateV1ToV2(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + DatabaseContract.TABLE_DAILY_STEPS +
+                " ADD COLUMN " + DatabaseContract.COL_DS_LAST_RAW_SENSOR + " INTEGER");
+        db.execSQL("ALTER TABLE " + DatabaseContract.TABLE_WORKOUTS +
+                " ADD COLUMN " + DatabaseContract.COL_W_DURATION_SECONDS + " INTEGER");
+        db.execSQL("ALTER TABLE " + DatabaseContract.TABLE_WORKOUTS +
+                " ADD COLUMN " + DatabaseContract.COL_W_STEP_COUNT + " INTEGER");
+        db.execSQL(DatabaseContract.SQL_CREATE_RUNNING_SESSIONS);
+
+        // A V1 database already has goals and reminder settings. These calls only
+        // fill in missing rows, including the two new V2 settings.
+        ensureDefaultGoal(db);
+        ensureDefaultSettings(db);
     }
 
     @Override
@@ -94,7 +113,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper {
                 SQLiteDatabase.CONFLICT_IGNORE);
     }
 
-    /** Inserts default reminder settings if they are missing. */
+    /** Inserts default reminder and V2 settings if they are missing. */
     public static void ensureDefaultSettings(SQLiteDatabase db) {
         insertSettingIfMissing(db, DatabaseContract.SETTING_REMINDER_ENABLED,
                 String.valueOf(DatabaseContract.DEFAULT_REMINDER_ENABLED));
@@ -102,6 +121,10 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper {
                 String.valueOf(DatabaseContract.DEFAULT_REMINDER_HOUR));
         insertSettingIfMissing(db, DatabaseContract.SETTING_REMINDER_MINUTE,
                 String.valueOf(DatabaseContract.DEFAULT_REMINDER_MINUTE));
+        insertSettingIfMissing(db, DatabaseContract.SETTING_AUTO_STEPS_ENABLED,
+                String.valueOf(DatabaseContract.DEFAULT_AUTO_STEPS_ENABLED));
+        insertSettingIfMissing(db, DatabaseContract.SETTING_ONBOARDING_COMPLETED,
+                String.valueOf(DatabaseContract.DEFAULT_ONBOARDING_COMPLETED));
     }
 
     private static void insertSettingIfMissing(SQLiteDatabase db, String key, String value) {
@@ -113,6 +136,7 @@ public class FitnessDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static void dropAllTables(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_RUNNING_SESSIONS);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_DAILY_STEPS);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_WORKOUTS);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_FITNESS_GOALS);
