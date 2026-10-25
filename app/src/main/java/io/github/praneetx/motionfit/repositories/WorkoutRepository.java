@@ -202,6 +202,12 @@ public class WorkoutRepository {
         if (workout.getDurationMinutes() <= 0) {
             return "Duration must be a positive number of minutes.";
         }
+        if (workout.getDurationSeconds() != null && workout.getDurationSeconds() <= 0) {
+            return "Exact duration must be a positive number of seconds.";
+        }
+        if (workout.getStepCount() != null && workout.getStepCount() < 0) {
+            return "Step count cannot be negative.";
+        }
         return null;
     }
 
@@ -210,6 +216,16 @@ public class WorkoutRepository {
         values.put(DatabaseContract.COL_W_TYPE, workout.getWorkoutType().trim());
         values.put(DatabaseContract.COL_W_DATE, workout.getWorkoutDate());
         values.put(DatabaseContract.COL_W_DURATION, workout.getDurationMinutes());
+        if (workout.getDurationSeconds() == null) {
+            values.putNull(DatabaseContract.COL_W_DURATION_SECONDS);
+        } else {
+            values.put(DatabaseContract.COL_W_DURATION_SECONDS, workout.getDurationSeconds());
+        }
+        if (workout.getStepCount() == null) {
+            values.putNull(DatabaseContract.COL_W_STEP_COUNT);
+        } else {
+            values.put(DatabaseContract.COL_W_STEP_COUNT, workout.getStepCount());
+        }
         String notes = workout.getNotes();
         if (notes == null || notes.trim().isEmpty()) {
             values.putNull(DatabaseContract.COL_W_NOTES);
@@ -225,6 +241,10 @@ public class WorkoutRepository {
         workout.setWorkoutType(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_TYPE)));
         workout.setWorkoutDate(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_DATE)));
         workout.setDurationMinutes(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_DURATION)));
+        int secondsIndex = cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_DURATION_SECONDS);
+        workout.setDurationSeconds(cursor.isNull(secondsIndex) ? null : cursor.getInt(secondsIndex));
+        int stepsIndex = cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_STEP_COUNT);
+        workout.setStepCount(cursor.isNull(stepsIndex) ? null : cursor.getInt(stepsIndex));
         int notesIndex = cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_NOTES);
         workout.setNotes(cursor.isNull(notesIndex) ? null : cursor.getString(notesIndex));
         workout.setCreatedAt(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.COL_W_CREATED_AT)));

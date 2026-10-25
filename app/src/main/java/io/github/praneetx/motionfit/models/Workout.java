@@ -24,6 +24,8 @@ public class Workout {
     private String workoutType;
     private String workoutDate; // YYYY-MM-DD
     private int durationMinutes;
+    private Integer durationSeconds;
+    private Integer stepCount;
     private String notes;
     private String createdAt;
     private String updatedAt;
@@ -68,6 +70,30 @@ public class Workout {
 
     public void setDurationMinutes(int durationMinutes) {
         this.durationMinutes = durationMinutes;
+    }
+
+    /**
+     * Exact duration in seconds for a Running-mode workout, or {@code null} for
+     * manual and migrated workouts.
+     */
+    public Integer getDurationSeconds() {
+        return durationSeconds;
+    }
+
+    public void setDurationSeconds(Integer durationSeconds) {
+        this.durationSeconds = durationSeconds;
+    }
+
+    /**
+     * Recorded steps for a Running-mode workout, or {@code null} when steps were
+     * unavailable (or the workout is manual/migrated).
+     */
+    public Integer getStepCount() {
+        return stepCount;
+    }
+
+    public void setStepCount(Integer stepCount) {
+        this.stepCount = stepCount;
     }
 
     public String getNotes() {

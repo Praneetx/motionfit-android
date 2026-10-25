@@ -73,6 +73,41 @@ public class SettingsRepository {
         }
     }
 
+    public boolean isAutoStepsEnabled() {
+        return getSettings().isAutoStepsEnabled();
+    }
+
+    /** Opts the user into or out of automatic daily step counting. */
+    public OperationResult setAutoStepsEnabled(boolean enabled) {
+        return saveBooleanSetting(DatabaseContract.SETTING_AUTO_STEPS_ENABLED, enabled);
+    }
+
+    public boolean isOnboardingCompleted() {
+        return getSettings().isOnboardingCompleted();
+    }
+
+    /** Records whether the one-time V2 onboarding has been shown/finished. */
+    public OperationResult setOnboardingCompleted(boolean completed) {
+        return saveBooleanSetting(DatabaseContract.SETTING_ONBOARDING_COMPLETED, completed);
+    }
+
+    private OperationResult saveBooleanSetting(String key, boolean value) {
+        try {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                putSetting(db, key, String.valueOf(value));
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            return OperationResult.ok();
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Saving setting " + key + " failed", e);
+            return OperationResult.error("Could not save settings. Please try again.");
+        }
+    }
+
     private static void putSetting(SQLiteDatabase db, String key, String value) {
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.COL_S_KEY, key);
@@ -98,6 +133,12 @@ public class SettingsRepository {
                     break;
                 case DatabaseContract.SETTING_REMINDER_MINUTE:
                     settings.setReminderMinute(clamp(Integer.parseInt(value), 0, 59));
+                    break;
+                case DatabaseContract.SETTING_AUTO_STEPS_ENABLED:
+                    settings.setAutoStepsEnabled("true".equalsIgnoreCase(value));
+                    break;
+                case DatabaseContract.SETTING_ONBOARDING_COMPLETED:
+                    settings.setOnboardingCompleted("true".equalsIgnoreCase(value));
                     break;
                 default:
                     break;

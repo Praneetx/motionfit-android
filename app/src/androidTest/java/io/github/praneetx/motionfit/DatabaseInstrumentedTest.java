@@ -1,23 +1,30 @@
 package io.github.praneetx.motionfit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import io.github.praneetx.motionfit.database.DatabaseContract;
+import io.github.praneetx.motionfit.database.FitnessDatabaseHelper;
 import io.github.praneetx.motionfit.logic.ActivitySummaryCalculator;
 import io.github.praneetx.motionfit.logic.DayActivity;
+import io.github.praneetx.motionfit.models.AppSettings;
 import io.github.praneetx.motionfit.models.DailySteps;
 import io.github.praneetx.motionfit.models.FitnessGoal;
 import io.github.praneetx.motionfit.models.Workout;
 import io.github.praneetx.motionfit.repositories.DataResetRepository;
 import io.github.praneetx.motionfit.repositories.GoalRepository;
+import io.github.praneetx.motionfit.repositories.SettingsRepository;
 import io.github.praneetx.motionfit.repositories.StepsRepository;
 import io.github.praneetx.motionfit.repositories.SummaryRepository;
 import io.github.praneetx.motionfit.repositories.WorkoutRepository;
@@ -43,19 +50,22 @@ public class DatabaseInstrumentedTest {
 
     private static final String SAME_DAY = "2031-05-05";
 
+    private Context context;
     private StepsRepository stepsRepository;
     private WorkoutRepository workoutRepository;
     private GoalRepository goalRepository;
     private SummaryRepository summaryRepository;
+    private SettingsRepository settingsRepository;
     private DataResetRepository dataResetRepository;
 
     @Before
     public void setUp() {
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         stepsRepository = new StepsRepository(context);
         workoutRepository = new WorkoutRepository(context);
         goalRepository = new GoalRepository(context);
         summaryRepository = new SummaryRepository(context);
+        settingsRepository = new SettingsRepository(context);
         dataResetRepository = new DataResetRepository(context);
 
         // Known starting state: no steps, no workouts, default goals.
@@ -156,5 +166,38 @@ public class DatabaseInstrumentedTest {
         assertEquals(DatabaseContract.DEFAULT_STEP_GOAL, goalRepository.getGoal().getDailyStepGoal());
         assertEquals(DatabaseContract.DEFAULT_WORKOUT_MINUTES_GOAL,
                 goalRepository.getGoal().getDailyWorkoutMinutesGoal());
+    }
+
+    @Test
+    public void clearAllData_removesRunningSessionAndResetsNewSettings() {
+        SQLiteDatabase db = FitnessDatabaseHelper.getInstance(context).getWritableDatabase();
+        String now = DateUtils.nowTimestamp();
+        ContentValues session = new ContentValues();
+        session.put(DatabaseContract.COL_RS_ID, 1);
+        session.put(DatabaseContract.COL_RS_STATUS, "active");
+        session.put(DatabaseContract.COL_RS_STARTED_AT, now);
+        session.put(DatabaseContract.COL_RS_STARTED_ELAPSED_MS, 1000L);
+        session.put(DatabaseContract.COL_RS_CREATED_AT, now);
+        session.put(DatabaseContract.COL_RS_UPDATED_AT, now);
+        assertTrue(db.insertOrThrow(DatabaseContract.TABLE_RUNNING_SESSIONS, null, session) > 0);
+
+        assertTrue(settingsRepository.saveReminder(true, 7, 30).isSuccess());
+        assertTrue(settingsRepository.setAutoStepsEnabled(true).isSuccess());
+        assertTrue(settingsRepository.setOnboardingCompleted(true).isSuccess());
+        assertTrue(settingsRepository.getSettings().isReminderEnabled());
+        assertTrue(settingsRepository.isAutoStepsEnabled());
+        assertTrue(settingsRepository.isOnboardingCompleted());
+
+        assertTrue(dataResetRepository.clearAllData().isSuccess());
+
+        assertEquals("an in-progress run must be discarded", 0L,
+                DatabaseUtils.queryNumEntries(db, DatabaseContract.TABLE_RUNNING_SESSIONS));
+
+        AppSettings settings = settingsRepository.getSettings();
+        assertFalse(settings.isReminderEnabled());
+        assertEquals(DatabaseContract.DEFAULT_REMINDER_HOUR, settings.getReminderHour());
+        assertEquals(DatabaseContract.DEFAULT_REMINDER_MINUTE, settings.getReminderMinute());
+        assertFalse(settings.isAutoStepsEnabled());
+        assertFalse(settings.isOnboardingCompleted());
     }
 }

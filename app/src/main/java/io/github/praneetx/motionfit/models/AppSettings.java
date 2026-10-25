@@ -8,6 +8,8 @@ public class AppSettings {
     private boolean reminderEnabled;
     private int reminderHour;
     private int reminderMinute;
+    private boolean autoStepsEnabled;
+    private boolean onboardingCompleted;
 
     public AppSettings() {
     }
@@ -40,5 +42,21 @@ public class AppSettings {
 
     public void setReminderMinute(int reminderMinute) {
         this.reminderMinute = reminderMinute;
+    }
+
+    public boolean isAutoStepsEnabled() {
+        return autoStepsEnabled;
+    }
+
+    public void setAutoStepsEnabled(boolean autoStepsEnabled) {
+        this.autoStepsEnabled = autoStepsEnabled;
+    }
+
+    public boolean isOnboardingCompleted() {
+        return onboardingCompleted;
+    }
+
+    public void setOnboardingCompleted(boolean onboardingCompleted) {
+        this.onboardingCompleted = onboardingCompleted;
     }
 }

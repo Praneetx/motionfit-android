@@ -14,10 +14,12 @@ import io.github.praneetx.motionfit.utils.OperationResult;
 /**
  * Implements the destructive "clear all data" action.
  *
- * <p>Documented reset policy: all step records and all workouts are deleted, the
- * fitness goals are restored to their default values (8000 steps / 30 minutes)
- * and reminder preferences are reset to "disabled at 18:00". Everything happens
- * inside a single transaction so a failure cannot leave a half-cleared database.</p>
+ * <p>Documented reset policy: all step records, workouts and any in-progress run
+ * are deleted, the fitness goals are restored to their default values (8000 steps
+ * / 30 minutes), reminder preferences are reset to "disabled at 18:00", and the
+ * V2 auto-tracking/onboarding settings return to their opt-in defaults. Everything
+ * happens inside a single transaction so a failure cannot leave a half-cleared
+ * database.</p>
  */
 public class DataResetRepository {
 
@@ -33,11 +35,12 @@ public class DataResetRepository {
             SQLiteDatabase db = helper.getWritableDatabase();
             db.beginTransaction();
             try {
+                db.delete(DatabaseContract.TABLE_RUNNING_SESSIONS, null, null);
                 db.delete(DatabaseContract.TABLE_DAILY_STEPS, null, null);
                 db.delete(DatabaseContract.TABLE_WORKOUTS, null, null);
 
                 resetGoal(db);
-                resetReminderSettings(db);
+                resetSettings(db);
 
                 db.setTransactionSuccessful();
             } finally {
@@ -71,13 +74,17 @@ public class DataResetRepository {
         }
     }
 
-    private static void resetReminderSettings(SQLiteDatabase db) {
+    private static void resetSettings(SQLiteDatabase db) {
         putSetting(db, DatabaseContract.SETTING_REMINDER_ENABLED,
                 String.valueOf(DatabaseContract.DEFAULT_REMINDER_ENABLED));
         putSetting(db, DatabaseContract.SETTING_REMINDER_HOUR,
                 String.valueOf(DatabaseContract.DEFAULT_REMINDER_HOUR));
         putSetting(db, DatabaseContract.SETTING_REMINDER_MINUTE,
                 String.valueOf(DatabaseContract.DEFAULT_REMINDER_MINUTE));
+        putSetting(db, DatabaseContract.SETTING_AUTO_STEPS_ENABLED,
+                String.valueOf(DatabaseContract.DEFAULT_AUTO_STEPS_ENABLED));
+        putSetting(db, DatabaseContract.SETTING_ONBOARDING_COMPLETED,
+                String.valueOf(DatabaseContract.DEFAULT_ONBOARDING_COMPLETED));
     }
 
     private static void putSetting(SQLiteDatabase db, String key, String value) {
