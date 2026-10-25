@@ -9,11 +9,14 @@ public class DailySteps {
     public static final String SOURCE_MANUAL = "manual";
     /** Value used when the number came from the device step sensor. */
     public static final String SOURCE_SENSOR = "sensor";
+    /** Value used when a manual correction becomes the new sensor checkpoint. */
+    public static final String SOURCE_SENSOR_ADJUSTED = "sensor_adjusted";
 
     private long id;
     private String activityDate; // YYYY-MM-DD
     private int steps;
     private String source;
+    private Long lastRawSensor;
     private String createdAt;
     private String updatedAt;
 
@@ -56,6 +59,18 @@ public class DailySteps {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    /**
+     * Latest raw {@code TYPE_STEP_COUNTER} reading applied to this date, or
+     * {@code null} when no automatic reading has been applied.
+     */
+    public Long getLastRawSensor() {
+        return lastRawSensor;
+    }
+
+    public void setLastRawSensor(Long lastRawSensor) {
+        this.lastRawSensor = lastRawSensor;
     }
 
     public String getCreatedAt() {
