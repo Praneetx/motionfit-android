@@ -49,12 +49,14 @@
         <activity
             android:name=".activities.WorkoutEditActivity"
             android:exported="false"
-            android:label="@string/title_add_workout" />
+            android:label="@string/title_add_workout"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activities.GoalsActivity"
             android:exported="false"
-            android:label="@string/title_goals" />
+            android:label="@string/title_goals"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activities.SummaryActivity"

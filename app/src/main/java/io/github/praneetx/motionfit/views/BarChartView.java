@@ -25,6 +25,8 @@ public class BarChartView extends View {
     private float[] values = new float[0];
     private String[] labels = new String[0];
     private float goalValue = -1f;
+    /** Optional caller-supplied TalkBack text; null means "describe the data". */
+    private String accessibilitySummary;
 
     /** Index of the "today" bar: drawn at full strength, others dimmed. -1 = none. */
     private int highlightIndex = -1;
@@ -107,8 +109,40 @@ public class BarChartView extends View {
         this.values = values == null ? new float[0] : values.clone();
         this.labels = labels == null ? new String[0] : labels.clone();
         this.goalValue = goalValue;
-        setContentDescription(getResources().getString(R.string.progress_chart_title));
+        updateAccessibilitySummary();
         invalidate();
+    }
+
+    /**
+     * Overrides the auto-generated TalkBack summary. Pass {@code null} or an
+     * empty string to return to the data-derived summary (for example when a
+     * screen has a more specific sentence for the same chart).
+     */
+    public void setAccessibilitySummary(@Nullable String summary) {
+        this.accessibilitySummary = summary == null ? null : summary.trim();
+        updateAccessibilitySummary();
+    }
+
+    private void updateAccessibilitySummary() {
+        if (accessibilitySummary != null && !accessibilitySummary.isEmpty()) {
+            setContentDescription(accessibilitySummary);
+            return;
+        }
+        if (values.length == 0) {
+            setContentDescription(getResources().getString(R.string.progress_empty));
+            return;
+        }
+
+        float highest = 0f;
+        for (float value : values) {
+            if (value > highest) {
+                highest = value;
+            }
+        }
+        setContentDescription(getResources().getString(
+                R.string.chart_accessibility_summary,
+                values.length,
+                Math.round(highest)));
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
-import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
@@ -59,26 +58,5 @@ public final class UiAnimations {
             return;
         }
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
-
-    /** Quick press feedback: 0.97 scale while pressed. */
-    public static void attachPressFeedback(View view) {
-        if (view == null) {
-            return;
-        }
-        view.setOnTouchListener((v, event) -> {
-            switch (event.getActionMasked()) {
-                case android.view.MotionEvent.ACTION_DOWN:
-                    v.animate().scaleX(0.97f).scaleY(0.97f).setDuration(90L).start();
-                    break;
-                case android.view.MotionEvent.ACTION_UP:
-                case android.view.MotionEvent.ACTION_CANCEL:
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(90L).start();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        });
     }
 }

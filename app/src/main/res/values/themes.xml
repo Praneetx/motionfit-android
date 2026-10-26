@@ -5,8 +5,11 @@
         Light-first Wise theme. DESIGN-wise.md has no dark mode, so the
         DayNight parent is deliberately replaced with a Light parent.
         Status bar and navigation bar use the sage canvas as requested.
+
+        API-27-only attributes are applied by the values-v27 override of
+        Theme.Motionfit; this base stays safe for the minSdk-26 window.
     -->
-    <style name="Theme.Motionfit" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.Motionfit.Base" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
         <item name="colorPrimaryContainer">@color/primary_pale</item>
@@ -31,7 +34,6 @@
         <item name="android:statusBarColor">@color/canvas_soft</item>
         <item name="android:navigationBarColor">@color/canvas_soft</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
 
         <!-- Inter is bundled in res/font so the app stays fully offline. -->
         <item name="android:fontFamily">@font/inter_regular</item>
@@ -41,6 +43,9 @@
         <item name="textInputStyle">@style/Widget.Wise.TextInputLayout</item>
         <item name="materialAlertDialogTheme">@style/Theme.Motionfit.Dialog</item>
     </style>
+
+    <!-- The default theme is the base; API 27+ adds the light nav bar. -->
+    <style name="Theme.Motionfit" parent="Theme.Motionfit.Base" />
 
     <!-- Dialog chrome follows ex-modal-card: white, 24dp radius, no shadow. -->
     <style name="Theme.Motionfit.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">

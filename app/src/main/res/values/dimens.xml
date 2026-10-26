@@ -47,7 +47,7 @@
     <dimen name="chart_height">160dp</dimen>
     <dimen name="chart_height_small">96dp</dimen>
     <dimen name="progress_bar_height">8dp</dimen>
-    <dimen name="icon_button_small">40dp</dimen>
+    <dimen name="icon_button_small">48dp</dimen>
 
     <!-- Floating pill navigation -->
     <dimen name="nav_height">64dp</dimen>

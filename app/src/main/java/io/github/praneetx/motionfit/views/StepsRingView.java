@@ -72,6 +72,9 @@ public class StepsRingView extends ProgressBar {
 
         setMax(100);
         setIndeterminate(false);
+        // The hero text next to the ring already announces the step total and
+        // goal. The ring is visual reinforcement, not a second control.
+        setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
     }
 
     /**

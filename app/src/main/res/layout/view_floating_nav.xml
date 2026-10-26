@@ -42,9 +42,12 @@
             <TextView
                 android:id="@+id/navLabel"
                 style="@style/Text.Wise.NavLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/spacing_xxs"
+                android:paddingEnd="@dimen/spacing_xxs"
                 android:maxLines="1"
                 android:text="@string/nav_today" />
         </LinearLayout>
@@ -71,9 +74,12 @@
             <TextView
                 android:id="@+id/navLabel"
                 style="@style/Text.Wise.NavLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/spacing_xxs"
+                android:paddingEnd="@dimen/spacing_xxs"
                 android:maxLines="1"
                 android:text="@string/nav_steps" />
         </LinearLayout>
@@ -100,9 +106,12 @@
             <TextView
                 android:id="@+id/navLabel"
                 style="@style/Text.Wise.NavLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/spacing_xxs"
+                android:paddingEnd="@dimen/spacing_xxs"
                 android:maxLines="1"
                 android:text="@string/nav_workouts" />
         </LinearLayout>
@@ -129,9 +138,12 @@
             <TextView
                 android:id="@+id/navLabel"
                 style="@style/Text.Wise.NavLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/spacing_xxs"
+                android:paddingEnd="@dimen/spacing_xxs"
                 android:maxLines="1"
                 android:text="@string/nav_progress" />
         </LinearLayout>
@@ -158,9 +170,12 @@
             <TextView
                 android:id="@+id/navLabel"
                 style="@style/Text.Wise.NavLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/spacing_xxs"
+                android:paddingEnd="@dimen/spacing_xxs"
                 android:maxLines="1"
                 android:text="@string/nav_settings" />
         </LinearLayout>

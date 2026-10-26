@@ -19,7 +19,8 @@
     <color name="ink">#0E0F0C</color>
     <color name="ink_deep">#163300</color>
     <color name="body">#454745</color>
-    <color name="mute">#868685</color>
+    <!-- 6.3:1 on white and 5.2:1 on sage; normal-size captions need 4.5:1. -->
+    <color name="mute">#5F615F</color>
 
     <!-- Semantic -->
     <color name="positive">#2EAD4B</color>

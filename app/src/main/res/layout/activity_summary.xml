@@ -41,7 +41,7 @@
                     android:padding="@dimen/spacing_sm"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_arrow_back"
-                    android:tint="@color/ink"
+                    app:tint="@color/ink"
                     android:visibility="gone" />
 
                 <TextView
@@ -106,7 +106,7 @@
                     android:padding="@dimen/spacing_sm"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_chevron_left"
-                    android:tint="@color/ink" />
+                    app:tint="@color/ink" />
 
                 <TextView
                     android:id="@+id/periodLabel"
@@ -125,7 +125,7 @@
                     android:padding="@dimen/spacing_sm"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_chevron_right"
-                    android:tint="@color/ink" />
+                    app:tint="@color/ink" />
             </LinearLayout>
 
             <!-- HERO: period steps -->

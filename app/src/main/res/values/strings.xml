@@ -113,6 +113,7 @@
     <string name="progress_best_day">Best step day</string>
     <string name="progress_active_days">Active days</string>
     <string name="progress_chart_title">Steps per day</string>
+    <string name="chart_accessibility_summary">Chart with %1$d bars. Highest value %2$d.</string>
     <string name="progress_empty">No activity recorded for this period.</string>
     <string name="progress_prev">Previous period</string>
     <string name="progress_next">Next period</string>

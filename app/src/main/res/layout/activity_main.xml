@@ -54,7 +54,7 @@
                             android:padding="@dimen/spacing_sm"
                             android:scaleType="centerInside"
                             android:src="@drawable/ic_chevron_left"
-                            android:tint="@color/ink" />
+                            app:tint="@color/ink" />
 
                         <TextView
                             android:id="@+id/dashboardDate"
@@ -73,7 +73,7 @@
                             android:padding="@dimen/spacing_sm"
                             android:scaleType="centerInside"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/ink" />
+                            app:tint="@color/ink" />
                     </LinearLayout>
 
                     <TextView
@@ -93,7 +93,7 @@
                     android:padding="@dimen/spacing_md"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_add"
-                    android:tint="@color/ink" />
+                    app:tint="@color/ink" />
             </LinearLayout>
 
             <!-- HERO: card-feature-dark with the lime steps ring -->
