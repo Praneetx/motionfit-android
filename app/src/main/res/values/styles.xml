@@ -205,7 +205,8 @@
     <!-- Bare numeric value used inside the Goals cards -->
     <style name="Widget.Wise.BareNumberInput" parent="Widget.Wise.TextInputEditText">
         <item name="android:fontFamily">@font/inter_black</item>
-        <item name="android:textSize">@dimen/text_screen_title</item>
+        <!-- 28sp keeps a seven-digit goal between the 48dp steppers at 1.3x. -->
+        <item name="android:textSize">28sp</item>
         <item name="android:textColor">@color/ink</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:fontFeatureSettings">tnum</item>
@@ -214,6 +215,7 @@
         <item name="android:paddingStart">0dp</item>
         <item name="android:paddingEnd">0dp</item>
         <item name="android:minWidth">80dp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <!-- ==================================================================

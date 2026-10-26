@@ -64,10 +64,12 @@
 
             <!-- Type -->
             <TextView
+                android:id="@+id/typeLabel"
                 style="@style/Text.Wise.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xl"
+                android:labelFor="@id/workoutTypeSpinner"
                 android:text="@string/label_type" />
 
             <LinearLayout
@@ -84,16 +86,17 @@
                     android:id="@+id/workoutTypeSpinner"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/touch_min"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/workout_type_label" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <!-- Date -->
             <TextView
+                android:id="@+id/dateLabel"
                 style="@style/Text.Wise.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_lg"
+                android:labelFor="@id/btnPickDate"
                 android:text="@string/label_date" />
 
             <com.google.android.material.button.MaterialButton
@@ -117,6 +120,7 @@
                     style="@style/Widget.Wise.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/workout_duration_label"
                     android:fontFeatureSettings="tnum"
                     android:inputType="number"
                     android:maxLength="4" />
@@ -135,6 +139,7 @@
                     style="@style/Widget.Wise.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/workout_notes_field"
                     android:gravity="top|start"
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="500"

@@ -111,6 +111,10 @@
     <!-- Goals -->
     <string name="goals_step_label">Daily step goal</string>
     <string name="goals_minutes_label">Daily workout minutes goal</string>
+    <string name="goals_decrease_steps">Decrease daily step goal</string>
+    <string name="goals_increase_steps">Increase daily step goal</string>
+    <string name="goals_decrease_minutes">Decrease daily workout minutes goal</string>
+    <string name="goals_increase_minutes">Increase daily workout minutes goal</string>
     <string name="goals_help">Goals drive the dashboard progress bars. Changing a goal never changes past records.</string>
     <string name="goals_saved">Goals updated.</string>
     <string name="goals_save_failed">Could not save the goals.</string>
@@ -145,7 +149,6 @@
     <string name="settings_reminders_section">Reminders</string>
     <string name="settings_data_section">Local data</string>
     <string name="settings_about_section">About</string>
-    <string name="settings_reminder_switch">Daily activity reminder</string>
     <string name="settings_reminder_time">Reminder time</string>
     <string name="settings_change_time">Change time</string>
     <string name="settings_reminder_saved">Reminder settings saved.</string>
@@ -159,7 +162,7 @@
     <string name="settings_clear_confirm">Delete everything</string>
     <string name="settings_cleared">All local data cleared.</string>
     <string name="settings_clear_failed">Could not clear the data.</string>
-    <string name="settings_version">Version 0.1.0</string>
+    <string name="settings_version_format">Version %1$s</string>
     <string name="settings_built_with">Java + Kotlin + XML + SQLite — fully offline</string>
     <string name="settings_about_text">Motionfit records your daily steps, workouts and goals entirely on your device.\n\nNo account, no analytics, no internet permission. Distance tracking and calorie estimation are not included.</string>
     <string name="settings_go_goals">Edit fitness goals</string>
@@ -190,8 +193,6 @@
     <string name="nav_settings">Settings</string>
 
     <string name="content_desc_add">Add</string>
-    <string name="content_desc_increase">Increase</string>
-    <string name="content_desc_decrease">Decrease</string>
 
     <string name="label_workout_time">Workout time</string>
     <string name="label_workouts_count">Workouts</string>

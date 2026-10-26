@@ -35,6 +35,12 @@ android {
         }
     }
 
+    buildFeatures {
+        // Settings shows the installed version from BuildConfig instead of a
+        // hardcoded string.
+        buildConfig true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17

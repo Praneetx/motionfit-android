@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import io.github.praneetx.motionfit.BuildConfig;
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.models.AppSettings;
 import io.github.praneetx.motionfit.repositories.DataResetRepository;
@@ -59,7 +60,10 @@ public class SettingsActivity extends AppCompatActivity {
         reminderTimeView = findViewById(R.id.reminderTimeValue);
         notificationsBlockedView = findViewById(R.id.notificationsBlocked);
 
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        TextView versionView = findViewById(R.id.settingsVersion);
+        versionView.setText(getString(
+                R.string.settings_version_format, BuildConfig.VERSION_NAME));
+
         findViewById(R.id.btnEditGoals).setOnClickListener(
                 v -> startActivity(new Intent(this, GoalsActivity.class)));
         findViewById(R.id.btnChangeTime).setOnClickListener(v -> showTimePicker());

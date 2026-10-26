@@ -63,9 +63,11 @@
                 android:padding="@dimen/card_padding">
 
                 <TextView
+                    android:id="@+id/stepGoalLabel"
                     style="@style/Text.Wise.Secondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/stepGoalInput"
                     android:text="@string/goals_step_label" />
 
                 <LinearLayout
@@ -80,7 +82,7 @@
                         android:layout_width="@dimen/touch_min"
                         android:layout_height="@dimen/touch_min"
                         android:background="@drawable/bg_icon_circle_soft"
-                        android:contentDescription="@string/content_desc_decrease"
+                        android:contentDescription="@string/goals_decrease_steps"
                         android:padding="@dimen/spacing_md"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_minus"
@@ -100,7 +102,7 @@
                         android:layout_width="@dimen/touch_min"
                         android:layout_height="@dimen/touch_min"
                         android:background="@drawable/bg_icon_circle_soft"
-                        android:contentDescription="@string/content_desc_increase"
+                        android:contentDescription="@string/goals_increase_steps"
                         android:padding="@dimen/spacing_md"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_add"
@@ -137,9 +139,11 @@
                 android:padding="@dimen/card_padding">
 
                 <TextView
+                    android:id="@+id/minutesGoalLabel"
                     style="@style/Text.Wise.Secondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/minutesGoalInput"
                     android:text="@string/goals_minutes_label" />
 
                 <LinearLayout
@@ -154,7 +158,7 @@
                         android:layout_width="@dimen/touch_min"
                         android:layout_height="@dimen/touch_min"
                         android:background="@drawable/bg_icon_circle_soft"
-                        android:contentDescription="@string/content_desc_decrease"
+                        android:contentDescription="@string/goals_decrease_minutes"
                         android:padding="@dimen/spacing_md"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_minus"
@@ -174,7 +178,7 @@
                         android:layout_width="@dimen/touch_min"
                         android:layout_height="@dimen/touch_min"
                         android:background="@drawable/bg_icon_circle_soft"
-                        android:contentDescription="@string/content_desc_increase"
+                        android:contentDescription="@string/goals_increase_minutes"
                         android:padding="@dimen/spacing_md"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_add"
