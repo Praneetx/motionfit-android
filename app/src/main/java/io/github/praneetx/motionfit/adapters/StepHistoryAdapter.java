@@ -72,12 +72,25 @@ public class StepHistoryAdapter extends RecyclerView.Adapter<StepHistoryAdapter.
         }
 
         void bind(final DailySteps record) {
-            dateView.setText(DateUtils.formatForDisplay(record.getActivityDate()));
-            int sourceRes = DailySteps.SOURCE_SENSOR.equals(record.getSource())
-                    ? R.string.steps_source_sensor
-                    : R.string.steps_source_manual;
+            String date = DateUtils.formatForDisplay(record.getActivityDate());
+            int sourceRes;
+            if (DailySteps.SOURCE_SENSOR.equals(record.getSource())) {
+                sourceRes = R.string.steps_source_sensor;
+            } else if (DailySteps.SOURCE_SENSOR_ADJUSTED.equals(record.getSource())) {
+                sourceRes = R.string.steps_source_adjusted;
+            } else {
+                sourceRes = R.string.steps_source_manual;
+            }
+            String steps = FormatUtils.intText(record.getSteps());
+
+            dateView.setText(date);
             sourceView.setText(sourceRes);
-            stepsView.setText(FormatUtils.intText(record.getSteps()));
+            stepsView.setText(steps);
+            itemView.setContentDescription(itemView.getContext().getString(
+                    R.string.steps_history_row_description,
+                    date,
+                    itemView.getContext().getString(sourceRes),
+                    steps));
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {

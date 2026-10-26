@@ -38,6 +38,20 @@ public class SummaryRepository {
 
     /** Steps + workout totals for a single calendar day. */
     public DaySummary getDaySummary(String dateIso) {
+        try {
+            return loadDaySummary(dateIso);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "getDaySummary failed for " + dateIso, e);
+            return new DaySummary(dateIso, 0, 0, 0);
+        }
+    }
+
+    /**
+     * Strict variant for screens that must tell a failed read apart from a real
+     * zero. Package-private so the dashboard can use it without making the
+     * legacy, best-effort {@link #getDaySummary(String)} contract public API.
+     */
+    DaySummary loadDaySummary(String dateIso) {
         int steps = 0;
         int workoutCount = 0;
         int workoutMinutes = 0;
@@ -46,33 +60,29 @@ public class SummaryRepository {
             return new DaySummary(dateIso, 0, 0, 0);
         }
 
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
+        SQLiteDatabase db = helper.getReadableDatabase();
 
-            Cursor stepCursor = db.rawQuery(
-                    "SELECT " + DatabaseContract.COL_DS_STEPS
-                            + " FROM " + DatabaseContract.TABLE_DAILY_STEPS
-                            + " WHERE " + DatabaseContract.COL_DS_DATE + " = ?",
-                    new String[]{dateIso});
-            try (stepCursor) {
-                if (stepCursor.moveToFirst()) {
-                    steps = stepCursor.getInt(0);
-                }
+        Cursor stepCursor = db.rawQuery(
+                "SELECT " + DatabaseContract.COL_DS_STEPS
+                        + " FROM " + DatabaseContract.TABLE_DAILY_STEPS
+                        + " WHERE " + DatabaseContract.COL_DS_DATE + " = ?",
+                new String[]{dateIso});
+        try (stepCursor) {
+            if (stepCursor.moveToFirst()) {
+                steps = stepCursor.getInt(0);
             }
+        }
 
-            Cursor workoutCursor = db.rawQuery(
-                    "SELECT COUNT(*), IFNULL(SUM(" + DatabaseContract.COL_W_DURATION + "), 0)"
-                            + " FROM " + DatabaseContract.TABLE_WORKOUTS
-                            + " WHERE " + DatabaseContract.COL_W_DATE + " = ?",
-                    new String[]{dateIso});
-            try (workoutCursor) {
-                if (workoutCursor.moveToFirst()) {
-                    workoutCount = workoutCursor.getInt(0);
-                    workoutMinutes = workoutCursor.getInt(1);
-                }
+        Cursor workoutCursor = db.rawQuery(
+                "SELECT COUNT(*), IFNULL(SUM(" + DatabaseContract.COL_W_DURATION + "), 0)"
+                        + " FROM " + DatabaseContract.TABLE_WORKOUTS
+                        + " WHERE " + DatabaseContract.COL_W_DATE + " = ?",
+                new String[]{dateIso});
+        try (workoutCursor) {
+            if (workoutCursor.moveToFirst()) {
+                workoutCount = workoutCursor.getInt(0);
+                workoutMinutes = workoutCursor.getInt(1);
             }
-        } catch (SQLiteException e) {
-            Log.e(TAG, "getDaySummary failed for " + dateIso, e);
         }
 
         return new DaySummary(dateIso, steps, workoutCount, workoutMinutes);

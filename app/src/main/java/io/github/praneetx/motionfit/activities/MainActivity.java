@@ -19,6 +19,7 @@ import io.github.praneetx.motionfit.repositories.DashboardRepository;
 import io.github.praneetx.motionfit.repositories.WorkoutRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
+import io.github.praneetx.motionfit.utils.LoadResult;
 import io.github.praneetx.motionfit.utils.OperationResult;
 import io.github.praneetx.motionfit.utils.UiAnimations;
 import io.github.praneetx.motionfit.views.FloatingNavView;
@@ -59,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
     private TextView workoutPercentView;
     private TextView recentEmpty;
     private RecyclerView recentWorkouts;
+    private View dashboardErrorState;
+    private View stepsHeroCard;
+    private View workoutCard;
+    private View dashboardEmptyState;
+    private View recentCard;
+    private View editStepsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,12 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
         workoutPercentView = findViewById(R.id.workoutPercent);
         recentEmpty = findViewById(R.id.recentEmpty);
         recentWorkouts = findViewById(R.id.recentWorkouts);
+        dashboardErrorState = findViewById(R.id.dashboardErrorState);
+        stepsHeroCard = findViewById(R.id.stepsHeroCard);
+        workoutCard = findViewById(R.id.workoutCard);
+        dashboardEmptyState = findViewById(R.id.dashboardEmptyState);
+        recentCard = findViewById(R.id.recentCard);
+        editStepsButton = findViewById(R.id.btnEditSteps);
     }
 
     private void setUpRecycler() {
@@ -112,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
         findViewById(R.id.btnPrevDay).setOnClickListener(v -> shiftSelectedDate(-1));
         findViewById(R.id.btnNextDay).setOnClickListener(v -> shiftSelectedDate(1));
 
+        editStepsButton.setOnClickListener(v -> openSteps());
+        findViewById(R.id.btnEmptyLogSteps).setOnClickListener(v -> openSteps());
+        findViewById(R.id.btnRetryDashboard).setOnClickListener(v -> loadDashboard());
+
         FloatingNavView nav = findViewById(R.id.floatingNav);
         if (nav != null) {
             nav.setActiveDestination(FloatingNavView.DEST_TODAY);
@@ -125,13 +142,17 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
     }
 
     private void loadDashboard() {
-        DashboardData data = dashboardRepository.load(selectedDate);
-        if (data == null) {
-            Toast.makeText(this, R.string.dashboard_error, Toast.LENGTH_LONG).show();
+        String displayDate = DateUtils.formatForDisplay(selectedDate);
+        dateView.setText(displayDate);
+        dateView.setContentDescription(getString(R.string.dashboard_date_description, displayDate));
+
+        LoadResult<DashboardData> result = dashboardRepository.loadResult(selectedDate);
+        if (!result.isSuccess() || result.getData() == null) {
+            showLoadError();
             return;
         }
-
-        dateView.setText(DateUtils.formatForDisplay(data.dateIso));
+        DashboardData data = result.getData();
+        showLoadedDay();
 
         // Hero ring: fills once per load; the figure counts up to the total.
         stepsProgress.setProgressAnimated(
@@ -140,7 +161,12 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
         lastStepsShown = data.steps;
         stepsGoalView.setText(getString(R.string.of_steps_goal,
                 FormatUtils.intText(data.stepGoal)));
-        stepsPercentView.setText(GoalProgressCalculator.formatPercent(data.steps, data.stepGoal));
+        String stepPercent = GoalProgressCalculator.formatPercent(data.steps, data.stepGoal);
+        stepsPercentView.setText(stepPercent);
+        stepsValue.setContentDescription(getString(R.string.dashboard_steps_value_description,
+                FormatUtils.intText(data.steps), stepPercent, FormatUtils.intText(data.stepGoal)));
+        editStepsButton.setContentDescription(
+                getString(R.string.dashboard_edit_steps_on_date, displayDate));
 
         // badge-positive: only when the daily step goal is actually reached.
         View goalBadge = findViewById(R.id.stepsGoalBadge);
@@ -161,12 +187,33 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
         workoutPercentView.setText(
                 GoalProgressCalculator.formatPercent(data.workoutMinutes, data.workoutMinutesGoal));
 
-        // Recent workouts
+        // Recent workouts, or a real empty-day action instead of a zero-only page.
         List<Workout> recent = data.recentWorkouts;
         workoutAdapter.setItems(recent);
-        boolean isEmpty = recent.isEmpty();
-        recentEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        recentWorkouts.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        boolean noWorkouts = recent.isEmpty();
+        recentEmpty.setVisibility(noWorkouts ? View.VISIBLE : View.GONE);
+        recentWorkouts.setVisibility(noWorkouts ? View.GONE : View.VISIBLE);
+
+        boolean emptyDay = data.steps == 0 && data.workoutCount == 0 && noWorkouts;
+        dashboardEmptyState.setVisibility(emptyDay ? View.VISIBLE : View.GONE);
+        recentCard.setVisibility(emptyDay ? View.GONE : View.VISIBLE);
+    }
+
+    private void showLoadError() {
+        dashboardErrorState.setVisibility(View.VISIBLE);
+        stepsHeroCard.setVisibility(View.GONE);
+        workoutCard.setVisibility(View.GONE);
+        dashboardEmptyState.setVisibility(View.GONE);
+        recentCard.setVisibility(View.GONE);
+    }
+
+    private void showLoadedDay() {
+        dashboardErrorState.setVisibility(View.GONE);
+        stepsHeroCard.setVisibility(View.VISIBLE);
+        workoutCard.setVisibility(View.VISIBLE);
+        // Empty/recent visibility is decided after the recent list is known.
+        dashboardEmptyState.setVisibility(View.GONE);
+        recentCard.setVisibility(View.VISIBLE);
     }
 
     private void openSteps() {

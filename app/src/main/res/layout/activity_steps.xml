@@ -84,6 +84,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xs"
+                    android:autoSizeMaxTextSize="64sp"
+                    android:autoSizeMinTextSize="24sp"
+                    android:autoSizeStepGranularity="2sp"
+                    android:autoSizeTextType="uniform"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -118,6 +122,8 @@
                         android:text="@string/sensor_title" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/bg_badge_negative"
                         android:fontFamily="@font/inter_semibold"
                         android:paddingStart="@dimen/spacing_md"

@@ -40,7 +40,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -59,10 +59,14 @@
                         <TextView
                             android:id="@+id/dashboardDate"
                             style="@style/Text.Wise.Caption"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/spacing_xs"
-                            android:layout_marginEnd="@dimen/spacing_xs" />
+                            android:layout_marginEnd="@dimen/spacing_xs"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1" />
 
                         <ImageButton
                             android:id="@+id/btnNextDay"
@@ -96,8 +100,43 @@
                     app:tint="@color/ink" />
             </LinearLayout>
 
+            <!-- Inline load failure: replaces the day cards until Retry succeeds -->
+            <LinearLayout
+                android:id="@+id/dashboardErrorState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:accessibilityLiveRegion="polite"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dashboard_error_title" />
+
+                <TextView
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/dashboard_error" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetryDashboard"
+                    style="@style/Widget.Wise.Button.Primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="@string/action_retry" />
+            </LinearLayout>
+
             <!-- HERO: card-feature-dark with the lime steps ring -->
             <LinearLayout
+                android:id="@+id/stepsHeroCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xl"
@@ -130,12 +169,12 @@
                             android:layout_width="@dimen/ring_value_width"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:autoSizeMaxTextSize="64sp"
+                            android:autoSizeMinTextSize="24sp"
+                            android:autoSizeStepGranularity="2sp"
+                            android:autoSizeTextType="uniform"
                             android:maxLines="1"
-                            android:singleLine="true"
-                            app:autoSizeMaxTextSize="64sp"
-                            app:autoSizeMinTextSize="24sp"
-                            app:autoSizeStepGranularity="2sp"
-                            app:autoSizeTextType="uniform" />
+                            android:singleLine="true" />
 
                         <TextView
                             android:id="@+id/stepsPercent"
@@ -171,10 +210,19 @@
                     android:textColor="@color/positive_deep"
                     android:textSize="@dimen/text_secondary"
                     android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditSteps"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/dashboard_edit_steps" />
             </LinearLayout>
 
             <!-- Workout time + count card -->
             <LinearLayout
+                android:id="@+id/workoutCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_lg"
@@ -277,8 +325,43 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Whole-day empty state: separate from a load failure -->
+            <LinearLayout
+                android:id="@+id/dashboardEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:accessibilityLiveRegion="polite"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dashboard_empty_title" />
+
+                <TextView
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/dashboard_no_steps_yet" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEmptyLogSteps"
+                    style="@style/Widget.Wise.Button.Primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="@string/action_log_steps" />
+            </LinearLayout>
+
             <!-- Recent workouts -->
             <LinearLayout
+                android:id="@+id/recentCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_lg"

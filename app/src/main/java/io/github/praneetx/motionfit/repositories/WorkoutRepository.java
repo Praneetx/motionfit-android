@@ -137,6 +137,20 @@ public class WorkoutRepository {
      * @param limit      maximum rows to return (0 or less = no limit)
      */
     public List<Workout> getWorkouts(String typeFilter, String dateFilter, int limit) {
+        try {
+            return loadWorkouts(typeFilter, dateFilter, limit);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "getWorkouts failed", e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Strict variant for screens that must tell a failed read apart from a real
+     * empty list. Package-private so the dashboard can use it while the public
+     * read methods keep their existing best-effort behaviour.
+     */
+    List<Workout> loadWorkouts(String typeFilter, String dateFilter, int limit) {
         StringBuilder selection = new StringBuilder();
         List<String> args = new ArrayList<>();
 
@@ -156,23 +170,19 @@ public class WorkoutRepository {
         String limitClause = limit > 0 ? String.valueOf(limit) : null;
 
         List<Workout> results = new ArrayList<>();
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor cursor = db.query(
-                    DatabaseContract.TABLE_WORKOUTS,
-                    null,
-                    selection.length() > 0 ? selection.toString() : null,
-                    args.isEmpty() ? null : args.toArray(new String[0]),
-                    null, null,
-                    orderBy,
-                    limitClause);
-            try (cursor) {
-                while (cursor.moveToNext()) {
-                    results.add(mapCursor(cursor));
-                }
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.query(
+                DatabaseContract.TABLE_WORKOUTS,
+                null,
+                selection.length() > 0 ? selection.toString() : null,
+                args.isEmpty() ? null : args.toArray(new String[0]),
+                null, null,
+                orderBy,
+                limitClause);
+        try (cursor) {
+            while (cursor.moveToNext()) {
+                results.add(mapCursor(cursor));
             }
-        } catch (SQLiteException e) {
-            Log.e(TAG, "getWorkouts failed", e);
         }
         return results;
     }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.adapters.StepHistoryAdapter;
 import io.github.praneetx.motionfit.models.DailySteps;
+import io.github.praneetx.motionfit.repositories.SettingsRepository;
 import io.github.praneetx.motionfit.repositories.StepsRepository;
 import io.github.praneetx.motionfit.services.StepCounterSensorHelper;
 import io.github.praneetx.motionfit.utils.DateUtils;
@@ -42,6 +43,7 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
     private static final int REQUEST_ACTIVITY_RECOGNITION = 101;
 
     private StepsRepository stepsRepository;
+    private SettingsRepository settingsRepository;
     private StepHistoryAdapter historyAdapter;
     private StepCounterSensorHelper sensorHelper;
 
@@ -51,6 +53,7 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
 
     private TextView selectedDateView;
     private TextView selectedValueView;
+    private View editStepsButton;
     private TextView stepsEmptyView;
     private RecyclerView historyView;
     private TextView sensorStatusView;
@@ -64,6 +67,7 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
         setContentView(R.layout.activity_steps);
 
         stepsRepository = new StepsRepository(this);
+        settingsRepository = new SettingsRepository(this);
 
         String requestedDate = getIntent().getStringExtra(EXTRA_DATE);
         selectedDate = DateUtils.isValidIsoDate(requestedDate) ? requestedDate : DateUtils.todayIso();
@@ -92,6 +96,7 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
     private void bindViews() {
         selectedDateView = findViewById(R.id.stepsSelectedDate);
         selectedValueView = findViewById(R.id.stepsSelectedValue);
+        editStepsButton = findViewById(R.id.btnEditSteps);
         stepsEmptyView = findViewById(R.id.stepsEmpty);
         historyView = findViewById(R.id.stepHistory);
         sensorStatusView = findViewById(R.id.sensorStatus);
@@ -127,8 +132,16 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
     private void refresh() {
         DailySteps record = stepsRepository.getForDate(selectedDate);
         int steps = record == null ? 0 : record.getSteps();
-        selectedDateView.setText(DateUtils.formatForDisplay(selectedDate));
+        String displayDate = DateUtils.formatForDisplay(selectedDate);
+        selectedDateView.setText(displayDate);
+        selectedDateView.setContentDescription(
+                getString(R.string.dashboard_date_description, displayDate));
         selectedValueView.setText(FormatUtils.intText(steps));
+        selectedValueView.setContentDescription(getString(
+                R.string.steps_selected_value_description,
+                FormatUtils.intText(steps), displayDate));
+        editStepsButton.setContentDescription(
+                getString(R.string.dashboard_edit_steps_on_date, displayDate));
 
         historyAdapter.setItems(stepsRepository.getAll());
         boolean isEmpty = historyAdapter.getItemCount() == 0;
@@ -141,9 +154,13 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
     private void showStepDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_steps, null);
         TextView dateLabel = dialogView.findViewById(R.id.dialogDateLabel);
+        TextView helper = dialogView.findViewById(R.id.dialogHelper);
         final TextInputEditText input = dialogView.findViewById(R.id.stepsInput);
 
         dateLabel.setText(DateUtils.formatForDisplay(selectedDate));
+        helper.setText(settingsRepository.isAutoStepsEnabled()
+                ? R.string.steps_dialog_helper_auto
+                : R.string.steps_dialog_helper_manual);
         DailySteps existing = stepsRepository.getForDate(selectedDate);
         if (existing != null) {
             input.setText(String.valueOf(existing.getSteps()));

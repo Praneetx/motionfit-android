@@ -20,6 +20,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
     <string name="action_ok">OK</string>
+    <string name="action_retry">Retry</string>
     <string name="action_log_steps">Log steps</string>
     <string name="action_add_workout">Add workout</string>
     <string name="action_goals">Goals</string>
@@ -34,11 +35,16 @@
     <string name="dashboard_goal_of_minutes">of %1$s min goal</string>
     <string name="dashboard_recent_title">Recent workouts</string>
     <string name="dashboard_empty_recent">No workouts recorded yet.\nTap “Add workout” to start.</string>
+    <string name="dashboard_empty_title">No activity yet</string>
+    <string name="dashboard_error_title">Could not load this day</string>
     <string name="dashboard_error">Could not load your activity data. Please try again.</string>
     <string name="dashboard_no_steps_yet">No steps logged for this day yet.</string>
     <string name="content_desc_previous_day">Previous day</string>
     <string name="content_desc_next_day">Next day</string>
     <string name="dashboard_edit_steps">Edit steps</string>
+    <string name="dashboard_edit_steps_on_date">Edit steps for %1$s</string>
+    <string name="dashboard_date_description">Selected date: %1$s</string>
+    <string name="dashboard_steps_value_description">%1$s steps, %2$s of %3$s goal</string>
 
     <!-- Steps screen -->
     <string name="steps_history_title">Step history</string>
@@ -47,7 +53,10 @@
     <string name="steps_field_label">Step total</string>
     <string name="steps_hint">e.g. 6500</string>
     <string name="steps_source_manual">Manual</string>
-    <string name="steps_source_sensor">Sensor</string>
+    <string name="steps_source_sensor">Automatic</string>
+    <string name="steps_source_adjusted">Adjusted</string>
+    <string name="steps_selected_value_description">%1$s steps on %2$s</string>
+    <string name="steps_history_row_description">%1$s, %2$s, %3$s steps</string>
     <string name="steps_error_empty">Please enter a step count.</string>
     <string name="steps_error_not_number">Please enter digits only.</string>
     <string name="steps_error_negative">Steps cannot be negative.</string>
@@ -202,5 +211,6 @@
     <string name="details_duration">Duration</string>
     <string name="workout_edit_action">Edit</string>
 
-    <string name="steps_dialog_helper">Enter the total for this day.</string>
+    <string name="steps_dialog_helper_manual">This becomes the total for this day. Automatic counting is off, so the sensor is not used.</string>
+    <string name="steps_dialog_helper_auto">This becomes the total for this day. Future automatic steps continue from here.</string>
 </resources>
