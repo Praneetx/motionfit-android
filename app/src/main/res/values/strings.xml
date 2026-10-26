@@ -11,6 +11,20 @@
     <string name="title_goals">Fitness Goals</string>
     <string name="title_progress">Progress</string>
     <string name="title_settings">Settings</string>
+    <string name="title_onboarding">Welcome</string>
+
+    <!-- First-run onboarding -->
+    <string name="onboarding_welcome_title">Welcome to Motionfit</string>
+    <string name="onboarding_welcome_body">A short setup, then everything stays on this device. You can skip any part of it.</string>
+    <string name="onboarding_privacy_title">Private by design</string>
+    <string name="onboarding_privacy_body">Motionfit works fully offline. There is no account, no analytics and no internet permission. Your steps, workouts and goals stay on your device.</string>
+    <string name="onboarding_goals_title">Your daily goals</string>
+    <string name="onboarding_goals_body">These are your current goals. Skipping keeps them exactly as they are; finishing saves the values shown below. Past records are never changed.</string>
+    <string name="onboarding_auto_title">Automatic counting</string>
+    <string name="onboarding_auto_body">Optional. Motionfit can count steps with the device step counter and show a persistent notification while it tracks. Counting starts from the moment you turn it on, so use a manual total if you want to include earlier steps.</string>
+    <string name="onboarding_auto_permission_note">If you turn this on and finish, Android may ask for activity and notification access. Denying keeps manual entry and workouts available. No location is ever requested.</string>
+    <string name="onboarding_finish">Save goals and continue</string>
+    <string name="onboarding_skip">Skip for now</string>
 
     <!-- Common actions -->
     <string name="action_back">Back</string>

@@ -16,6 +16,7 @@ import io.github.praneetx.motionfit.logic.GoalProgressCalculator;
 import io.github.praneetx.motionfit.models.DashboardData;
 import io.github.praneetx.motionfit.models.Workout;
 import io.github.praneetx.motionfit.repositories.DashboardRepository;
+import io.github.praneetx.motionfit.repositories.SettingsRepository;
 import io.github.praneetx.motionfit.repositories.WorkoutRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
@@ -70,6 +71,15 @@ public class MainActivity extends AppCompatActivity implements WorkoutAdapter.Li
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Existing V1 users and fresh installs see the short, skippable setup
+        // once. It never runs over the dashboard after completion.
+        if (!new SettingsRepository(this).isOnboardingCompleted()) {
+            startActivity(new Intent(this, OnboardingActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         dashboardRepository = new DashboardRepository(this);

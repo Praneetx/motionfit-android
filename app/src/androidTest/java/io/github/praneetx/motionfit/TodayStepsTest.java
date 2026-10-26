@@ -27,6 +27,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import io.github.praneetx.motionfit.activities.MainActivity;
 import io.github.praneetx.motionfit.repositories.DataResetRepository;
+import io.github.praneetx.motionfit.repositories.SettingsRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
 
 import org.junit.Before;
@@ -47,6 +48,8 @@ public class TodayStepsTest {
     public void clearData() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertTrue(new DataResetRepository(context).clearAllData().isSuccess());
+        // These checks exercise the dashboard after the one-time setup.
+        assertTrue(new SettingsRepository(context).setOnboardingCompleted(true).isSuccess());
     }
 
     @Test

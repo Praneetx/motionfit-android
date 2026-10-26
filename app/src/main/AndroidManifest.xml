@@ -40,6 +40,12 @@
         </activity>
 
         <activity
+            android:name=".activities.OnboardingActivity"
+            android:exported="false"
+            android:label="@string/title_onboarding"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".activities.StepsActivity"
             android:exported="false"
             android:label="@string/title_steps" />
