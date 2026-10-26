@@ -99,8 +99,9 @@
                     android:text="@string/steps_go_hint" />
             </LinearLayout>
 
-            <!-- Optional sensor (EXPERIMENTAL) -->
+            <!-- Read-only effective automatic-tracking status -->
             <LinearLayout
+                android:id="@+id/stepsTrackingCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_lg"
@@ -108,70 +109,34 @@
                 android:orientation="vertical"
                 android:padding="@dimen/card_padding">
 
-                <LinearLayout
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/Text.Wise.SectionTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/sensor_title" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_badge_negative"
-                        android:fontFamily="@font/inter_semibold"
-                        android:paddingStart="@dimen/spacing_md"
-                        android:paddingTop="@dimen/spacing_xs"
-                        android:paddingEnd="@dimen/spacing_md"
-                        android:paddingBottom="@dimen/spacing_xs"
-                        android:text="@string/sensor_experimental_badge"
-                        android:textColor="@color/canvas"
-                        android:textSize="@dimen/text_caption" />
-                </LinearLayout>
+                    android:text="@string/steps_tracking_title" />
 
                 <TextView
-                    android:id="@+id/sensorStatus"
-                    style="@style/Text.Wise.Secondary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm" />
-
-                <TextView
-                    android:id="@+id/sensorReading"
+                    android:id="@+id/stepsTrackingStatus"
                     style="@style/Text.Wise.MetricLarge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xs"
-                    android:visibility="gone" />
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:accessibilityLiveRegion="polite" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/stepsTrackingDetail"
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnManageTracking"
+                    style="@style/Widget.Wise.Button.Secondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_lg"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnToggleSensor"
-                        style="@style/Widget.Wise.Button.Secondary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sensor_start" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSaveSensorSteps"
-                        style="@style/Widget.Wise.Button.Primary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_sm"
-                        android:text="@string/action_save"
-                        android:visibility="gone" />
-                </LinearLayout>
+                    android:text="@string/steps_tracking_manage" />
             </LinearLayout>
 
             <!-- History -->

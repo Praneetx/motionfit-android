@@ -187,6 +187,39 @@ public class StepsRepositoryTest {
     }
 
     @Test
+    public void continuousMidnightReadingCarriesTheGapIntoTheNewDay() {
+        assertTrue(repository.applySensorReading(DATE, 1000L).isSuccess());
+        assertTrue(repository.applySensorReading(DATE, 1010L).isSuccess());
+
+        assertTrue(repository.applyContinuousSensorReading(
+                OTHER_DATE, 1100L, DATE, 1010L).isSuccess());
+
+        DailySteps previous = repository.getForDate(DATE);
+        DailySteps next = repository.getForDate(OTHER_DATE);
+        assertNotNull(previous);
+        assertNotNull(next);
+        assertEquals(10, previous.getSteps());
+        assertEquals(Long.valueOf(1010L), previous.getLastRawSensor());
+        assertEquals(90, next.getSteps());
+        assertEquals(Long.valueOf(1100L), next.getLastRawSensor());
+        assertEquals(DailySteps.SOURCE_SENSOR, next.getSource());
+    }
+
+    @Test
+    public void continuousMidnightReadingPreservesAnExistingManualNewDayTotal() {
+        assertTrue(repository.saveManualTotal(OTHER_DATE, 5000).isSuccess());
+
+        assertTrue(repository.applyContinuousSensorReading(
+                OTHER_DATE, 1100L, DATE, 1010L).isSuccess());
+
+        DailySteps next = repository.getForDate(OTHER_DATE);
+        assertNotNull(next);
+        assertEquals(5000, next.getSteps());
+        assertEquals(Long.valueOf(1100L), next.getLastRawSensor());
+        assertEquals(DailySteps.SOURCE_SENSOR_ADJUSTED, next.getSource());
+    }
+
+    @Test
     public void negativeManualTotalIsRejectedWithoutWriting() {
         OperationResult result = repository.saveManualTotal(DATE, -1);
 

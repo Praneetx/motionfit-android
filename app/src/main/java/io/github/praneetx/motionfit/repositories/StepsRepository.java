@@ -169,6 +169,50 @@ public class StepsRepository {
     }
 
     /**
+     * Applies a reading across a midnight boundary observed continuously by the
+     * same service. Only the gap since the previous day's checkpoint is credited
+     * to the new day; the previous day's row is never modified.
+     *
+     * <p>If the new day already has a row (for example a manual total), that total
+     * is preserved and the reading becomes its checkpoint. A backwards or
+     * same-day date falls back to the conservative single-day rule.</p>
+     */
+    public OperationResult applyContinuousSensorReading(
+            String dateIso,
+            long raw,
+            String previousDateIso,
+            Long previousCheckpoint) {
+        if (!DateUtils.isValidIsoDate(dateIso)) {
+            return OperationResult.error("The selected date is not valid.");
+        }
+        if (previousDateIso == null || previousCheckpoint == null
+                || !DateUtils.isValidIsoDate(previousDateIso)
+                || previousDateIso.compareTo(dateIso) >= 0) {
+            return applySensorReading(dateIso, raw);
+        }
+        try {
+            DailySteps current = readForDate(dateIso);
+            if (current != null) {
+                return applySensorReading(dateIso, raw, current);
+            }
+
+            StepDayState previous = new StepDayState(
+                    previousDateIso, 0, previousCheckpoint, StepSource.SENSOR);
+            StepUpdate update = StepCountEngine.applyReading(
+                    previous, raw, dateIso, true);
+            int rows = writeSensorUpdate(dateIso, null, update);
+            if (rows > 0) {
+                return OperationResult.ok();
+            }
+            // Another writer created the row between the read and insert.
+            return applySensorReading(dateIso, raw);
+        } catch (SQLiteException e) {
+            Log.e(TAG, "applyContinuousSensorReading failed for " + dateIso, e);
+            return OperationResult.error("Could not apply the step reading. Please try again.");
+        }
+    }
+
+    /**
      * Sets an absolute user total. When {@code rawNow} is available it becomes
      * the new checkpoint and the source becomes {@code sensor_adjusted}; when it
      * is {@code null} the checkpoint is cleared and the source is {@code manual}.

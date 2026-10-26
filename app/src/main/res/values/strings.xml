@@ -64,17 +64,21 @@
     <string name="steps_saved">Step total saved.</string>
     <string name="steps_save_failed">Could not save the step total. Please try again.</string>
     <string name="steps_go_hint">Tap a day in the history to edit its total.</string>
+    <string name="steps_tracking_title">Automatic counting</string>
+    <string name="steps_tracking_manage">Manage automatic counting</string>
+    <string name="steps_tracking_off_detail">Manual entry only. Turn on automatic counting in Settings to use the device step counter.</string>
+    <string name="steps_tracking_active_detail">Counting automatically. A persistent notification is shown while tracking.</string>
+    <string name="steps_tracking_app_open_notifications">Notifications are blocked, so steps count only while Motionfit is open.</string>
+    <string name="steps_tracking_app_open_fallback">Android did not allow background tracking, so steps count only while Motionfit is open.</string>
+    <string name="steps_tracking_unavailable_sensor">No step counter was found on this device. Manual entry still works.</string>
+    <string name="steps_tracking_unavailable_permission">Activity access is denied. Manual entry and workouts still work.</string>
 
-    <string name="sensor_title">Automatic step counting</string>
-    <string name="sensor_experimental_badge">EXPERIMENTAL</string>
-    <string name="sensor_unavailable">No step-counter sensor was found on this device. Manual entry still works.</string>
-    <string name="sensor_permission_required">Activity recognition permission is required for automatic counting.</string>
-    <string name="sensor_permission_denied">Permission denied. Automatic counting is off; manual entry still works.</string>
-    <string name="sensor_start">Start</string>
-    <string name="sensor_stop">Stop</string>
-    <string name="sensor_reading">%1$s steps this session</string>
-    <string name="sensor_add_steps">Add %1$s steps to this day</string>
-    <string name="sensor_note">Readings are only collected while this screen is open.</string>
+    <!-- Effective automatic-tracking states -->
+    <string name="tracking_status_off">Off</string>
+    <string name="tracking_status_active">Active</string>
+    <string name="tracking_status_app_open_only">App-open only</string>
+    <string name="tracking_status_unavailable">Unavailable</string>
+    <string name="tracking_status_description">Automatic counting status: %1$s</string>
 
     <!-- Workouts -->
     <string name="workouts_empty">No workouts yet.\nTap + to add your first workout.</string>
@@ -149,6 +153,24 @@
     <string name="settings_reminders_section">Reminders</string>
     <string name="settings_data_section">Local data</string>
     <string name="settings_about_section">About</string>
+    <string name="settings_auto_section">Automatic step counting</string>
+    <string name="settings_auto_off_detail">Count steps automatically using the device’s step counter. Manual entry always works.</string>
+    <string name="settings_auto_active_detail">Counting in the background. A persistent notification is shown while tracking.</string>
+    <string name="settings_auto_app_open_notifications">Notifications are blocked, so Android does not allow always-on counting. Steps count while Motionfit is open.</string>
+    <string name="settings_auto_app_open_fallback">Android did not allow the background service. Steps count while Motionfit is open.</string>
+    <string name="settings_auto_app_open_starting">Steps count while Motionfit is open. Background counting starts when Android allows it.</string>
+    <string name="settings_auto_unavailable_sensor">This device has no step counter. Manual entry and workouts still work.</string>
+    <string name="settings_auto_unavailable_activity">Activity access is denied. Automatic counting stays unavailable; manual entry still works.</string>
+    <string name="settings_auto_unavailable_service">Automatic counting is unavailable right now. Manual entry still works.</string>
+    <string name="settings_auto_allow_activity">Allow activity access</string>
+    <string name="settings_auto_allow_notifications">Allow notifications</string>
+    <string name="settings_auto_battery_settings">Battery settings</string>
+    <string name="settings_auto_limits">Background tracking depends on Android and the device maker’s battery settings. A force-stopped app cannot be restarted by Motionfit.</string>
+    <string name="settings_auto_enabled">Automatic counting turned on.</string>
+    <string name="settings_auto_disabled">Automatic counting turned off.</string>
+    <string name="settings_auto_save_failed">Could not save the automatic counting setting.</string>
+    <string name="settings_auto_permission_denied">Permission denied. Automatic counting stays limited; manual entry still works.</string>
+    <string name="settings_auto_settings_unavailable">Android settings are not available on this device.</string>
     <string name="settings_reminder_time">Reminder time</string>
     <string name="settings_change_time">Change time</string>
     <string name="settings_reminder_saved">Reminder settings saved.</string>
@@ -158,7 +180,7 @@
     <string name="settings_reminder_test_hint">Reminders are scheduled locally. Android may delay them to save battery, and they stop if the app is force-stopped.</string>
     <string name="settings_clear_data">Clear all local data</string>
     <string name="settings_clear_title">Clear all data?</string>
-    <string name="settings_clear_message">This permanently deletes every step record and workout, and resets goals and reminder settings. This cannot be undone.</string>
+    <string name="settings_clear_message">This permanently deletes every step record and workout and discards any run in progress. It resets goals, reminders and automatic counting. This cannot be undone.</string>
     <string name="settings_clear_confirm">Delete everything</string>
     <string name="settings_cleared">All local data cleared.</string>
     <string name="settings_clear_failed">Could not clear the data.</string>
@@ -175,6 +197,12 @@
     <string name="notification_text">Open Motionfit and log today’s activity.</string>
     <string name="notification_test_title">Test reminder</string>
     <string name="notification_test_text">If you can see this, local notifications work on this device.</string>
+    <string name="tracking_notification_channel_name">Automatic step counting</string>
+    <string name="tracking_notification_channel_desc">Shown while Motionfit counts steps automatically in the background.</string>
+    <string name="tracking_notification_title">Counting your steps</string>
+    <string name="tracking_notification_text">Automatic step counting is on. Tap to open Motionfit.</string>
+    <string name="tracking_notification_public_title">Motionfit</string>
+    <string name="tracking_notification_public_text">Tracking is on.</string>
     <string name="pick_time_title">Choose reminder time</string>
 
     <!-- Formatting helpers -->

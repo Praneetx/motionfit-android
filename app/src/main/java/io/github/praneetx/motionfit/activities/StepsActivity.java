@@ -1,65 +1,72 @@
 package io.github.praneetx.motionfit.activities;
 
-import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.adapters.StepHistoryAdapter;
+import io.github.praneetx.motionfit.logic.TrackingMode;
 import io.github.praneetx.motionfit.models.DailySteps;
 import io.github.praneetx.motionfit.repositories.SettingsRepository;
 import io.github.praneetx.motionfit.repositories.StepsRepository;
-import io.github.praneetx.motionfit.services.StepCounterSensorHelper;
+import io.github.praneetx.motionfit.services.ActivityTrackingService;
 import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
 import io.github.praneetx.motionfit.utils.OperationResult;
 import io.github.praneetx.motionfit.utils.ValidationUtils;
 import io.github.praneetx.motionfit.views.FloatingNavView;
-import com.google.android.material.button.MaterialButton;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 /**
- * Manual daily step tracking plus the optional (EXPERIMENTAL) device sensor.
- * Manual entry is always available and never depends on the sensor.
+ * Manual daily step history and calibration.
+ *
+ * <p>The experimental one-shot sensor card is gone. Automatic readings have one
+ * owner, {@link ActivityTrackingService}; this screen shows that service's
+ * effective status and routes manual corrections through it so the in-memory
+ * checkpoint cannot race the user's total.</p>
  */
 public class StepsActivity extends AppCompatActivity implements StepHistoryAdapter.Listener {
 
     public static final String EXTRA_DATE = "extra_date";
 
-    private static final int REQUEST_ACTIVITY_RECOGNITION = 101;
-
     private StepsRepository stepsRepository;
     private SettingsRepository settingsRepository;
     private StepHistoryAdapter historyAdapter;
-    private StepCounterSensorHelper sensorHelper;
 
     private String selectedDate;
-    private boolean sensorRunning;
-    private int sessionSteps;
 
     private TextView selectedDateView;
     private TextView selectedValueView;
     private View editStepsButton;
     private TextView stepsEmptyView;
     private RecyclerView historyView;
-    private TextView sensorStatusView;
-    private TextView sensorReadingView;
-    private MaterialButton toggleSensorButton;
-    private MaterialButton saveSensorButton;
+    private TextView trackingStatusView;
+    private TextView trackingDetailView;
+
+    private boolean trackingReceiverRegistered;
+
+    private final BroadcastReceiver trackingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refresh();
+            updateTrackingStatus();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,27 +77,43 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
         settingsRepository = new SettingsRepository(this);
 
         String requestedDate = getIntent().getStringExtra(EXTRA_DATE);
-        selectedDate = DateUtils.isValidIsoDate(requestedDate) ? requestedDate : DateUtils.todayIso();
+        selectedDate = DateUtils.isValidIsoDate(requestedDate)
+                ? requestedDate
+                : DateUtils.todayIso();
 
         bindViews();
         setUpRecycler();
-        setUpSensor();
         setUpActions();
 
         FloatingNavView.bind(this, FloatingNavView.DEST_STEPS);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        refresh();
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ActivityTrackingService.ACTION_DAILY_STEPS_CHANGED);
+        filter.addAction(ActivityTrackingService.ACTION_TRACKING_STATUS_CHANGED);
+        ContextCompat.registerReceiver(
+                this, trackingReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
+        trackingReceiverRegistered = true;
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        // Never keep a sensor listener alive while the screen is not visible.
-        stopSensor();
+    protected void onResume() {
+        super.onResume();
+        ActivityTrackingService.refresh(this);
+        refresh();
+        updateTrackingStatus();
+    }
+
+    @Override
+    protected void onStop() {
+        if (trackingReceiverRegistered) {
+            unregisterReceiver(trackingReceiver);
+            trackingReceiverRegistered = false;
+        }
+        super.onStop();
     }
 
     private void bindViews() {
@@ -99,10 +122,8 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
         editStepsButton = findViewById(R.id.btnEditSteps);
         stepsEmptyView = findViewById(R.id.stepsEmpty);
         historyView = findViewById(R.id.stepHistory);
-        sensorStatusView = findViewById(R.id.sensorStatus);
-        sensorReadingView = findViewById(R.id.sensorReading);
-        toggleSensorButton = findViewById(R.id.btnToggleSensor);
-        saveSensorButton = findViewById(R.id.btnSaveSensorSteps);
+        trackingStatusView = findViewById(R.id.stepsTrackingStatus);
+        trackingDetailView = findViewById(R.id.stepsTrackingDetail);
     }
 
     private void setUpRecycler() {
@@ -114,19 +135,8 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
     private void setUpActions() {
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         findViewById(R.id.btnEditSteps).setOnClickListener(v -> showStepDialog());
-        toggleSensorButton.setOnClickListener(v -> toggleSensor());
-        saveSensorButton.setOnClickListener(v -> saveSensorSteps());
-    }
-
-    private void setUpSensor() {
-        sensorHelper = new StepCounterSensorHelper(this);
-        if (!sensorHelper.isAvailable()) {
-            sensorStatusView.setText(R.string.sensor_unavailable);
-            toggleSensorButton.setVisibility(View.GONE);
-            saveSensorButton.setVisibility(View.GONE);
-        } else {
-            sensorStatusView.setText(R.string.sensor_note);
-        }
+        findViewById(R.id.btnManageTracking).setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
     }
 
     private void refresh() {
@@ -149,7 +159,43 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
         historyView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 
-    // ----- Manual entry -----
+    private void updateTrackingStatus() {
+        TrackingMode mode = ActivityTrackingService.getEffectiveStatus(this);
+        int statusRes;
+        int detailRes;
+        switch (mode) {
+            case ACTIVE:
+                statusRes = R.string.tracking_status_active;
+                detailRes = R.string.steps_tracking_active_detail;
+                break;
+            case APP_OPEN_ONLY:
+                statusRes = R.string.tracking_status_app_open_only;
+                detailRes = io.github.praneetx.motionfit.services.NotificationHelper
+                        .areTrackingNotificationsEnabled(this)
+                        ? R.string.steps_tracking_app_open_fallback
+                        : R.string.steps_tracking_app_open_notifications;
+                break;
+            case UNAVAILABLE:
+                statusRes = R.string.tracking_status_unavailable;
+                detailRes = !ActivityTrackingService.hasStepCounter(this)
+                        ? R.string.steps_tracking_unavailable_sensor
+                        : R.string.steps_tracking_unavailable_permission;
+                break;
+            case OFF:
+            default:
+                statusRes = R.string.tracking_status_off;
+                detailRes = R.string.steps_tracking_off_detail;
+                break;
+        }
+
+        String status = getString(statusRes);
+        trackingStatusView.setText(status);
+        trackingStatusView.setContentDescription(
+                getString(R.string.tracking_status_description, status));
+        trackingDetailView.setText(detailRes);
+    }
+
+    // ----- Manual entry / calibration -----
 
     private void showStepDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_steps, null);
@@ -184,12 +230,13 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
                 input.setError(stepErrorMessage(parsed.error));
                 return;
             }
-            OperationResult result = stepsRepository.saveDailySteps(
-                    selectedDate, parsed.value, DailySteps.SOURCE_MANUAL);
+            OperationResult result = ActivityTrackingService.calibrate(
+                    this, selectedDate, parsed.value);
             if (result.isSuccess()) {
                 dialog.dismiss();
                 Toast.makeText(this, R.string.steps_saved, Toast.LENGTH_SHORT).show();
                 refresh();
+                updateTrackingStatus();
             } else {
                 Toast.makeText(this, R.string.steps_save_failed, Toast.LENGTH_LONG).show();
             }
@@ -207,100 +254,6 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
             case NOT_A_NUMBER:
             default:
                 return getString(R.string.steps_error_not_number);
-        }
-    }
-
-    // ----- Optional sensor (EXPERIMENTAL) -----
-
-    private void toggleSensor() {
-        if (sensorRunning) {
-            stopSensor();
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
-                    REQUEST_ACTIVITY_RECOGNITION);
-            return;
-        }
-        startSensor();
-    }
-
-    private void startSensor() {
-        sessionSteps = 0;
-        saveSensorButton.setVisibility(View.GONE);
-        sensorReadingView.setVisibility(View.GONE);
-
-        sensorHelper.start(new StepCounterSensorHelper.Listener() {
-            @Override
-            public void onSessionSteps(int steps) {
-                sessionSteps = steps;
-                sensorReadingView.setVisibility(View.VISIBLE);
-                sensorReadingView.setText(getString(R.string.sensor_reading, FormatUtils.intText(steps)));
-                if (steps > 0) {
-                    saveSensorButton.setVisibility(View.VISIBLE);
-                    saveSensorButton.setText(getString(R.string.sensor_add_steps, FormatUtils.intText(steps)));
-                }
-            }
-
-            @Override
-            public void onSensorUnavailable(String reason) {
-                sensorStatusView.setText(R.string.sensor_unavailable);
-                toggleSensorButton.setVisibility(View.GONE);
-                sensorRunning = false;
-            }
-        });
-
-        sensorRunning = true;
-        toggleSensorButton.setText(R.string.sensor_stop);
-        sensorStatusView.setText(R.string.sensor_note);
-    }
-
-    private void stopSensor() {
-        if (sensorHelper != null) {
-            sensorHelper.stop();
-        }
-        sensorRunning = false;
-        if (toggleSensorButton != null && sensorHelper != null && sensorHelper.isAvailable()) {
-            toggleSensorButton.setText(R.string.sensor_start);
-        }
-    }
-
-    private void saveSensorSteps() {
-        if (sessionSteps <= 0) {
-            return;
-        }
-        DailySteps existing = stepsRepository.getForDate(selectedDate);
-        int baseSteps = existing == null ? 0 : existing.getSteps();
-        OperationResult result = stepsRepository.saveDailySteps(
-                selectedDate, baseSteps + sessionSteps, DailySteps.SOURCE_SENSOR);
-        if (!result.isSuccess()) {
-            Toast.makeText(this, result.getMessage(), Toast.LENGTH_LONG).show();
-            return;
-        }
-        Toast.makeText(this, R.string.steps_saved, Toast.LENGTH_SHORT).show();
-        // One-shot action: stop and hide so the same reading cannot be added twice.
-        stopSensor();
-        saveSensorButton.setVisibility(View.GONE);
-        sensorReadingView.setVisibility(View.GONE);
-        sessionSteps = 0;
-        refresh();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode != REQUEST_ACTIVITY_RECOGNITION) {
-            return;
-        }
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startSensor();
-        } else {
-            Toast.makeText(this, R.string.sensor_permission_denied, Toast.LENGTH_LONG).show();
         }
     }
 
