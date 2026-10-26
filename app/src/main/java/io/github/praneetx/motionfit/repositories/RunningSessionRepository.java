@@ -215,10 +215,113 @@ public class RunningSessionRepository {
     }
 
     /**
+     * Freezes the persisted duration without using the current uptime. This is
+     * the reboot-safe recovery path: downtime and time spent after a crash are
+     * never added to the run.
+     */
+    public OperationResult markInterruptedAfterReboot() {
+        try {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                RunningSession session = readSession(db);
+                if (session == null) {
+                    return OperationResult.error("No run is in progress.");
+                }
+
+                RunningClockState frozen = RunningSessionClock.recover(
+                        toClockState(session), 0L, false);
+                ContentValues values = clockValues(frozen);
+                values.put(DatabaseContract.COL_RS_INTERRUPTED, 1);
+                values.put(DatabaseContract.COL_RS_UPDATED_AT, DateUtils.nowTimestamp());
+
+                int rows = db.update(
+                        DatabaseContract.TABLE_RUNNING_SESSIONS,
+                        values,
+                        DatabaseContract.COL_RS_ID + " = ?",
+                        new String[]{String.valueOf(RunningSession.SINGLETON_ID)});
+                if (rows != 1) {
+                    throw new SQLiteException("Could not mark the running session interrupted.");
+                }
+
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            return OperationResult.ok();
+        } catch (SQLiteException e) {
+            Log.e(TAG, "markInterruptedAfterReboot failed", e);
+            return OperationResult.error("Could not update the run. Please try again.");
+        }
+    }
+
+    /**
+     * Records the first raw sensor value as the session baseline when the
+     * service started before the sensor delivered its initial reading.
+     */
+    public OperationResult initializeStepBaseline(long startRawSteps) {
+        if (startRawSteps < 0) {
+            return OperationResult.error("Step count cannot be negative.");
+        }
+        try {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.beginTransaction();
+            try {
+                RunningSession session = readSession(db);
+                if (session == null) {
+                    return OperationResult.error("No run is in progress.");
+                }
+                if (session.getStartRawSteps() != null) {
+                    db.setTransactionSuccessful();
+                    return OperationResult.ok();
+                }
+
+                ContentValues values = new ContentValues();
+                putNullableLong(values, DatabaseContract.COL_RS_START_RAW_STEPS, startRawSteps);
+                putNullableLong(values, DatabaseContract.COL_RS_LAST_RAW_STEPS, startRawSteps);
+                values.put(DatabaseContract.COL_RS_STEP_COUNT, 0);
+                values.put(DatabaseContract.COL_RS_UPDATED_AT, DateUtils.nowTimestamp());
+
+                int rows = db.update(
+                        DatabaseContract.TABLE_RUNNING_SESSIONS,
+                        values,
+                        DatabaseContract.COL_RS_ID + " = ?",
+                        new String[]{String.valueOf(RunningSession.SINGLETON_ID)});
+                if (rows != 1) {
+                    throw new SQLiteException("Could not initialize the running step baseline.");
+                }
+
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            return OperationResult.ok();
+        } catch (SQLiteException e) {
+            Log.e(TAG, "initializeStepBaseline failed", e);
+            return OperationResult.error("Could not update the run. Please try again.");
+        }
+    }
+
+    /**
      * Saves exactly one Running workout and deletes the session in one
      * transaction. An absent session is treated as already finished.
      */
     public OperationResult finish(long nowElapsedMs) {
+        return finishInternal(nowElapsedMs, null);
+    }
+
+    /**
+     * Finish with the latest in-memory step count so the last partial sensor
+     * interval is saved atomically with the workout.
+     */
+    public OperationResult finish(long nowElapsedMs, int stepCount) {
+        if (stepCount < 0) {
+            return OperationResult.error("Step count cannot be negative.");
+        }
+        return finishInternal(nowElapsedMs, stepCount);
+    }
+
+    private OperationResult finishInternal(long nowElapsedMs, Integer liveStepCount) {
         try {
             SQLiteDatabase db = helper.getWritableDatabase();
             db.beginTransaction();
@@ -238,7 +341,9 @@ public class RunningSessionRepository {
                 int durationMinutes = WorkoutDuration.minutes(durationSeconds);
                 Integer steps = session.getStartRawSteps() == null
                         ? null
-                        : Math.max(0, session.getStepCount());
+                        : Math.max(0, liveStepCount == null
+                                ? session.getStepCount()
+                                : liveStepCount);
 
                 String now = DateUtils.nowTimestamp();
                 ContentValues workout = new ContentValues();

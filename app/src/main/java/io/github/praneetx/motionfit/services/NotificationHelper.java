@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.activities.MainActivity;
+import io.github.praneetx.motionfit.utils.FormatUtils;
 
 /**
  * Creates the notification channel and posts local reminder notifications.
@@ -165,6 +166,76 @@ public final class NotificationHelper {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(
                         context.getString(R.string.tracking_notification_text)))
                 .setContentIntent(contentIntent)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setSilent(true)
+                .setShowWhen(false)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setPublicVersion(publicVersion)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build();
+    }
+
+    /**
+     * Builds the persistent Running notification. State changes (pause/resume)
+     * are service actions; there is deliberately no Stop action here so a run
+     * can only be ended from the screen after confirmation.
+     */
+    public static Notification buildRunningNotification(
+            Context context, long durationMs, Integer stepCount, boolean paused) {
+        ensureTrackingChannel(context);
+
+        Intent openApp = new Intent(context, MainActivity.class);
+        openApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                context,
+                10,
+                openApp,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        Intent toggleIntent = new Intent(context, ActivityTrackingService.class);
+        toggleIntent.setAction(paused
+                ? ActivityTrackingService.ACTION_RESUME_RUN
+                : ActivityTrackingService.ACTION_PAUSE_RUN);
+        PendingIntent togglePendingIntent = PendingIntent.getService(
+                context,
+                paused ? 201 : 202,
+                toggleIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        String clock = FormatUtils.clockText(durationMs);
+        String metrics = stepCount == null
+                ? context.getString(R.string.running_notification_steps_unknown, clock)
+                : context.getString(R.string.running_notification_metrics,
+                        clock, FormatUtils.intText(stepCount));
+        String text = paused
+                ? context.getString(R.string.running_notification_paused_text, metrics)
+                : metrics;
+
+        Notification publicVersion = new NotificationCompat.Builder(context, TRACKING_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(context.getString(R.string.tracking_notification_public_title))
+                .setContentText(context.getString(R.string.tracking_notification_public_text))
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setSilent(true)
+                .setShowWhen(false)
+                .build();
+
+        return new NotificationCompat.Builder(context, TRACKING_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(context.getString(paused
+                        ? R.string.running_notification_title_paused
+                        : R.string.running_notification_title))
+                .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setContentIntent(contentIntent)
+                .addAction(
+                        paused ? R.drawable.ic_play : R.drawable.ic_pause,
+                        context.getString(paused
+                                ? R.string.action_resume_run
+                                : R.string.action_pause_run),
+                        togglePendingIntent)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setSilent(true)

@@ -3,7 +3,6 @@ package io.github.praneetx.motionfit.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 
 import io.github.praneetx.motionfit.models.AppSettings;
 import io.github.praneetx.motionfit.repositories.RunningSessionRepository;
@@ -30,8 +29,9 @@ public class BootReceiver extends BroadcastReceiver {
             ReminderScheduler.schedule(context, settings.getReminderHour(), settings.getReminderMinute());
         }
 
-        // No live process can own a session after a reboot; freeze it for recovery.
-        new RunningSessionRepository(context).markInterrupted(SystemClock.elapsedRealtime());
+        // No live process can own a session after a reboot; freeze the persisted
+        // duration so the new boot's uptime is never added to the run.
+        new RunningSessionRepository(context).markInterruptedAfterReboot();
 
         if (settings.isAutoStepsEnabled()) {
             ActivityTrackingService.startFromBoot(context);

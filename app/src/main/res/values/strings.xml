@@ -217,6 +217,13 @@
     <string name="tracking_notification_text">Automatic step counting is on. Tap to open Motionfit.</string>
     <string name="tracking_notification_public_title">Motionfit</string>
     <string name="tracking_notification_public_text">Tracking is on.</string>
+    <string name="running_notification_title">Run in progress</string>
+    <string name="running_notification_title_paused">Run paused</string>
+    <string name="running_notification_metrics">%1$s elapsed | %2$s steps</string>
+    <string name="running_notification_steps_unknown">%1$s elapsed | steps unavailable</string>
+    <string name="running_notification_paused_text">Paused | %1$s</string>
+    <string name="action_pause_run">Pause run</string>
+    <string name="action_resume_run">Resume run</string>
     <string name="pick_time_title">Choose reminder time</string>
 
     <!-- Formatting helpers -->

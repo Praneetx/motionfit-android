@@ -209,6 +209,58 @@ public class RunningSessionRepositoryTest {
     }
 
     @Test
+    public void finishWithLatestLiveStepsSavesTheFinalPartialInterval() {
+        startSession();
+        assertTrue(repository.update(30000L, 10, 510L).isSuccess());
+
+        assertTrue(repository.finish(62000L, 77).isSuccess());
+
+        List<Workout> workouts = workoutRepository.getForDate(START_DATE);
+        assertEquals(1, workouts.size());
+        assertEquals(Integer.valueOf(77), workouts.get(0).getStepCount());
+        assertEquals(Integer.valueOf(61), workouts.get(0).getDurationSeconds());
+    }
+
+    @Test
+    public void lateFirstSensorReadingBecomesTheBaselineWithoutCountingPastSteps() {
+        assertTrue(repository.start(STARTED_AT, START_ELAPSED, 7, null).isSuccess());
+
+        assertTrue(repository.initializeStepBaseline(9000L).isSuccess());
+        RunningSession baseline = repository.getSession();
+        assertNotNull(baseline);
+        assertEquals(Long.valueOf(9000L), baseline.getStartRawSteps());
+        assertEquals(Long.valueOf(9000L), baseline.getLastRawSteps());
+        assertEquals(0, baseline.getStepCount());
+
+        assertTrue(repository.initializeStepBaseline(9999L).isSuccess());
+        RunningSession unchanged = repository.getSession();
+        assertNotNull(unchanged);
+        assertEquals(Long.valueOf(9000L), unchanged.getStartRawSteps());
+    }
+
+    @Test
+    public void rebootFreezeUsesPersistedDurationNotNewUptime() {
+        startSession();
+        assertTrue(repository.update(31000L, 42, 542L).isSuccess());
+
+        // The new boot's uptime (900000ms) is much larger than the old one; it
+        // must not be added to the saved run.
+        assertTrue(repository.markInterruptedAfterReboot().isSuccess());
+        RunningSession interrupted = repository.getSession();
+        assertNotNull(interrupted);
+        assertTrue(interrupted.isInterrupted());
+        assertEquals(30000L, interrupted.getAccumulatedMs());
+        assertEquals(30000L, interrupted.getDurationMs());
+        assertNull(interrupted.getLastResumedElapsedMs());
+        assertEquals(42, interrupted.getStepCount());
+
+        assertTrue(repository.resume(900000L).isSuccess());
+        assertTrue(repository.finish(910000L).isSuccess());
+        assertEquals(Integer.valueOf(40),
+                workoutRepository.getForDate(START_DATE).get(0).getDurationSeconds());
+    }
+
+    @Test
     public void discardDeletesTheSessionWithoutInsertingAWorkout() {
         startSession();
 
