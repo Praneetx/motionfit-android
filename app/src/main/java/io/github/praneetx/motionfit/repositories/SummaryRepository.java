@@ -12,6 +12,7 @@ import io.github.praneetx.motionfit.logic.ActivitySummaryCalculator;
 import io.github.praneetx.motionfit.logic.DayActivity;
 import io.github.praneetx.motionfit.models.DaySummary;
 import io.github.praneetx.motionfit.utils.DateUtils;
+import io.github.praneetx.motionfit.utils.LoadResult;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -91,15 +92,41 @@ public class SummaryRepository {
     /**
      * Returns one {@link DayActivity} per calendar date from {@code start} to
      * {@code end} inclusive. Days without activity are filled with zeros.
+     *
+     * <p>This best-effort method keeps its historical behaviour: a failed read
+     * is presented as an all-zero series. Screens that must tell a failed read
+     * apart from a real empty period use {@link #loadDailySeriesResult}.</p>
      */
     public List<DayActivity> getDailySeries(LocalDate start, LocalDate end) {
         List<String> dates = DateUtils.isoDatesBetween(start, end);
         if (dates.isEmpty()) {
             return new ArrayList<>();
         }
-        List<DayActivity> recorded = loadRecorded(start, end);
-        // Java hands the raw rows to the Kotlin calculator.
-        return ActivitySummaryCalculator.zeroFill(dates, recorded);
+        try {
+            // Java hands the raw rows to the Kotlin calculator.
+            return ActivitySummaryCalculator.zeroFill(dates, loadRecorded(start, end));
+        } catch (SQLiteException e) {
+            Log.e(TAG, "getDailySeries failed", e);
+            return ActivitySummaryCalculator.zeroFill(dates, new ArrayList<>());
+        }
+    }
+
+    /**
+     * Strict variant for screens that must distinguish a failed read from a
+     * real empty period. A successful empty period is still zero-filled.
+     */
+    public LoadResult<List<DayActivity>> loadDailySeriesResult(LocalDate start, LocalDate end) {
+        List<String> dates = DateUtils.isoDatesBetween(start, end);
+        if (dates.isEmpty()) {
+            return LoadResult.success(new ArrayList<>());
+        }
+        try {
+            return LoadResult.success(
+                    ActivitySummaryCalculator.zeroFill(dates, loadRecorded(start, end)));
+        } catch (SQLiteException e) {
+            Log.e(TAG, "loadDailySeriesResult failed", e);
+            return LoadResult.error("Could not load progress data. Please try again.");
+        }
     }
 
     /** Aggregated totals for the given range (convenience wrapper). */
@@ -111,47 +138,48 @@ public class SummaryRepository {
         return getDailySeries(DateUtils.startOfMonth(anyDayInMonth), DateUtils.endOfMonth(anyDayInMonth));
     }
 
-    /** Loads the per-day rows that actually exist inside the range. */
-    private List<DayActivity> loadRecorded(LocalDate start, LocalDate end) {
+    /**
+     * Loads the per-day rows that actually exist inside the range.
+     *
+     * <p>Package-private and allowed to throw so tests can exercise the strict
+     * result path without needing a corrupt database.</p>
+     */
+    List<DayActivity> loadRecorded(LocalDate start, LocalDate end) {
         String startIso = start.format(DateUtils.ISO_DATE);
         String endIso = end.format(DateUtils.ISO_DATE);
         // index 0 = steps, index 1 = workoutMinutes, index 2 = workoutCount
         Map<String, int[]> perDay = new HashMap<>();
 
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
+        SQLiteDatabase db = helper.getReadableDatabase();
 
-            Cursor stepCursor = db.rawQuery(
-                    "SELECT " + DatabaseContract.COL_DS_DATE + ", " + DatabaseContract.COL_DS_STEPS
-                            + " FROM " + DatabaseContract.TABLE_DAILY_STEPS
-                            + " WHERE " + DatabaseContract.COL_DS_DATE + " BETWEEN ? AND ?",
-                    new String[]{startIso, endIso});
-            try (stepCursor) {
-                while (stepCursor.moveToNext()) {
-                    String date = stepCursor.getString(0);
-                    int[] slot = perDay.computeIfAbsent(date, key -> new int[3]);
-                    slot[0] = stepCursor.getInt(1);
-                }
+        Cursor stepCursor = db.rawQuery(
+                "SELECT " + DatabaseContract.COL_DS_DATE + ", " + DatabaseContract.COL_DS_STEPS
+                        + " FROM " + DatabaseContract.TABLE_DAILY_STEPS
+                        + " WHERE " + DatabaseContract.COL_DS_DATE + " BETWEEN ? AND ?",
+                new String[]{startIso, endIso});
+        try (stepCursor) {
+            while (stepCursor.moveToNext()) {
+                String date = stepCursor.getString(0);
+                int[] slot = perDay.computeIfAbsent(date, key -> new int[3]);
+                slot[0] = stepCursor.getInt(1);
             }
+        }
 
-            Cursor workoutCursor = db.rawQuery(
-                    "SELECT " + DatabaseContract.COL_W_DATE
-                            + ", COUNT(*)"
-                            + ", IFNULL(SUM(" + DatabaseContract.COL_W_DURATION + "), 0)"
-                            + " FROM " + DatabaseContract.TABLE_WORKOUTS
-                            + " WHERE " + DatabaseContract.COL_W_DATE + " BETWEEN ? AND ?"
-                            + " GROUP BY " + DatabaseContract.COL_W_DATE,
-                    new String[]{startIso, endIso});
-            try (workoutCursor) {
-                while (workoutCursor.moveToNext()) {
-                    String date = workoutCursor.getString(0);
-                    int[] slot = perDay.computeIfAbsent(date, key -> new int[3]);
-                    slot[2] = workoutCursor.getInt(1);
-                    slot[1] = workoutCursor.getInt(2);
-                }
+        Cursor workoutCursor = db.rawQuery(
+                "SELECT " + DatabaseContract.COL_W_DATE
+                        + ", COUNT(*)"
+                        + ", IFNULL(SUM(" + DatabaseContract.COL_W_DURATION + "), 0)"
+                        + " FROM " + DatabaseContract.TABLE_WORKOUTS
+                        + " WHERE " + DatabaseContract.COL_W_DATE + " BETWEEN ? AND ?"
+                        + " GROUP BY " + DatabaseContract.COL_W_DATE,
+                new String[]{startIso, endIso});
+        try (workoutCursor) {
+            while (workoutCursor.moveToNext()) {
+                String date = workoutCursor.getString(0);
+                int[] slot = perDay.computeIfAbsent(date, key -> new int[3]);
+                slot[2] = workoutCursor.getInt(1);
+                slot[1] = workoutCursor.getInt(2);
             }
-        } catch (SQLiteException e) {
-            Log.e(TAG, "loadRecorded failed", e);
         }
 
         List<DayActivity> recorded = new ArrayList<>(perDay.size());

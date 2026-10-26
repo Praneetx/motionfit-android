@@ -11,6 +11,7 @@ import io.github.praneetx.motionfit.database.DatabaseContract;
 import io.github.praneetx.motionfit.database.FitnessDatabaseHelper;
 import io.github.praneetx.motionfit.models.Workout;
 import io.github.praneetx.motionfit.utils.DateUtils;
+import io.github.praneetx.motionfit.utils.LoadResult;
 import io.github.praneetx.motionfit.utils.OperationResult;
 
 import java.util.ArrayList;
@@ -142,6 +143,21 @@ public class WorkoutRepository {
         } catch (SQLiteException e) {
             Log.e(TAG, "getWorkouts failed", e);
             return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Strict, screen-facing variant for distinguishing a failed read from a
+     * real empty list. The legacy {@link #getWorkouts} method above keeps its
+     * best-effort behaviour.
+     */
+    public LoadResult<List<Workout>> loadWorkoutsResult(
+            String typeFilter, String dateFilter, int limit) {
+        try {
+            return LoadResult.success(loadWorkouts(typeFilter, dateFilter, limit));
+        } catch (SQLiteException e) {
+            Log.e(TAG, "loadWorkoutsResult failed", e);
+            return LoadResult.error("Could not load workouts. Please try again.");
         }
     }
 

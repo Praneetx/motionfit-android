@@ -18,6 +18,7 @@ import io.github.praneetx.motionfit.adapters.WorkoutAdapter;
 import io.github.praneetx.motionfit.models.Workout;
 import io.github.praneetx.motionfit.repositories.WorkoutRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
+import io.github.praneetx.motionfit.utils.LoadResult;
 import io.github.praneetx.motionfit.utils.OperationResult;
 import io.github.praneetx.motionfit.views.FloatingNavView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -36,6 +37,8 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
     private Spinner typeFilter;
     private TextView emptyView;
     private RecyclerView listView;
+    private View listCard;
+    private View errorState;
 
     /** null means "all types". */
     private String activeTypeFilter;
@@ -50,6 +53,8 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
         typeFilter = findViewById(R.id.typeFilter);
         emptyView = findViewById(R.id.workoutsEmpty);
         listView = findViewById(R.id.workoutList);
+        listCard = findViewById(R.id.workoutListCard);
+        errorState = findViewById(R.id.workoutsErrorState);
 
         adapter = new WorkoutAdapter(this);
         listView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,8 +62,8 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
 
         setUpTypeFilter();
 
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         findViewById(R.id.btnAddWorkout).setOnClickListener(v -> openEditor(0L));
+        findViewById(R.id.btnRetryWorkouts).setOnClickListener(v -> loadWorkouts());
 
         FloatingNavView.bind(this, FloatingNavView.DEST_WORKOUTS);
     }
@@ -96,9 +101,21 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
     }
 
     private void loadWorkouts() {
-        List<Workout> workouts = workoutRepository.getWorkouts(activeTypeFilter, null, 0);
+        LoadResult<List<Workout>> result =
+                workoutRepository.loadWorkoutsResult(activeTypeFilter, null, 0);
+        if (!result.isSuccess()) {
+            adapter.setItems(new ArrayList<>());
+            errorState.setVisibility(View.VISIBLE);
+            listCard.setVisibility(View.GONE);
+            return;
+        }
+
+        errorState.setVisibility(View.GONE);
+        listCard.setVisibility(View.VISIBLE);
+
+        List<Workout> workouts = result.getData();
         adapter.setItems(workouts);
-        boolean isEmpty = workouts.isEmpty();
+        boolean isEmpty = workouts == null || workouts.isEmpty();
         emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         listView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }

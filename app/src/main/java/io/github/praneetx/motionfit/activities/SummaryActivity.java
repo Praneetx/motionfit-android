@@ -14,6 +14,7 @@ import io.github.praneetx.motionfit.repositories.GoalRepository;
 import io.github.praneetx.motionfit.repositories.SummaryRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
+import io.github.praneetx.motionfit.utils.LoadResult;
 import io.github.praneetx.motionfit.views.BarChartView;
 import io.github.praneetx.motionfit.views.FloatingNavView;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -51,7 +52,11 @@ public class SummaryActivity extends AppCompatActivity {
     private TextView averageStepsView;
     private TextView bestDayView;
     private TextView activeDaysView;
-    private TextView emptyView;
+    private View emptyCard;
+    private View errorCard;
+    private View heroCard;
+    private View chartsRow;
+    private View detailsCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +76,17 @@ public class SummaryActivity extends AppCompatActivity {
         averageStepsView = findViewById(R.id.avgSteps);
         bestDayView = findViewById(R.id.bestDay);
         activeDaysView = findViewById(R.id.activeDays);
-        emptyView = findViewById(R.id.summaryEmpty);
+        emptyCard = findViewById(R.id.summaryEmptyCard);
+        errorCard = findViewById(R.id.summaryErrorCard);
+        heroCard = findViewById(R.id.summaryHeroCard);
+        chartsRow = findViewById(R.id.summaryChartsRow);
+        detailsCard = findViewById(R.id.summaryDetailsCard);
 
         configureCharts();
 
         findViewById(R.id.btnPrevPeriod).setOnClickListener(v -> shiftPeriod(-1));
         findViewById(R.id.btnNextPeriod).setOnClickListener(v -> shiftPeriod(1));
+        findViewById(R.id.btnRetrySummary).setOnClickListener(v -> refresh());
 
         FloatingNavView.bind(this, FloatingNavView.DEST_PROGRESS);
 
@@ -170,7 +180,19 @@ public class SummaryActivity extends AppCompatActivity {
                 break;
         }
 
-        List<DayActivity> series = summaryRepository.getDailySeries(start, end);
+        String periodText = periodLabelText(start, end);
+        periodLabel.setText(periodText);
+        periodLabel.setContentDescription(
+                getString(R.string.progress_period_description, periodText));
+
+        LoadResult<List<DayActivity>> result =
+                summaryRepository.loadDailySeriesResult(start, end);
+        if (!result.isSuccess() || result.getData() == null) {
+            showErrorState();
+            return;
+        }
+
+        List<DayActivity> series = result.getData();
         FitnessGoal goal = goalRepository.getGoal();
 
         // Chart series + labels in one pass
@@ -211,8 +233,47 @@ public class SummaryActivity extends AppCompatActivity {
                 ? "-"
                 : DateUtils.formatForDisplay(best.getDateIso()));
 
-        periodLabel.setText(periodLabelText(start, end));
-        emptyView.setVisibility((steps == 0 && workouts == 0) ? View.VISIBLE : View.GONE);
+        if (best != null && best.getSteps() > 0) {
+            chart.setAccessibilitySummary(getString(
+                    R.string.chart_steps_accessibility_summary,
+                    FormatUtils.intText(steps),
+                    FormatUtils.intText(average),
+                    DateUtils.formatForDisplay(best.getDateIso()),
+                    FormatUtils.intText(best.getSteps()),
+                    periodText));
+        } else {
+            chart.setAccessibilitySummary(getString(
+                    R.string.chart_steps_accessibility_summary_empty, periodText));
+        }
+        minutesChart.setAccessibilitySummary(getString(
+                R.string.chart_minutes_accessibility_summary,
+                FormatUtils.intText(minutes),
+                periodText));
+        workoutsChart.setAccessibilitySummary(getString(
+                R.string.chart_workouts_accessibility_summary,
+                FormatUtils.intText(workouts),
+                FormatUtils.intText(activeDays),
+                periodText));
+
+        showContentState(steps == 0 && workouts == 0);
+    }
+
+    private void showErrorState() {
+        emptyCard.setVisibility(View.GONE);
+        errorCard.setVisibility(View.VISIBLE);
+        heroCard.setVisibility(View.GONE);
+        chartsRow.setVisibility(View.GONE);
+        detailsCard.setVisibility(View.GONE);
+    }
+
+    private void showContentState(boolean isEmpty) {
+        errorCard.setVisibility(View.GONE);
+        emptyCard.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+
+        int contentVisibility = isEmpty ? View.GONE : View.VISIBLE;
+        heroCard.setVisibility(contentVisibility);
+        chartsRow.setVisibility(contentVisibility);
+        detailsCard.setVisibility(contentVisibility);
     }
 
     private int indexOfToday(List<DayActivity> series) {

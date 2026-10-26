@@ -78,8 +78,13 @@
 
     <!-- Workouts -->
     <string name="workouts_empty">No workouts yet.\nTap + to add your first workout.</string>
+    <string name="workouts_error_title">Could not load workouts</string>
+    <string name="workouts_error">Could not load your workout history. Please try again.</string>
     <string name="workouts_filter_all">All types</string>
     <string name="workout_duration_value">%1$d min</string>
+    <string name="workout_row_meta">%1$s · %2$s</string>
+    <string name="workout_edit_action_description">Edit %1$s workout from %2$s</string>
+    <string name="workout_delete_action_description">Delete %1$s workout from %2$s</string>
     <string name="workout_notes_label">Notes: %1$s</string>
     <string name="workout_delete_title">Delete workout?</string>
     <string name="workout_delete_message">This workout will be permanently removed. This cannot be undone.</string>
@@ -123,7 +128,15 @@
     <string name="progress_active_days">Active days</string>
     <string name="progress_chart_title">Steps per day</string>
     <string name="chart_accessibility_summary">Chart with %1$d bars. Highest value %2$d.</string>
+    <string name="progress_empty_title">No activity for this period</string>
     <string name="progress_empty">No activity recorded for this period.</string>
+    <string name="progress_error_title">Could not load progress</string>
+    <string name="progress_error">Could not load your progress data. Please try again.</string>
+    <string name="progress_period_description">Showing %1$s</string>
+    <string name="chart_steps_accessibility_summary">Steps chart. %1$s steps this period, average %2$s per day. Best day %3$s with %4$s steps. %5$s</string>
+    <string name="chart_steps_accessibility_summary_empty">Steps chart. No steps recorded for %1$s.</string>
+    <string name="chart_minutes_accessibility_summary">Workout time chart. %1$s minutes this period. %2$s</string>
+    <string name="chart_workouts_accessibility_summary">Workout count chart. %1$s workouts on %2$s active days. %3$s</string>
     <string name="progress_prev">Previous period</string>
     <string name="progress_next">Next period</string>
 

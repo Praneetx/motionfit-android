@@ -93,9 +93,18 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         void bind(final Workout workout) {
             typeView.setText(workout.getWorkoutType());
 
+            String displayDate = DateUtils.formatForDisplay(workout.getWorkoutDate());
             String duration = itemView.getContext().getString(
                     R.string.workout_duration_value, workout.getDurationMinutes());
-            metaView.setText(DateUtils.formatForDisplay(workout.getWorkoutDate()) + "  -  " + duration);
+            metaView.setText(itemView.getContext().getString(
+                    R.string.workout_row_meta, displayDate, duration));
+
+            editButton.setContentDescription(itemView.getContext().getString(
+                    R.string.workout_edit_action_description,
+                    workout.getWorkoutType(), displayDate));
+            deleteButton.setContentDescription(itemView.getContext().getString(
+                    R.string.workout_delete_action_description,
+                    workout.getWorkoutType(), displayDate));
 
             String note = workout.getNotes();
             if (note == null || note.trim().isEmpty()) {
