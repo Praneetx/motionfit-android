@@ -27,7 +27,6 @@ import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
 import io.github.praneetx.motionfit.utils.OperationResult;
 import io.github.praneetx.motionfit.utils.ValidationUtils;
-import io.github.praneetx.motionfit.views.FloatingNavView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -84,8 +83,6 @@ public class StepsActivity extends AppCompatActivity implements StepHistoryAdapt
         bindViews();
         setUpRecycler();
         setUpActions();
-
-        FloatingNavView.bind(this, FloatingNavView.DEST_STEPS);
     }
 
     @Override

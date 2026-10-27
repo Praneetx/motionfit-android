@@ -4,7 +4,8 @@
     The root FrameLayout is the pill itself (ink background set in code);
     this file only declares the sliding lime highlight and the five items.
 -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <View
         android:id="@+id/navHighlight"
@@ -17,8 +18,8 @@
         android:id="@+id/navItems"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/navToday"
@@ -33,55 +34,57 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/navIcon"
+                android:id="@+id/navTodayIcon"
                 android:layout_width="@dimen/nav_icon"
                 android:layout_height="@dimen/nav_icon"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_home" />
+                android:src="@drawable/ic_home"
+                app:tint="@color/nav_inactive" />
 
             <TextView
-                android:id="@+id/navLabel"
+                android:id="@+id/navTodayLabel"
                 style="@style/Text.Wise.NavLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:paddingStart="@dimen/spacing_xxs"
                 android:paddingEnd="@dimen/spacing_xxs"
-                android:maxLines="1"
                 android:text="@string/nav_today" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/navSteps"
+            android:id="@+id/navRun"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="@string/nav_steps"
+            android:contentDescription="@string/nav_run"
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/navIcon"
+                android:id="@+id/navRunIcon"
                 android:layout_width="@dimen/nav_icon"
                 android:layout_height="@dimen/nav_icon"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_walk" />
+                android:src="@drawable/ic_run"
+                app:tint="@color/nav_inactive" />
 
             <TextView
-                android:id="@+id/navLabel"
+                android:id="@+id/navRunLabel"
                 style="@style/Text.Wise.NavLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:paddingStart="@dimen/spacing_xxs"
                 android:paddingEnd="@dimen/spacing_xxs"
-                android:maxLines="1"
-                android:text="@string/nav_steps" />
+                android:text="@string/nav_run" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,22 +100,23 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/navIcon"
+                android:id="@+id/navWorkoutsIcon"
                 android:layout_width="@dimen/nav_icon"
                 android:layout_height="@dimen/nav_icon"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_dumbbell" />
+                android:src="@drawable/ic_dumbbell"
+                app:tint="@color/nav_inactive" />
 
             <TextView
-                android:id="@+id/navLabel"
+                android:id="@+id/navWorkoutsLabel"
                 style="@style/Text.Wise.NavLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:paddingStart="@dimen/spacing_xxs"
                 android:paddingEnd="@dimen/spacing_xxs"
-                android:maxLines="1"
                 android:text="@string/nav_workouts" />
         </LinearLayout>
 
@@ -129,22 +133,23 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/navIcon"
+                android:id="@+id/navProgressIcon"
                 android:layout_width="@dimen/nav_icon"
                 android:layout_height="@dimen/nav_icon"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_chart" />
+                android:src="@drawable/ic_chart"
+                app:tint="@color/nav_inactive" />
 
             <TextView
-                android:id="@+id/navLabel"
+                android:id="@+id/navProgressLabel"
                 style="@style/Text.Wise.NavLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:paddingStart="@dimen/spacing_xxs"
                 android:paddingEnd="@dimen/spacing_xxs"
-                android:maxLines="1"
                 android:text="@string/nav_progress" />
         </LinearLayout>
 
@@ -161,22 +166,23 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/navIcon"
+                android:id="@+id/navSettingsIcon"
                 android:layout_width="@dimen/nav_icon"
                 android:layout_height="@dimen/nav_icon"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_settings" />
+                android:src="@drawable/ic_settings"
+                app:tint="@color/nav_inactive" />
 
             <TextView
-                android:id="@+id/navLabel"
+                android:id="@+id/navSettingsLabel"
                 style="@style/Text.Wise.NavLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:paddingStart="@dimen/spacing_xxs"
                 android:paddingEnd="@dimen/spacing_xxs"
-                android:maxLines="1"
                 android:text="@string/nav_settings" />
         </LinearLayout>
     </LinearLayout>

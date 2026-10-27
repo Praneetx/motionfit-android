@@ -366,6 +366,14 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenStepsHistory"
+                style="@style/Widget.Wise.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:text="@string/progress_step_history_action" />
         </LinearLayout>
     </ScrollView>
 

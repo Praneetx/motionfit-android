@@ -95,7 +95,7 @@ public class UiAccessibilityTest {
         LayoutInflater.from(context).inflate(R.layout.view_floating_nav, root, true);
         View workouts = root.findViewById(R.id.navWorkouts);
         assertNotNull(workouts);
-        TextView label = workouts.findViewById(R.id.navLabel);
+        TextView label = workouts.findViewById(R.id.navWorkoutsLabel);
 
         assertNotNull(label);
         assertEquals(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM, label.getAutoSizeTextType());

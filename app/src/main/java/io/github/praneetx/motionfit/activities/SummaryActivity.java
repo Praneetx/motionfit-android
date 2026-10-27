@@ -1,5 +1,6 @@
 package io.github.praneetx.motionfit.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import io.github.praneetx.motionfit.repositories.SummaryRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
 import io.github.praneetx.motionfit.utils.LoadResult;
+import io.github.praneetx.motionfit.utils.UiAnimations;
 import io.github.praneetx.motionfit.views.BarChartView;
 import io.github.praneetx.motionfit.views.FloatingNavView;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -87,6 +89,7 @@ public class SummaryActivity extends AppCompatActivity {
         findViewById(R.id.btnPrevPeriod).setOnClickListener(v -> shiftPeriod(-1));
         findViewById(R.id.btnNextPeriod).setOnClickListener(v -> shiftPeriod(1));
         findViewById(R.id.btnRetrySummary).setOnClickListener(v -> refresh());
+        findViewById(R.id.btnOpenStepsHistory).setOnClickListener(v -> openStepsHistory());
 
         FloatingNavView.bind(this, FloatingNavView.DEST_PROGRESS);
 
@@ -256,6 +259,13 @@ public class SummaryActivity extends AppCompatActivity {
                 periodText));
 
         showContentState(steps == 0 && workouts == 0);
+    }
+
+    private void openStepsHistory() {
+        Intent intent = new Intent(this, StepsActivity.class);
+        intent.putExtra(StepsActivity.EXTRA_DATE, DateUtils.todayIso());
+        startActivity(intent);
+        UiAnimations.fadeTransition(this);
     }
 
     private void showErrorState() {

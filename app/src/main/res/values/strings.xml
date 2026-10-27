@@ -236,7 +236,7 @@
     <string name="title_day">Day</string>
 
     <string name="nav_today">Today</string>
-    <string name="nav_steps">Steps</string>
+    <string name="nav_run">Run</string>
     <string name="nav_workouts">Workouts</string>
     <string name="nav_progress">Progress</string>
     <string name="nav_settings">Settings</string>
@@ -253,6 +253,7 @@
 
     <string name="progress_steps_this_period">Steps this period</string>
     <string name="progress_average">Average per day</string>
+    <string name="progress_step_history_action">View step history</string>
     <string name="chart_minutes_title">Workout time</string>
     <string name="chart_workouts_title">Workout count</string>
 

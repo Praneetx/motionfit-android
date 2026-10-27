@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Steps history screen (main destination, so it carries the floating nav).
+    Steps detail: reachable from Today and Progress, so it is a pushed screen
+    with a visible back action instead of a root destination with bottom nav.
     Circular "+" opens the step entry dialog.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="@dimen/nav_content_padding"
+        android:paddingBottom="@dimen/spacing_2xl"
         android:scrollbars="none">
 
         <LinearLayout
@@ -33,15 +34,14 @@
 
                 <ImageButton
                     android:id="@+id/btnBack"
-                    android:layout_width="@dimen/icon_button_small"
-                    android:layout_height="@dimen/icon_button_small"
+                    android:layout_width="@dimen/touch_min"
+                    android:layout_height="@dimen/touch_min"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/action_back"
-                    android:padding="@dimen/spacing_sm"
+                    android:padding="@dimen/spacing_md"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/ink"
-                    android:visibility="gone" />
+                    app:tint="@color/ink" />
 
                 <TextView
                     style="@style/Text.Wise.ScreenTitle"
@@ -171,13 +171,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <io.github.praneetx.motionfit.views.FloatingNavView
-        android:id="@+id/floatingNav"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/nav_height"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="@dimen/nav_margin_side"
-        android:layout_marginEnd="@dimen/nav_margin_side"
-        android:layout_marginBottom="@dimen/nav_margin_bottom" />
 </FrameLayout>

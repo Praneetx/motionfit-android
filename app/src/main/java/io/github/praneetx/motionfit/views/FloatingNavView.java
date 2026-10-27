@@ -20,8 +20,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.activities.MainActivity;
+import io.github.praneetx.motionfit.activities.RunningActivity;
 import io.github.praneetx.motionfit.activities.SettingsActivity;
-import io.github.praneetx.motionfit.activities.StepsActivity;
 import io.github.praneetx.motionfit.activities.SummaryActivity;
 import io.github.praneetx.motionfit.activities.WorkoutListActivity;
 import io.github.praneetx.motionfit.utils.UiAnimations;
@@ -39,13 +39,21 @@ import io.github.praneetx.motionfit.utils.UiAnimations;
 public class FloatingNavView extends FrameLayout {
 
     public static final int DEST_TODAY = R.id.navToday;
-    public static final int DEST_STEPS = R.id.navSteps;
+    public static final int DEST_RUN = R.id.navRun;
     public static final int DEST_WORKOUTS = R.id.navWorkouts;
     public static final int DEST_PROGRESS = R.id.navProgress;
     public static final int DEST_SETTINGS = R.id.navSettings;
 
     private static final int[] DESTINATIONS = {
-            DEST_TODAY, DEST_STEPS, DEST_WORKOUTS, DEST_PROGRESS, DEST_SETTINGS
+            DEST_TODAY, DEST_RUN, DEST_WORKOUTS, DEST_PROGRESS, DEST_SETTINGS
+    };
+    private static final int[] ICON_IDS = {
+            R.id.navTodayIcon, R.id.navRunIcon, R.id.navWorkoutsIcon,
+            R.id.navProgressIcon, R.id.navSettingsIcon
+    };
+    private static final int[] LABEL_IDS = {
+            R.id.navTodayLabel, R.id.navRunLabel, R.id.navWorkoutsLabel,
+            R.id.navProgressLabel, R.id.navSettingsLabel
     };
 
     private View highlight;
@@ -120,7 +128,8 @@ public class FloatingNavView extends FrameLayout {
     }
 
     private void updateItemAppearance() {
-        for (int destination : DESTINATIONS) {
+        for (int i = 0; i < DESTINATIONS.length; i++) {
+            int destination = DESTINATIONS[i];
             View item = findViewById(destination);
             if (item == null) {
                 continue;
@@ -128,8 +137,8 @@ public class FloatingNavView extends FrameLayout {
             boolean active = destination == activeDestination;
             item.setSelected(active);
 
-            ImageView icon = item.findViewById(R.id.navIcon);
-            TextView label = item.findViewById(R.id.navLabel);
+            ImageView icon = findViewById(ICON_IDS[i]);
+            TextView label = findViewById(LABEL_IDS[i]);
             int color = getContext().getColor(active ? R.color.ink : R.color.nav_inactive);
             if (icon != null) {
                 icon.setImageTintList(ColorStateList.valueOf(color));
@@ -196,8 +205,8 @@ public class FloatingNavView extends FrameLayout {
         }
         Context context = getContext();
         Class<?> target;
-        if (destination == DEST_STEPS) {
-            target = StepsActivity.class;
+        if (destination == DEST_RUN) {
+            target = RunningActivity.class;
         } else if (destination == DEST_WORKOUTS) {
             target = WorkoutListActivity.class;
         } else if (destination == DEST_PROGRESS) {

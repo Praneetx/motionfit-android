@@ -4,8 +4,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
@@ -77,8 +79,12 @@ public class TodayStepsTest {
             onView(withText(R.string.dashboard_no_steps_yet))
                     .perform(scrollTo())
                     .check(matches(isDisplayed()));
-            onView(withText(R.string.action_log_steps))
-                    .perform(scrollTo(), click());
+            // The floating pill overlaps the bottom of the scroll area. Scroll
+            // all the way down so the action is tappable above the pill rather
+            // than at a point where the Run destination intercepts the tap.
+            onView(withId(R.id.btnEmptyLogSteps)).perform(scrollTo());
+            onView(isRoot()).perform(swipeUp());
+            onView(withId(R.id.btnEmptyLogSteps)).perform(click());
             onView(withId(R.id.stepsSelectedValue)).check(matches(isDisplayed()));
             pressBack();
         }
