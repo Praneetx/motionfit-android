@@ -90,7 +90,9 @@ public class RunningScreenTest {
                     .check(matches(withText(R.string.running_dash)));
             onView(withId(R.id.runningCadenceValue))
                     .check(matches(withText(R.string.running_dash)));
-            onView(withId(R.id.runningStatusCard)).check(matches(isDisplayed()));
+            onView(withId(R.id.runningStatusCard))
+                    .perform(scrollTo())
+                    .check(matches(isDisplayed()));
 
             // Explanatory copy may mention why these metrics do not exist, but
             // there must be no actual distance, pace or calorie field.

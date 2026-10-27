@@ -95,12 +95,19 @@
     <string name="tracking_status_description">Automatic counting status: %1$s</string>
 
     <!-- Workouts -->
-    <string name="workouts_empty">No workouts yet.\nTap + to add your first workout.</string>
+    <string name="workouts_empty">No workouts yet.\nAdd your first workout to see it here.</string>
     <string name="workouts_error_title">Could not load workouts</string>
     <string name="workouts_error">Could not load your workout history. Please try again.</string>
     <string name="workouts_filter_all">All types</string>
     <string name="workout_duration_value">%1$d min</string>
     <string name="workout_row_meta">%1$s · %2$s</string>
+    <string name="workout_row_meta_running">%1$s · %2$s · %3$s steps</string>
+    <string name="workout_row_meta_running_no_steps">%1$s · %2$s · steps unavailable</string>
+    <string name="workout_running_metrics_title">Recorded run</string>
+    <string name="workout_running_metrics_caption">Exact values saved by Running mode. Steps are read-only.</string>
+    <string name="workout_recorded_duration_label">Recorded duration</string>
+    <string name="workout_recorded_steps_label">Steps</string>
+    <string name="workout_recorded_steps_unavailable">Unavailable</string>
     <string name="workout_edit_action_description">Edit %1$s workout from %2$s</string>
     <string name="workout_delete_action_description">Delete %1$s workout from %2$s</string>
     <string name="workout_notes_label">Notes: %1$s</string>
@@ -253,7 +260,10 @@
 
     <string name="progress_steps_this_period">Steps this period</string>
     <string name="progress_average">Average per day</string>
-    <string name="progress_step_history_action">View step history</string>
+    <string name="progress_step_history_title">Step history</string>
+    <string name="progress_step_history_caption">The 7 most recent recorded days, newest first.</string>
+    <string name="progress_step_history_empty">No step history yet. Log today’s steps to start your history.</string>
+    <string name="progress_step_history_action">View all</string>
     <string name="chart_minutes_title">Workout time</string>
     <string name="chart_workouts_title">Workout count</string>
 

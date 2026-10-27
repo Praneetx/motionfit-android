@@ -36,6 +36,7 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
     private WorkoutAdapter adapter;
     private Spinner typeFilter;
     private TextView emptyView;
+    private View emptyAddButton;
     private RecyclerView listView;
     private View listCard;
     private View errorState;
@@ -52,6 +53,7 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
 
         typeFilter = findViewById(R.id.typeFilter);
         emptyView = findViewById(R.id.workoutsEmpty);
+        emptyAddButton = findViewById(R.id.btnEmptyAddWorkout);
         listView = findViewById(R.id.workoutList);
         listCard = findViewById(R.id.workoutListCard);
         errorState = findViewById(R.id.workoutsErrorState);
@@ -63,6 +65,7 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
         setUpTypeFilter();
 
         findViewById(R.id.btnAddWorkout).setOnClickListener(v -> openEditor(0L));
+        findViewById(R.id.btnEmptyAddWorkout).setOnClickListener(v -> openEditor(0L));
         findViewById(R.id.btnRetryWorkouts).setOnClickListener(v -> loadWorkouts());
 
         FloatingNavView.bind(this, FloatingNavView.DEST_WORKOUTS);
@@ -117,6 +120,7 @@ public class WorkoutListActivity extends AppCompatActivity implements WorkoutAda
         adapter.setItems(workouts);
         boolean isEmpty = workouts == null || workouts.isEmpty();
         emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        emptyAddButton.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         listView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 

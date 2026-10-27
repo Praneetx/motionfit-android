@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,6 +110,7 @@ public class RunningActivity extends AppCompatActivity
     private View errorCard;
     private View actions;
     private View closeButton;
+    private ScrollView scrollView;
 
     private MaterialButton startButton;
     private MaterialButton pauseResumeButton;
@@ -292,6 +294,7 @@ public class RunningActivity extends AppCompatActivity
         errorCard = findViewById(R.id.runningErrorCard);
         actions = findViewById(R.id.runningActions);
         closeButton = findViewById(R.id.btnCloseRunning);
+        scrollView = findViewById(R.id.runningScroll);
 
         startButton = findViewById(R.id.btnStartRun);
         pauseResumeButton = findViewById(R.id.btnPauseResumeRun);
@@ -443,16 +446,20 @@ public class RunningActivity extends AppCompatActivity
         switch (status) {
             case RUNNING:
                 stateLabel.setText(R.string.running_state_running);
+                stateLabel.setBackgroundResource(R.drawable.bg_wise_card_green);
                 break;
             case PAUSED:
                 stateLabel.setText(R.string.running_state_paused);
+                stateLabel.setBackgroundResource(R.drawable.bg_wise_card_sage);
                 break;
             case INTERRUPTED:
                 stateLabel.setText(R.string.running_state_interrupted);
+                stateLabel.setBackgroundResource(R.drawable.bg_wise_card_sage);
                 break;
             case READY:
             default:
                 stateLabel.setText(R.string.running_state_ready);
+                stateLabel.setBackgroundResource(R.drawable.bg_badge_positive);
                 break;
         }
     }
@@ -530,6 +537,7 @@ public class RunningActivity extends AppCompatActivity
         finishingProgress.setVisibility(
                 animationsEnabled() ? View.VISIBLE : View.GONE);
         stateLabel.setText(R.string.running_state_saving);
+        stateLabel.setBackgroundResource(R.drawable.bg_wise_card_sage);
         clearKeepScreen();
     }
 
@@ -548,6 +556,7 @@ public class RunningActivity extends AppCompatActivity
                 FormatUtils.clockText(summaryDurationMs),
                 stepsText));
         stateLabel.setText(R.string.running_state_saved);
+        stateLabel.setBackgroundResource(R.drawable.bg_badge_positive);
 
         statusCard.setVisibility(View.GONE);
         recoveryCard.setVisibility(View.GONE);
@@ -558,6 +567,7 @@ public class RunningActivity extends AppCompatActivity
         backNote.setVisibility(View.GONE);
         summaryCard.setVisibility(View.VISIBLE);
         summaryDoneButton.setEnabled(true);
+        revealCard(summaryCard);
         clearKeepScreen();
     }
 
@@ -574,7 +584,20 @@ public class RunningActivity extends AppCompatActivity
         actions.setVisibility(View.GONE);
         backNote.setVisibility(View.GONE);
         stateLabel.setText(R.string.running_state_error);
+        stateLabel.setBackgroundResource(R.drawable.bg_wise_card_sage);
+        revealCard(errorCard);
         clearKeepScreen();
+    }
+
+    /**
+     * Bring a terminal card into view immediately. Smooth scrolling is avoided
+     * so reduced-motion users get the result without extra animation.
+     */
+    private void revealCard(View card) {
+        if (scrollView == null || card == null) {
+            return;
+        }
+        card.post(() -> scrollView.scrollTo(0, Math.max(0, card.getTop())));
     }
 
     private void leaveError() {

@@ -6,12 +6,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import io.github.praneetx.motionfit.R;
+import io.github.praneetx.motionfit.adapters.StepHistoryAdapter;
 import io.github.praneetx.motionfit.logic.ActivitySummaryCalculator;
 import io.github.praneetx.motionfit.logic.DayActivity;
+import io.github.praneetx.motionfit.models.DailySteps;
 import io.github.praneetx.motionfit.models.FitnessGoal;
 import io.github.praneetx.motionfit.repositories.GoalRepository;
+import io.github.praneetx.motionfit.repositories.StepsRepository;
 import io.github.praneetx.motionfit.repositories.SummaryRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
 import io.github.praneetx.motionfit.utils.FormatUtils;
@@ -40,6 +45,7 @@ public class SummaryActivity extends AppCompatActivity {
 
     private SummaryRepository summaryRepository;
     private GoalRepository goalRepository;
+    private StepsRepository stepsRepository;
 
     private Mode mode = Mode.DAILY;
     private LocalDate anchor = LocalDate.now();
@@ -59,6 +65,10 @@ public class SummaryActivity extends AppCompatActivity {
     private View heroCard;
     private View chartsRow;
     private View detailsCard;
+    private View stepHistoryCard;
+    private View stepHistoryEmpty;
+    private RecyclerView stepHistoryList;
+    private StepHistoryAdapter stepHistoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +77,7 @@ public class SummaryActivity extends AppCompatActivity {
 
         summaryRepository = new SummaryRepository(this);
         goalRepository = new GoalRepository(this);
+        stepsRepository = new StepsRepository(this);
 
         chart = findViewById(R.id.chart);
         minutesChart = findViewById(R.id.minutesChart);
@@ -83,6 +94,14 @@ public class SummaryActivity extends AppCompatActivity {
         heroCard = findViewById(R.id.summaryHeroCard);
         chartsRow = findViewById(R.id.summaryChartsRow);
         detailsCard = findViewById(R.id.summaryDetailsCard);
+        stepHistoryCard = findViewById(R.id.summaryStepHistoryCard);
+        stepHistoryEmpty = findViewById(R.id.progressStepHistoryEmpty);
+        stepHistoryList = findViewById(R.id.progressStepHistoryList);
+
+        stepHistoryAdapter = new StepHistoryAdapter(
+                record -> openStepsHistory(record.getActivityDate()));
+        stepHistoryList.setLayoutManager(new LinearLayoutManager(this));
+        stepHistoryList.setAdapter(stepHistoryAdapter);
 
         configureCharts();
 
@@ -90,6 +109,7 @@ public class SummaryActivity extends AppCompatActivity {
         findViewById(R.id.btnNextPeriod).setOnClickListener(v -> shiftPeriod(1));
         findViewById(R.id.btnRetrySummary).setOnClickListener(v -> refresh());
         findViewById(R.id.btnOpenStepsHistory).setOnClickListener(v -> openStepsHistory());
+        findViewById(R.id.btnEmptyProgressSteps).setOnClickListener(v -> openStepsHistory());
 
         FloatingNavView.bind(this, FloatingNavView.DEST_PROGRESS);
 
@@ -259,11 +279,26 @@ public class SummaryActivity extends AppCompatActivity {
                 periodText));
 
         showContentState(steps == 0 && workouts == 0);
+        loadStepHistory();
+    }
+
+    /** Last seven recorded step days, independent of the selected chart period. */
+    private void loadStepHistory() {
+        List<DailySteps> all = stepsRepository.getAll();
+        int limit = Math.min(7, all.size());
+        stepHistoryAdapter.setItems(all.subList(0, limit));
+        boolean isEmpty = limit == 0;
+        stepHistoryList.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        stepHistoryEmpty.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     private void openStepsHistory() {
+        openStepsHistory(DateUtils.todayIso());
+    }
+
+    private void openStepsHistory(String dateIso) {
         Intent intent = new Intent(this, StepsActivity.class);
-        intent.putExtra(StepsActivity.EXTRA_DATE, DateUtils.todayIso());
+        intent.putExtra(StepsActivity.EXTRA_DATE, dateIso);
         startActivity(intent);
         UiAnimations.fadeTransition(this);
     }
@@ -274,11 +309,13 @@ public class SummaryActivity extends AppCompatActivity {
         heroCard.setVisibility(View.GONE);
         chartsRow.setVisibility(View.GONE);
         detailsCard.setVisibility(View.GONE);
+        stepHistoryCard.setVisibility(View.GONE);
     }
 
     private void showContentState(boolean isEmpty) {
         errorCard.setVisibility(View.GONE);
         emptyCard.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        stepHistoryCard.setVisibility(View.VISIBLE);
 
         int contentVisibility = isEmpty ? View.GONE : View.VISIBLE;
         heroCard.setVisibility(contentVisibility);

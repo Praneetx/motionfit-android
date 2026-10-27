@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.models.Workout;
 import io.github.praneetx.motionfit.utils.DateUtils;
+import io.github.praneetx.motionfit.utils.FormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,10 +95,28 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             typeView.setText(workout.getWorkoutType());
 
             String displayDate = DateUtils.formatForDisplay(workout.getWorkoutDate());
-            String duration = itemView.getContext().getString(
-                    R.string.workout_duration_value, workout.getDurationMinutes());
-            metaView.setText(itemView.getContext().getString(
-                    R.string.workout_row_meta, displayDate, duration));
+            Integer exactSeconds = workout.getDurationSeconds();
+            if (exactSeconds != null) {
+                String exactDuration = FormatUtils.clockText(exactSeconds * 1000L);
+                Integer stepCount = workout.getStepCount();
+                if (stepCount != null) {
+                    metaView.setText(itemView.getContext().getString(
+                            R.string.workout_row_meta_running,
+                            displayDate,
+                            exactDuration,
+                            FormatUtils.intText(stepCount)));
+                } else {
+                    metaView.setText(itemView.getContext().getString(
+                            R.string.workout_row_meta_running_no_steps,
+                            displayDate,
+                            exactDuration));
+                }
+            } else {
+                String duration = itemView.getContext().getString(
+                        R.string.workout_duration_value, workout.getDurationMinutes());
+                metaView.setText(itemView.getContext().getString(
+                        R.string.workout_row_meta, displayDate, duration));
+            }
 
             editButton.setContentDescription(itemView.getContext().getString(
                     R.string.workout_edit_action_description,

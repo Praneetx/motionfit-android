@@ -1,6 +1,8 @@
 package io.github.praneetx.motionfit;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -104,6 +106,21 @@ public class WorkoutsProgressTest {
             onView(withId(R.id.workoutsErrorState)).check(matches(withEffectiveVisibility(GONE)));
             onView(withId(R.id.workoutListCard)).check(matches(isDisplayed()));
             onView(withText(R.string.workouts_empty)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
+    public void workoutsEmptyStateOffersOneAddAction() {
+        try (ActivityScenario<WorkoutListActivity> scenario =
+                     ActivityScenario.launch(WorkoutListActivity.class)) {
+            onView(withId(R.id.btnEmptyAddWorkout))
+                    .check(matches(isDisplayed()))
+                    .check(matches(withText(R.string.action_add_workout)))
+                    .perform(click());
+
+            onView(withId(R.id.editTitle))
+                    .check(matches(withText(R.string.title_add_workout)));
+            pressBack();
         }
     }
 

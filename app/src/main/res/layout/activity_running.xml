@@ -11,6 +11,7 @@
     android:background="@color/canvas_soft">
 
     <ScrollView
+        android:id="@+id/runningScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -78,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_md"
-                android:background="@drawable/bg_wise_card_green"
+                android:background="@drawable/bg_badge_positive"
                 android:paddingStart="@dimen/spacing_md"
                 android:paddingTop="@dimen/spacing_xs"
                 android:paddingEnd="@dimen/spacing_md"
@@ -123,89 +124,6 @@
                     android:layout_marginTop="@dimen/spacing_sm"
                     android:text="@string/running_back_note"
                     android:visibility="gone" />
-            </LinearLayout>
-
-            <!-- Live metrics: no distance, pace or calorie field exists. -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_md"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_wise_card"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_md">
-
-                    <TextView
-                        style="@style/Text.Wise.Caption"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/running_steps_label" />
-
-                    <TextView
-                        android:id="@+id/runningStepValue"
-                        style="@style/Text.Wise.Hero"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:autoSizeMaxTextSize="40sp"
-                        android:autoSizeMinTextSize="24sp"
-                        android:autoSizeStepGranularity="2sp"
-                        android:autoSizeTextType="uniform"
-                        android:maxLines="1"
-                        android:text="@string/running_dash" />
-
-                    <TextView
-                        style="@style/Text.Wise.Caption"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/running_steps_helper" />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="@dimen/spacing_md"
-                    android:layout_height="1dp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_wise_card"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_md">
-
-                    <TextView
-                        style="@style/Text.Wise.Caption"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/running_cadence_label" />
-
-                    <TextView
-                        android:id="@+id/runningCadenceValue"
-                        style="@style/Text.Wise.Hero"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:autoSizeMaxTextSize="40sp"
-                        android:autoSizeMinTextSize="24sp"
-                        android:autoSizeStepGranularity="2sp"
-                        android:autoSizeTextType="uniform"
-                        android:maxLines="1"
-                        android:text="@string/running_dash" />
-
-                    <TextView
-                        style="@style/Text.Wise.Caption"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/running_cadence_helper" />
-                </LinearLayout>
             </LinearLayout>
 
             <!-- Primary actions stay above the explanatory card so a run can
@@ -300,6 +218,89 @@
                     android:layout_marginTop="@dimen/spacing_sm"
                     android:enabled="false"
                     android:text="@string/running_recovery_discard" />
+            </LinearLayout>
+
+            <!-- Live metrics: no distance, pace or calorie field exists. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_wise_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/running_steps_label" />
+
+                    <TextView
+                        android:id="@+id/runningStepValue"
+                        style="@style/Text.Wise.Hero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:autoSizeMaxTextSize="40sp"
+                        android:autoSizeMinTextSize="24sp"
+                        android:autoSizeStepGranularity="2sp"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:text="@string/running_dash" />
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="@string/running_steps_helper" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="@dimen/spacing_md"
+                    android:layout_height="1dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_wise_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/running_cadence_label" />
+
+                    <TextView
+                        android:id="@+id/runningCadenceValue"
+                        style="@style/Text.Wise.Hero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:autoSizeMaxTextSize="40sp"
+                        android:autoSizeMinTextSize="24sp"
+                        android:autoSizeStepGranularity="2sp"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:text="@string/running_dash" />
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="@string/running_cadence_helper" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Permission / effective-background status -->

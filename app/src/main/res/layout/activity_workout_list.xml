@@ -130,8 +130,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/spacing_lg"
-                android:paddingBottom="@dimen/spacing_lg"
                 android:text="@string/workouts_empty" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEmptyAddWorkout"
+                style="@style/Widget.Wise.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:layout_marginBottom="@dimen/spacing_lg"
+                android:text="@string/action_add_workout" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/workoutList"

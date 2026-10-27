@@ -14,6 +14,7 @@ import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.models.Workout;
 import io.github.praneetx.motionfit.repositories.WorkoutRepository;
 import io.github.praneetx.motionfit.utils.DateUtils;
+import io.github.praneetx.motionfit.utils.FormatUtils;
 import io.github.praneetx.motionfit.utils.OperationResult;
 import io.github.praneetx.motionfit.utils.ValidationUtils;
 import com.google.android.material.button.MaterialButton;
@@ -46,6 +47,9 @@ public class WorkoutEditActivity extends AppCompatActivity {
     private TextInputEditText notesInput;
     private MaterialButton deleteButton;
     private TextView metaCaptionView;
+    private View recordedRunCard;
+    private TextView recordedDurationValue;
+    private TextView recordedStepsValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class WorkoutEditActivity extends AppCompatActivity {
         notesInput = findViewById(R.id.notesInput);
         deleteButton = findViewById(R.id.btnDeleteWorkout);
         metaCaptionView = findViewById(R.id.editMetaCaption);
+        recordedRunCard = findViewById(R.id.recordedRunCard);
+        recordedDurationValue = findViewById(R.id.recordedDurationValue);
+        recordedStepsValue = findViewById(R.id.recordedStepsValue);
 
         setUpTypeSpinner();
 
@@ -107,6 +114,29 @@ public class WorkoutEditActivity extends AppCompatActivity {
         }
         updateDateButton();
         showMetaCaption();
+        showRecordedRunMetrics();
+    }
+
+    /**
+     * Running workouts carry exact seconds and a read-only step count. Show both
+     * in the details view so editing notes/date does not hide what was recorded.
+     */
+    private void showRecordedRunMetrics() {
+        if (recordedRunCard == null || existingWorkout == null
+                || existingWorkout.getDurationSeconds() == null) {
+            if (recordedRunCard != null) {
+                recordedRunCard.setVisibility(View.GONE);
+            }
+            return;
+        }
+
+        recordedDurationValue.setText(FormatUtils.clockText(
+                existingWorkout.getDurationSeconds() * 1000L));
+        Integer steps = existingWorkout.getStepCount();
+        recordedStepsValue.setText(steps == null
+                ? getString(R.string.workout_recorded_steps_unavailable)
+                : FormatUtils.intText(steps));
+        recordedRunCard.setVisibility(View.VISIBLE);
     }
 
     /** Shows the "Added / Updated" caption for an existing workout (details view). */
@@ -193,6 +223,15 @@ public class WorkoutEditActivity extends AppCompatActivity {
                 selectedType.toString(), selectedDate, parsedDuration.value, notes);
 
         boolean isUpdate = existingWorkout != null;
+        if (isUpdate && existingWorkout.getDurationSeconds() != null) {
+            // Keep the exact recorded values while the whole-minute field is
+            // unchanged. A real minute edit becomes the new exact duration.
+            workout.setDurationSeconds(parsedDuration.value == existingWorkout.getDurationMinutes()
+                    ? existingWorkout.getDurationSeconds()
+                    : parsedDuration.value * 60);
+            workout.setStepCount(existingWorkout.getStepCount());
+        }
+
         OperationResult result;
         if (isUpdate) {
             workout.setId(existingWorkout.getId());
