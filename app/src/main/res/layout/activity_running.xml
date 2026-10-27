@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Full-screen Running mode. There is deliberately no bottom navigation: a run
+    is a focused task. The service owns the clock and durable session; this layout
+    only renders Ready, Running, Paused, Recovery, Finishing, Summary and Error.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/canvas_soft">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/spacing_xl"
+            android:paddingEnd="@dimen/screen_margin"
+            android:paddingBottom="@dimen/spacing_2xl">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnCloseRunning"
+                    android:layout_width="@dimen/touch_min"
+                    android:layout_height="@dimen/touch_min"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/running_close"
+                    android:padding="@dimen/spacing_md"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_chevron_left"
+                    app:tint="@color/ink" />
+
+                <TextView
+                    android:id="@+id/runningTitle"
+                    style="@style/Text.Wise.ScreenTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_xs"
+                    android:layout_weight="1"
+                    android:accessibilityHeading="true"
+                    android:text="@string/title_run" />
+
+                <ImageView
+                    android:layout_width="@dimen/touch_min"
+                    android:layout_height="@dimen/touch_min"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no"
+                    android:padding="@dimen/spacing_md"
+                    android:src="@drawable/ic_run"
+                    app:tint="@color/ink" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/runningSubtitle"
+                style="@style/Text.Wise.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="@string/running_subtitle" />
+
+            <TextView
+                android:id="@+id/runningStateLabel"
+                style="@style/Text.Wise.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card_green"
+                android:paddingStart="@dimen/spacing_md"
+                android:paddingTop="@dimen/spacing_xs"
+                android:paddingEnd="@dimen/spacing_md"
+                android:paddingBottom="@dimen/spacing_xs"
+                android:text="@string/running_state_ready" />
+
+            <!-- Timer -->
+            <LinearLayout
+                android:id="@+id/runningTimerCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card_dark"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <TextView
+                    style="@style/Text.Wise.Caption.OnDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/running_timer_label" />
+
+                <TextView
+                    android:id="@+id/runningTimerValue"
+                    style="@style/Text.Wise.Hero.OnDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:autoSizeMaxTextSize="56sp"
+                    android:autoSizeMinTextSize="30sp"
+                    android:autoSizeStepGranularity="2sp"
+                    android:autoSizeTextType="uniform"
+                    android:fontFeatureSettings="tnum"
+                    android:maxLines="1"
+                    android:text="00:00" />
+
+                <TextView
+                    android:id="@+id/runningTimerHelper"
+                    style="@style/Text.Wise.Caption.OnDark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/running_back_note"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Live metrics: no distance, pace or calorie field exists. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_wise_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/running_steps_label" />
+
+                    <TextView
+                        android:id="@+id/runningStepValue"
+                        style="@style/Text.Wise.Hero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:autoSizeMaxTextSize="40sp"
+                        android:autoSizeMinTextSize="24sp"
+                        android:autoSizeStepGranularity="2sp"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:text="@string/running_dash" />
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="@string/running_steps_helper" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="@dimen/spacing_md"
+                    android:layout_height="1dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_wise_card"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/running_cadence_label" />
+
+                    <TextView
+                        android:id="@+id/runningCadenceValue"
+                        style="@style/Text.Wise.Hero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:autoSizeMaxTextSize="40sp"
+                        android:autoSizeMinTextSize="24sp"
+                        android:autoSizeStepGranularity="2sp"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:text="@string/running_dash" />
+
+                    <TextView
+                        style="@style/Text.Wise.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="@string/running_cadence_helper" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Primary actions stay above the explanatory card so a run can
+                 be started, paused or stopped without scrolling on short screens. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStartRun"
+                style="@style/Widget.Wise.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:enabled="false"
+                android:text="@string/running_start" />
+
+            <LinearLayout
+                android:id="@+id/runningActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xl"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPauseResumeRun"
+                    style="@style/Widget.Wise.Button.Primary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="@string/running_pause" />
+
+                <Space
+                    android:layout_width="@dimen/spacing_md"
+                    android:layout_height="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStopRun"
+                    style="@style/Widget.Wise.Button.Destructive"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="@string/running_stop" />
+            </LinearLayout>
+
+            <!-- Interrupted recovery takes priority over permission copy. -->
+            <LinearLayout
+                android:id="@+id/runningRecoveryCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card_sage"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/running_recovery_title" />
+
+                <TextView
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/running_recovery_body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecoveryResume"
+                    style="@style/Widget.Wise.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:enabled="false"
+                    android:text="@string/running_resume" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecoveryFinish"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:enabled="false"
+                    android:text="@string/running_recovery_finish" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecoveryDiscard"
+                    style="@style/Widget.Wise.Button.Destructive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:enabled="false"
+                    android:text="@string/running_recovery_discard" />
+            </LinearLayout>
+
+            <!-- Permission / effective-background status -->
+            <LinearLayout
+                android:id="@+id/runningStatusCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg">
+
+                <TextView
+                    android:id="@+id/runningStatusTitle"
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/running_status_ready_title" />
+
+                <TextView
+                    android:id="@+id/runningStatusBody"
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/running_status_ready_body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGrantActivity"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/running_grant_activity"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenNotificationSettings"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/running_open_notification_settings"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Finishing -->
+            <LinearLayout
+                android:id="@+id/runningFinishingCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_lg"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/runningFinishingProgress"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@string/running_saving"
+                    android:indeterminate="true" />
+
+                <TextView
+                    style="@style/Text.Wise.BodyStrong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_md"
+                    android:layout_weight="1"
+                    android:text="@string/running_saving" />
+            </LinearLayout>
+
+            <!-- Summary -->
+            <LinearLayout
+                android:id="@+id/runningSummaryCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card_green"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/running_saved_title" />
+
+                <TextView
+                    android:id="@+id/runningSummaryDetails"
+                    style="@style/Text.Wise.BodyStrong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm" />
+
+                <TextView
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/running_saved_body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSummaryDone"
+                    style="@style/Widget.Wise.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:text="@string/running_done" />
+            </LinearLayout>
+
+            <!-- Error -->
+            <LinearLayout
+                android:id="@+id/runningErrorCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="@drawable/bg_wise_card"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/runningErrorTitle"
+                    style="@style/Text.Wise.SectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/running_error_title"
+                    android:textColor="@color/negative_deep" />
+
+                <TextView
+                    android:id="@+id/runningErrorBody"
+                    style="@style/Text.Wise.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/running_error_body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetryRunning"
+                    style="@style/Widget.Wise.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:text="@string/running_retry" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/runningBackNote"
+                style="@style/Text.Wise.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:text="@string/running_back_note"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

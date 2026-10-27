@@ -276,4 +276,87 @@
 
     <string name="steps_dialog_helper_manual">This becomes the total for this day. Automatic counting is off, so the sensor is not used.</string>
     <string name="steps_dialog_helper_auto">This becomes the total for this day. Future automatic steps continue from here.</string>
+
+    <!-- Running screen -->
+    <string name="title_run">Run</string>
+    <string name="running_close">Close run screen</string>
+    <string name="running_subtitle">Timer and steps only. No GPS, distance or pace.</string>
+    <string name="running_dash">—</string>
+    <string name="running_timer_label">Elapsed time</string>
+    <string name="running_steps_label">Steps</string>
+    <string name="running_cadence_label">Cadence</string>
+    <string name="running_steps_helper">From the device step counter</string>
+    <string name="running_cadence_helper">Rolling 30-second estimate</string>
+    <string name="running_state_ready">Ready</string>
+    <string name="running_state_running">Running</string>
+    <string name="running_state_paused">Paused</string>
+    <string name="running_state_interrupted">Interrupted</string>
+    <string name="running_state_saved">Saved</string>
+    <string name="running_state_saving">Saving</string>
+    <string name="running_state_error">Unavailable</string>
+    <string name="running_start">Start run</string>
+    <string name="running_pause">Pause</string>
+    <string name="running_resume">Resume</string>
+    <string name="running_stop">Stop</string>
+    <string name="running_timer_accessibility">Elapsed time %1$s</string>
+    <string name="running_steps_accessibility">Steps %1$s</string>
+    <string name="running_steps_unavailable_accessibility">Steps unavailable</string>
+    <string name="running_cadence_accessibility">Cadence %1$d steps per minute</string>
+    <string name="running_cadence_unavailable_accessibility">Cadence unavailable</string>
+    <string name="running_back_note">Leaving this screen does not stop the run. Open Run again to return.</string>
+
+    <string name="running_status_ready_title">Timer and steps ready</string>
+    <string name="running_status_ready_body">Activity access and notifications are available. A run may show a persistent notification while it is active.</string>
+    <string name="running_status_timer_only_title">Timer-only run</string>
+    <string name="running_status_activity_body">Activity access is off. Steps, cadence and background timing are unavailable. The timer still works while this screen is open.</string>
+    <string name="running_status_no_sensor_body">This device does not report a step counter. Steps and cadence stay unavailable; the timer still works.</string>
+    <string name="running_status_notifications_title">Background timing may stop</string>
+    <string name="running_status_notifications_body">Notifications are off. Motionfit will not run a hidden tracker, so live updates may stop when you leave this screen or lock the device. The timer is saved when you return.</string>
+    <string name="running_status_background_on_title">Background timing is on</string>
+    <string name="running_status_background_on_body">A visible notification stays while this run is active. The timer and steps are saved on this device.</string>
+    <string name="running_status_background_off_title">Background timing is unavailable</string>
+    <string name="running_status_background_off_body">Android did not keep the tracking service running. The timer is saved, but live updates may stop when you leave this screen.</string>
+    <string name="running_grant_activity">Allow activity access</string>
+    <string name="running_open_notification_settings">Notification settings</string>
+
+    <string name="running_recovery_title">This run was interrupted</string>
+    <string name="running_recovery_body">Motionfit could not keep the timer running, for example after a restart. Downtime is not counted. Resume from the last recorded value, finish and save it, or discard it.</string>
+    <string name="running_recovery_finish">Finish and save</string>
+    <string name="running_recovery_discard">Discard</string>
+
+    <string name="running_stop_confirm_title">Stop and save this run?</string>
+    <string name="running_stop_confirm_message">Save %1$s and %2$s to Workouts? This run cannot be resumed.</string>
+    <string name="running_stop_steps_unknown">steps unavailable</string>
+    <string name="running_stop_steps">%1$s steps</string>
+    <string name="running_confirm_button">Stop and save</string>
+    <string name="running_keep_running">Keep running</string>
+
+    <string name="running_discard_title">Discard this run?</string>
+    <string name="running_discard_message">No workout will be saved. This cannot be undone.</string>
+    <string name="running_discard_confirm">Discard run</string>
+
+    <string name="running_saved_title">Saved to Workouts</string>
+    <string name="running_saved_body">Your run is saved on this device. The in-progress session has been removed, so stopping again cannot create a second record.</string>
+    <string name="running_saved_details">Duration %1$s | %2$s</string>
+    <string name="running_done">Done</string>
+    <string name="running_saving">Saving your run…</string>
+    <string name="running_save_failed_title">The run was not saved</string>
+    <string name="running_save_failed_body">The session is still safe on this device. Check the details and try again.</string>
+
+    <string name="running_error_title">Running is not available</string>
+    <string name="running_error_body">The tracking service could not be opened. Try again.</string>
+    <string name="running_retry">Try again</string>
+    <string name="running_action_failed">The run could not be updated. Try again.</string>
+    <string name="running_could_not_start">The run could not be started. Try again.</string>
+    <string name="running_could_not_save">The run could not be saved. The session is still safe; try again.</string>
+    <string name="running_could_not_discard">The run could not be discarded. Try again.</string>
+
+    <string name="running_announce_started">Run started. Timer running.</string>
+    <string name="running_announce_paused">Run paused.</string>
+    <string name="running_announce_resumed">Run resumed.</string>
+    <string name="running_announce_interrupted">Run interrupted. Recovery choices are available.</string>
+    <string name="running_announce_saved">Run saved to Workouts.</string>
+    <string name="running_announce_discarded">Run discarded. No workout was saved.</string>
+
+    <string name="action_stop_run">Stop run</string>
 </resources>

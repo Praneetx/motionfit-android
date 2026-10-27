@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import io.github.praneetx.motionfit.R;
 import io.github.praneetx.motionfit.activities.MainActivity;
+import io.github.praneetx.motionfit.activities.RunningActivity;
 import io.github.praneetx.motionfit.utils.FormatUtils;
 
 /**
@@ -178,16 +179,18 @@ public final class NotificationHelper {
     }
 
     /**
-     * Builds the persistent Running notification. State changes (pause/resume)
-     * are service actions; there is deliberately no Stop action here so a run
-     * can only be ended from the screen after confirmation.
+     * Builds the persistent Running notification. Pause/resume are service
+     * actions. Stop is not a silent finish: it opens the Running screen's
+     * confirmation, so a run cannot be saved by a single notification tap.
      */
     public static Notification buildRunningNotification(
             Context context, long durationMs, Integer stepCount, boolean paused) {
         ensureTrackingChannel(context);
 
-        Intent openApp = new Intent(context, MainActivity.class);
-        openApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent openApp = new Intent(context, RunningActivity.class);
+        openApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(
                 context,
                 10,
@@ -202,6 +205,17 @@ public final class NotificationHelper {
                 context,
                 paused ? 201 : 202,
                 toggleIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        Intent stopIntent = new Intent(context, RunningActivity.class);
+        stopIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        stopIntent.putExtra(RunningActivity.EXTRA_CONFIRM_STOP, true);
+        PendingIntent stopPendingIntent = PendingIntent.getActivity(
+                context,
+                203,
+                stopIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         String clock = FormatUtils.clockText(durationMs);
@@ -236,6 +250,10 @@ public final class NotificationHelper {
                                 ? R.string.action_resume_run
                                 : R.string.action_pause_run),
                         togglePendingIntent)
+                .addAction(
+                        R.drawable.ic_delete,
+                        context.getString(R.string.action_stop_run),
+                        stopPendingIntent)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setSilent(true)

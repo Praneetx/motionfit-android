@@ -51,6 +51,11 @@
             android:label="@string/title_steps" />
 
         <activity
+            android:name=".activities.RunningActivity"
+            android:exported="false"
+            android:label="@string/title_run" />
+
+        <activity
             android:name=".activities.WorkoutListActivity"
             android:exported="false"
             android:label="@string/title_workouts" />

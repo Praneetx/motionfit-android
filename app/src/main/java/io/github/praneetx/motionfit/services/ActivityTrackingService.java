@@ -27,6 +27,7 @@ import io.github.praneetx.motionfit.logic.RunningClockState;
 import io.github.praneetx.motionfit.logic.RunningCommand;
 import io.github.praneetx.motionfit.logic.RunningCommandError;
 import io.github.praneetx.motionfit.logic.RunningCommandValidation;
+import io.github.praneetx.motionfit.logic.RunningSessionClock;
 import io.github.praneetx.motionfit.logic.RunningSessionController;
 import io.github.praneetx.motionfit.logic.RunningSessionState;
 import io.github.praneetx.motionfit.logic.RunningSnapshot;
@@ -137,6 +138,8 @@ public class ActivityTrackingService extends Service {
     private boolean runningEpochLost;
     private boolean runPersistPending;
     private Long testClockMs;
+    private long lastFinishedDurationMs = -1L;
+    private Integer lastFinishedStepCount;
 
     /** Binder used by instrumentation tests and in-process callers. */
     public final class LocalBinder extends Binder {
@@ -271,6 +274,11 @@ public class ActivityTrackingService extends Service {
                 NotificationHelper.areTrackingNotificationsEnabled(this);
         boolean dailyEligible = autoEnabled && sensorPresent && activityGranted;
         boolean runActive = runningSession != null && !runningSession.isInterrupted();
+        // The approved timer-only fallback is explicitly app-visible when
+        // activity access is denied. Do not promote it to a background service
+        // just because it needs no sensor: the screen must not claim background
+        // timing that the product treats as unavailable.
+        boolean foregroundWanted = dailyEligible || (runActive && activityGranted);
 
         if (!dailyEligible && !runActive) {
             if (autoEnabled) {
@@ -280,7 +288,7 @@ public class ActivityTrackingService extends Service {
             return START_NOT_STICKY;
         }
 
-        if (allowForeground && notificationsAllowed) {
+        if (allowForeground && notificationsAllowed && foregroundWanted) {
             if (!foregroundStarted) {
                 if (startForegroundSafely()) {
                     foregroundStarted = true;
@@ -756,6 +764,8 @@ public class ActivityTrackingService extends Service {
 
         loadRunningSession();
         runningCadence.reset();
+        lastFinishedDurationMs = -1L;
+        lastFinishedStepCount = null;
         appVisible = appVisible || appIsVisible;
 
         if (!testMode) {
@@ -838,12 +848,21 @@ public class ActivityTrackingService extends Service {
             return OperationResult.error(runningErrorMessage(validation.getError()));
         }
 
-        OperationResult result = runningSessionRepository.finish(
-                nowElapsed(), runningStartRaw == null ? 0 : runningStepCount);
+        long now = nowElapsed();
+        RunningClockState savedClock = RunningSessionClock.finish(
+                toClockState(runningSession), now);
+        int savedSteps = runningStartRaw == null ? 0 : runningStepCount;
+        Integer savedStepSnapshot = runningStartRaw == null ? null : runningStepCount;
+        OperationResult result = runningSessionRepository.finish(now, savedSteps);
         if (!result.isSuccess()) {
             return result;
         }
 
+        // The repository commits the same clock snapshot. Keep the exact values
+        // for the summary so a dialog left open for a while cannot display a
+        // duration that differs from the saved workout.
+        lastFinishedDurationMs = savedClock.getDurationMs();
+        lastFinishedStepCount = savedStepSnapshot;
         clearRunningState();
         if (!testMode) {
             syncTracking(true);
@@ -852,6 +871,16 @@ public class ActivityTrackingService extends Service {
         sendStatusBroadcast(this);
         notifyRunningChanged();
         return OperationResult.ok();
+    }
+
+    /** Exact duration saved by the most recent successful finish, or -1. */
+    public long getLastFinishedDurationMs() {
+        return lastFinishedDurationMs;
+    }
+
+    /** Exact steps saved by the most recent finish; null means stored NULL. */
+    public Integer getLastFinishedStepCount() {
+        return lastFinishedStepCount;
     }
 
     /** Deletes the session without creating a workout. */

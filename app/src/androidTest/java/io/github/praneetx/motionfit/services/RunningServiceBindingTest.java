@@ -99,6 +99,9 @@ public class RunningServiceBindingTest {
         assertTrue(service.finishRun().isSuccess());
         assertNull(sessionRepository.getSession());
         assertEquals(RunningSnapshotStatus.READY, service.getRunningSnapshot().getStatus());
+        assertEquals("The summary must use the saved exact duration",
+                120000L, service.getLastFinishedDurationMs());
+        assertEquals(Integer.valueOf(50), service.getLastFinishedStepCount());
 
         List<Workout> workouts = workoutRepository.getForDate(DateUtils.todayIso());
         assertEquals("Finish must insert exactly one workout", 1, workouts.size());
@@ -158,16 +161,16 @@ public class RunningServiceBindingTest {
     }
 
     @Test
-    public void runningNotificationOffersExactlyOnePauseOrResumeAction() {
+    public void runningNotificationOffersToggleAndStopActions() {
         android.app.Notification active = NotificationHelper.buildRunningNotification(
                 context, 65000L, 123, false);
         android.app.Notification paused = NotificationHelper.buildRunningNotification(
                 context, 65000L, null, true);
 
-        assertEquals("Running notification must expose one toggle action",
-                1, active.actions.length);
-        assertEquals("Paused notification must expose one toggle action",
-                1, paused.actions.length);
+        assertEquals("Running notification must expose pause/resume and Stop",
+                2, active.actions.length);
+        assertEquals("Paused notification must expose resume and Stop",
+                2, paused.actions.length);
     }
 
     private void bindService() throws InterruptedException {
