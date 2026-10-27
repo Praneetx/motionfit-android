@@ -2,7 +2,8 @@
 
 Motionfit uses a light-first design system derived from Wise's visual language: a lime
 brand accent, a sage canvas, near-black ink surfaces, very heavy display type and
-generously rounded white cards.
+generously rounded white cards. V2 keeps that language and adds Running, a dedicated
+Steps detail screen and stronger layout resilience.
 
 ## Palette
 
@@ -17,12 +18,11 @@ Defined in `res/values/colors.xml`.
 | `ink` | `#0E0F0C` | hero cards, nav pill, headings |
 | `ink_deep` | `#163300` | ring track, dark chart baseline |
 | `body` | `#454745` | secondary text |
-| `mute` | `#868685` | captions, hints |
+| `mute` | `#5F615F` | captions, hints |
 | `canvas` | `#FFFFFF` | cards, inputs, circular icon buttons |
 | `canvas_soft` | `#E8EBE6` | screen canvas, status and navigation bars |
 | `positive` | `#2EAD4B` | success (never the lime brand colour) |
 | `negative` | `#D03238` | destructive actions and errors |
-| `negative_bg` | `#320707` | the EXPERIMENTAL badge background |
 | `accent_cyan` | `#38C8FF` | workout-minutes data only |
 | `accent_orange` | `#FFC091` | workout-count data only |
 
@@ -57,6 +57,7 @@ Weight 900 is used only for hero numbers and screen titles; everything else is 6
 * Inputs: 12dp radius with a 1dp ink border.
 * Badges and the nav highlight: fully round.
 * 4dp spacing grid; 24dp card padding, 16dp screen margin, at least 48dp touch targets.
+* Scrolling screens reserve enough bottom padding for the floating navigation.
 
 ## Floating pill navigation
 
@@ -64,63 +65,85 @@ A custom `FloatingNavView` (not `BottomNavigationView`).
 
 * Ink pill, 64dp tall, fully rounded, no shadow.
 * Floats 20dp from each side and 16dp above the bottom edge, plus the system
-  navigation inset via `WindowInsets`. The app is not edge-to-edge, so the inset
-  resolves to 0 and never double-pads.
-* Five destinations: Today, Steps, Workouts, Progress, Settings — 24dp icon plus a
-  12sp label, labels always visible; inactive items are white at 70%.
-* The active item sits in a lime pill with an ink icon and label. The highlight slides
-  between items.
+  navigation inset via `WindowInsets`.
+* Five destinations: **Today, Run, Workouts, Progress, Settings** — 24dp icon plus a
+  label, labels always visible; inactive items are white at 70%.
+* Labels autosize and ellipsize at narrow widths; the active item sits in a lime pill
+  with an ink icon and label. The highlight slides between items.
 * Every item has a content description, a target of at least 48dp and a selected state.
-* Scrolling screens reserve 104dp bottom padding so content is never hidden.
-* Pushed screens (New/Edit workout, Goals) simply do not include the nav.
-
-## Components
-
-| Component | Implementation |
-|---|---|
-| White card | `bg_wise_card.xml` on the sage canvas |
-| Dark hero card | `bg_wise_card_dark.xml` (Today and Progress) |
-| Sage / pale-green cards | `bg_wise_card_sage.xml`, `bg_wise_card_green.xml` |
-| Text input | `Widget.Wise.TextInputLayout` (white, 1dp ink, 12dp) |
-| Buttons | `Widget.Wise.Button.Primary` / `.Secondary` / `.Tertiary` / `.Destructive` |
-| Circular icon button | `bg_icon_circular.xml`, `bg_icon_circle_soft.xml` |
-| Badges | `bg_badge_positive.xml`, `bg_badge_negative.xml` |
-| Dialogs | `Theme.Motionfit.Dialog` (white, 24dp, no shadow) |
+* Pushed screens (Steps detail, New/Edit workout, Goals) do not include the nav.
+* At 360dp with 1.3× font scale the five labels remain visible and unclipped; Today is
+  crowded but content scrolls beneath the pill.
 
 ## Screens
 
-1. **Today** — date caption with chevrons, heavy title, circular "+"; ink hero card with
-   the lime steps ring (10dp rounded stroke from 12 o'clock, ink-deep track, heavy lime
-   total inside, "of N steps" beneath) and a positive "Goal met" badge; white card with
-   workout time (cyan bar, "25 / 30 min") and workout count; Recent card.
-2. **Progress** — heavy title, pill segmented control (active = ink/white), range label
-   with circular arrows; ink hero with the period step total, daily average and lime bar
-   chart (dashed goal line, today's bar full strength, zero days as small stubs); two
-   white cards with cyan (minutes) and orange (count) charts; best day and active days.
-3. **Settings** — grouped white cards for Goals, Reminders (lime switch + time) and Data
-   ("Clear all data" in negative red), plus a footer line "Everything stays on this
-   device." and a caption about notification permission.
-4. **New/Edit workout** — circular back, title, text-input fields (Type, Date, Duration,
-   Notes), pinned lime Save pill, red "Delete workout" when editing, and an
-   "Added/Updated" caption.
-5. **Goals** — one white card per goal with a large heavy value, circular minus/plus
+1. **Today** — date caption with chevrons, heavy title, circular “+”; ink hero card with
+   the lime steps ring, heavy lime total, percentage and “of N steps”; white card with
+   workout time (cyan bar) and workout count; Recent card; links into Steps detail.
+2. **Run** — focused full-screen Running mode. The order is timer card → Start/actions
+   → recovery card → live Steps/Cadence metrics → status card. The terminal summary or
+   error card is scrolled into view immediately. It shows “Timer and steps only. No GPS,
+   distance or pace.” A back/close action leaves the run alive; a persistent
+   notification owns it when the service is foreground.
+3. **Workouts** — heavy title, circular “+”, filter/segment controls, white rows with
+   type/date/duration. Running rows show exact `mm:ss` duration and step count (or
+   “steps unavailable”); manual rows keep whole-minute metadata. Empty state has one
+   Add action.
+4. **Progress** — heavy title, pill segmented control (Day/Week/Month), range label with
+   circular arrows; ink hero with period steps, average and lime bar chart; white cards
+   for minutes and workout count; best day/active days; a seven-day Step history card
+   (newest first, real empty state) with `View all` in its header.
+5. **Settings** — grouped white cards for Goals, Automatic step counting (status:
+   Off/Active/App-open only/Unavailable, permission actions, battery settings), Reminders,
+   Local data and a footer with “Everything stays on this device.” plus
+   `Version 2.0.0`.
+6. **Steps detail** — pushed screen with circular back, selected date, large total,
+   “Log steps” action, automatic-counting status card, and step history. It has no
+   floating nav; bottom padding keeps the log action clear of the history.
+7. **Onboarding** — one skippable first-run screen: welcome/privacy, goals, automatic
+   counting explanation and a permission note before any runtime request. Skip keeps
+   existing values and records only that onboarding was shown; Finish validates and
+   saves the shown goals and the opt-in choice.
+8. **New/Edit workout** — circular back, title, labelled fields (Type, Date, Duration,
+   Notes), pinned Save pill, red Delete when editing, and read-only exact Running
+   duration/steps when editing a recorded run.
+9. **Goals** — one white card per goal with a large heavy value, circular minus/plus
    steppers, a progress bar with today's real percentage, the caption that past days
-   keep their records, and a pinned "Save goals" pill.
-6. **Steps / Workouts** — heavy title, circular "+", white cards, 60dp rows.
+   keep their records, and a pinned Save goals pill.
+
+## Accessibility and resilience
+
+* 48dp minimum touch targets for navigation, steppers, back/close and small icon
+  actions; labels are associated with inputs.
+* Content descriptions cover steps, dates, Running timer/steps/cadence, chart summaries
+  and destructive actions. The steps ring is decorative to TalkBack; the text carries
+  the value.
+* Running announces state changes (started, paused, resumed, interrupted, saved) and
+  uses plurals for cadence. Steps/Cadence show an em dash plus “unavailable” when there
+  is no valid value.
+* The Steps detail screen uses start/end padding so it remains symmetric in RTL.
+* Forms use `adjustResize`; the workout editor and goals screen keep their back action
+  reachable.
+* Automated checks cover 360dp/1.3× layouts, contrast tokens, nav label autosizing,
+  chart accessibility summaries, and 48dp actions. Full TalkBack, reduced-motion, RTL
+  and physical-device audits are still **NOT RUN**.
 
 ## Motion
 
 * Press feedback: scale 0.97 for 90ms.
 * The steps ring fills once on load (about 800ms, decelerate) and the figure counts up.
 * The nav highlight slides (about 220ms); screens cross-fade (about 250ms).
+* Running's terminal summary/error card is scrolled into view immediately, with no
+  smooth-scroll animation.
 * **Reduce motion:** the system animator duration scale is checked; when it is 0 the
-  count-up, ring fill and slide are skipped and final values appear immediately.
+  count-up, ring fill and slide are skipped and final values appear immediately. The
+  Running saving spinner is also hidden at scale 0.
 
 ## Notes on scope
 
-* Workout details are shown by the New/Edit screen rather than a separate screen, so
-  there is no separate heavy-duration feature card.
+* Running deliberately has no distance, pace, route, GPS or calorie UI.
+* Workout details are shown by the New/Edit screen rather than a separate screen.
 * Goal steppers are view-only UI logic; the save path and validation are unchanged.
 * Inter at 900 is the display face; no proprietary font is redistributed.
-* The UI has not yet been visually verified on a device — see
+* Physical-device visual checks and a full TalkBack audit remain outstanding — see
   [testing.md](testing.md).

@@ -23,8 +23,8 @@ android {
         applicationId "io.github.praneetx.motionfit"
         minSdk 26              // Android 8.0 - gives us java.time and notification channels natively
         targetSdk 34           // kept at 34 so the simple XML UI is not forced into edge-to-edge mode
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 2
+        versionName "2.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

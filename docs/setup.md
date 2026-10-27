@@ -12,6 +12,7 @@ How to build and run Motionfit from a clean machine.
 | Android SDK platform | `android-37` (`compileSdk 37`) |
 | Android build-tools | 36.0.0 |
 | `minSdk` / `targetSdk` | 26 / 34 |
+| App version | `2.0.0` (versionCode 2) |
 
 ## JDK
 
@@ -63,9 +64,12 @@ On macOS/Linux, use `./gradlew assembleDebug`.
 ```powershell
 .\gradlew.bat testDebugUnitTest          # JVM unit tests
 .\gradlew.bat connectedDebugAndroidTest  # instrumented tests (needs a device)
+.\gradlew.bat lintDebug                  # Android lint
 ```
 
-Report: `app\build\reports\tests\testDebugUnitTest\index.html`.
+Reports: `app\build\reports\tests\testDebugUnitTest\index.html`,
+`app\build\reports\lint-results-debug.html`, and
+`app\build\outputs\androidTest-results\connected\debug\`.
 
 ## Release build (not configured yet)
 
