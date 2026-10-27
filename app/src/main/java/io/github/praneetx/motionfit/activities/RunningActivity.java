@@ -412,7 +412,8 @@ public class RunningActivity extends AppCompatActivity
         } else {
             cadenceValue.setText(FormatUtils.intText(cadence));
             cadenceValue.setContentDescription(
-                    getString(R.string.running_cadence_accessibility, cadence));
+                    getResources().getQuantityString(
+                            R.plurals.running_cadence_accessibility, cadence, cadence));
         }
     }
 

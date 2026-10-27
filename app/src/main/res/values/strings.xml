@@ -292,7 +292,8 @@
     <string name="title_run">Run</string>
     <string name="running_close">Close run screen</string>
     <string name="running_subtitle">Timer and steps only. No GPS, distance or pace.</string>
-    <string name="running_dash">—</string>
+    <string name="running_dash">-</string>
+    <string name="running_timer_zero">00:00</string>
     <string name="running_timer_label">Elapsed time</string>
     <string name="running_steps_label">Steps</string>
     <string name="running_cadence_label">Cadence</string>
@@ -312,7 +313,10 @@
     <string name="running_timer_accessibility">Elapsed time %1$s</string>
     <string name="running_steps_accessibility">Steps %1$s</string>
     <string name="running_steps_unavailable_accessibility">Steps unavailable</string>
-    <string name="running_cadence_accessibility">Cadence %1$d steps per minute</string>
+    <plurals name="running_cadence_accessibility">
+        <item quantity="one">Cadence %1$d step per minute</item>
+        <item quantity="other">Cadence %1$d steps per minute</item>
+    </plurals>
     <string name="running_cadence_unavailable_accessibility">Cadence unavailable</string>
     <string name="running_back_note">Leaving this screen does not stop the run. Open Run again to return.</string>
 

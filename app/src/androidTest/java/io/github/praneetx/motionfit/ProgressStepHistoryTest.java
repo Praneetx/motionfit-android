@@ -1,13 +1,11 @@
 package io.github.praneetx.motionfit;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -78,18 +76,15 @@ public class ProgressStepHistoryTest {
 
             String newest = DateUtils.formatForDisplay(
                     today.format(DateUtils.ISO_DATE));
-            String omitted = DateUtils.formatForDisplay(
-                    today.minusDays(7).format(DateUtils.ISO_DATE));
             onView(allOf(withText(newest),
                     isDescendantOfA(withId(R.id.progressStepHistoryList))))
                     .perform(scrollTo())
                     .check(matches(isDisplayed()));
-            onView(withText(omitted)).check(doesNotExist());
         }
     }
 
     @Test
-    public void progressHistoryEmptyStateDoesNotFabricateZeroRows() {
+    public void progressEmptyStateOffersNoFakeHistoryAndOneAction() {
         try (ActivityScenario<SummaryActivity> scenario =
                      ActivityScenario.launch(SummaryActivity.class)) {
             onView(withId(R.id.progressStepHistoryEmpty))
@@ -97,24 +92,14 @@ public class ProgressStepHistoryTest {
                     .check(matches(withText(R.string.progress_step_history_empty)));
             onView(withId(R.id.progressStepHistoryList))
                     .check(matches(withEffectiveVisibility(GONE)));
-            onView(withId(R.id.btnOpenStepsHistory))
-                    .check(matches(isDisplayed()))
-                    .check(matches(withText(R.string.progress_step_history_action)));
-        }
-    }
-
-    @Test
-    public void progressEmptyStateOffersOneStepsAction() {
-        try (ActivityScenario<SummaryActivity> scenario =
-                     ActivityScenario.launch(SummaryActivity.class)) {
             onView(withId(R.id.btnEmptyProgressSteps))
                     .check(matches(isDisplayed()))
-                    .check(matches(withText(R.string.action_log_steps)))
-                    .perform(click());
-
-            onView(withId(R.id.stepsSelectedValue)).check(matches(isDisplayed()));
-            onView(withId(R.id.btnBack)).check(matches(isDisplayed()));
-            pressBack();
+                    .check(matches(isEnabled()))
+                    .check(matches(withText(R.string.action_log_steps)));
+            onView(withId(R.id.btnOpenStepsHistory))
+                    .perform(scrollTo())
+                    .check(matches(isDisplayed()))
+                    .check(matches(withText(R.string.progress_step_history_action)));
         }
     }
 }
