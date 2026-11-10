@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Motionfit is an offline-first Android fitness tracker for steps, runs, workouts and goals. No account, no cloud and no internet permission.">
+  <meta name="theme-color" content="#e8ebe6">
+  <title>Motionfit — Move more. Share nothing.</title>
+  <link rel="icon" type="image/png" href="assets/motionfit-icon.png">
+  <link rel="preload" href="assets/inter-black.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="wordmark" href="#top" aria-label="Motionfit home">Motionfit</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu</button>
+      <nav class="site-nav" id="site-links" aria-label="Primary navigation">
+        <a href="#today">Today</a>
+        <a href="#running">Running</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#faq">FAQ</a>
+        <a class="button button-small" href="downloads/motionfit-2.0.0-debug.apk" download>Download APK</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <h1 id="hero-title" data-reveal>Move more.<br>Share nothing.</h1>
+          <p class="hero-intro" data-reveal style="--delay: 70ms">Motionfit is an offline-first Android tracker for steps, runs, workouts and goals. No account. No cloud. No internet permission.</p>
+          <div class="hero-actions" data-reveal style="--delay: 140ms">
+            <a class="button" href="downloads/motionfit-2.0.0-debug.apk" download>Download for Android</a>
+            <p>Version 2.0.0 · Android 8.0 or newer</p>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-reveal style="--delay: 100ms">
+          <div class="device hero-device" data-ui role="group" aria-label="Motionfit Today screen preview with sample data">
+            <div class="app-screen">
+              <div class="app-status"><span>9:41</span><span>Sample data</span></div>
+              <div class="app-heading">
+                <div>
+                  <p class="app-date">Friday, 30 October</p>
+                  <p class="app-title">Today</p>
+                </div>
+                <span class="app-add" aria-hidden="true">+</span>
+              </div>
+              <div class="app-hero-card">
+                <div class="steps-ring">
+                  <svg viewBox="0 0 160 160" aria-hidden="true">
+                    <circle class="ring-track" cx="80" cy="80" r="64"></circle>
+                    <circle class="ring-progress" cx="80" cy="80" r="64"></circle>
+                  </svg>
+                  <div class="ring-value">
+                    <strong>7,350</strong>
+                    <span>92%</span>
+                  </div>
+                </div>
+                <p>of 8,000 steps</p>
+              </div>
+              <div class="app-workout-card">
+                <div class="app-metric-row">
+                  <div><span>Workout time</span><strong>77 <small>min</small></strong></div>
+                  <div><span>Workouts</span><strong>2</strong></div>
+                </div>
+                <div class="app-progress" aria-hidden="true"><span style="width: 100%"></span></div>
+                <div class="app-progress-copy"><span>Goal: 60 min</span><span>128%</span></div>
+              </div>
+              <div class="app-recent">
+                <p class="app-section-title">Recent</p>
+                <div class="app-workout-row"><span>Running</span><strong>32:18</strong></div>
+                <div class="app-workout-row"><span>Strength</span><strong>45 min</strong></div>
+              </div>
+              <div class="app-nav" aria-hidden="true">
+                <span class="active">Today</span><span>Run</span><span>Workouts</span><span>Progress</span><span>Settings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="shell hero-foot" data-reveal>
+        <p>Steps, workouts and goals. Everything stays on your phone.</p>
+      </div>
+    </section>
+
+    <section class="section today-section" id="today" aria-labelledby="today-title">
+      <div class="shell split-grid">
+        <div class="section-copy">
+          <h2 id="today-title" data-reveal>Your day, without the data trail.</h2>
+          <p data-reveal style="--delay: 70ms">Open Motionfit and see what matters: today’s steps, workout time and recent activity. Correct a step total, add a workout or change a goal without signing in.</p>
+          <dl class="detail-list" data-reveal style="--delay: 140ms">
+            <div>
+              <dt>Automatic when available</dt>
+              <dd>Uses your device’s step-counter sensor. Manual entry remains available on every device.</dd>
+            </div>
+            <div>
+              <dt>Workouts you can edit</dt>
+              <dd>Add, filter, update and delete sessions, with exact duration and steps for recorded runs.</dd>
+            </div>
+            <div>
+              <dt>Goals that fit your routine</dt>
+              <dd>Set separate daily targets for steps and workout minutes, then see clear progress.</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="section-visual workout-visual" data-reveal style="--delay: 100ms">
+          <div class="device" data-ui role="group" aria-label="Motionfit Workouts screen preview with sample data">
+            <div class="app-screen">
+              <div class="app-status"><span>9:41</span><span>Sample data</span></div>
+              <div class="app-heading">
+                <p class="app-title">Workouts</p>
+                <span class="app-add" aria-hidden="true">+</span>
+              </div>
+              <div class="app-filter"><span>Type</span><strong>All workouts</strong><span aria-hidden="true">⌄</span></div>
+              <div class="workout-list">
+                <p class="workout-day">Today</p>
+                <article>
+                  <div><h3>Running</h3><p>30 October · 5,232 steps</p></div>
+                  <strong>32:18</strong>
+                </article>
+                <article>
+                  <div><h3>Strength</h3><p>30 October</p></div>
+                  <strong>45 min</strong>
+                </article>
+                <p class="workout-day">Earlier</p>
+                <article>
+                  <div><h3>Yoga</h3><p>29 October</p></div>
+                  <strong>30 min</strong>
+                </article>
+                <article>
+                  <div><h3>Cycling</h3><p>24 October</p></div>
+                  <strong>50 min</strong>
+                </article>
+              </div>
+              <div class="app-nav" aria-hidden="true">
+                <span>Today</span><span>Run</span><span class="active">Workouts</span><span>Progress</span><span>Settings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section run-section" id="running" aria-labelledby="running-title">
+      <div class="shell run-grid">
+        <div class="run-copy">
+          <h2 id="running-title" data-reveal>A run timer that stays in its lane.</h2>
+          <p data-reveal style="--delay: 70ms">Start, pause and finish with a reliable monotonic timer. If your phone has a step counter, Motionfit adds live steps and rolling cadence. If it doesn’t, the timer still works.</p>
+          <ul class="run-facts" data-reveal style="--delay: 140ms">
+            <li>Pause and resume without losing time.</li>
+            <li>Recover an interrupted run without inventing downtime.</li>
+            <li>Stop with confirmation and save one exact workout.</li>
+          </ul>
+          <p class="run-limit" data-reveal style="--delay: 180ms">No GPS, routes, distance, pace or calorie estimates.</p>
+        </div>
+
+        <div class="run-visual" data-reveal style="--delay: 100ms">
+          <div class="device" data-ui role="group" aria-label="Motionfit Running screen preview with sample data">
+            <div class="app-screen">
+              <div class="app-status"><span>9:41</span><span>Sample data</span></div>
+              <div class="app-heading">
+                <p class="app-title">Run</p>
+                <span class="running-state">Running</span>
+              </div>
+              <p class="run-subtitle">Timer and steps only. No GPS, distance or pace.</p>
+              <div class="run-timer-card">
+                <span>Elapsed time</span>
+                <strong>32:18</strong>
+                <p>You can leave this screen. Your run keeps going.</p>
+              </div>
+              <div class="run-actions" aria-hidden="true"><span>Pause</span><span>Stop</span></div>
+              <div class="run-metrics">
+                <div><span>Steps</span><strong>5,232</strong><p>During this run</p></div>
+                <div><span>Cadence</span><strong>162</strong><p>Steps per minute</p></div>
+              </div>
+              <div class="run-status-card"><strong>Tracking active</strong><p>Live steps come from this device’s step counter.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section progress-section" id="progress" aria-labelledby="progress-title">
+      <div class="shell progress-grid">
+        <div class="progress-visual" data-reveal>
+          <div class="device" data-ui role="group" aria-label="Motionfit Progress screen preview with sample data for 19 to 25 October">
+            <div class="app-screen">
+              <div class="app-status"><span>9:41</span><span>Sample data</span></div>
+              <div class="app-heading"><p class="app-title">Progress</p></div>
+              <div class="progress-tabs" aria-hidden="true"><span>Day</span><span class="active">Week</span><span>Month</span></div>
+              <p class="period-label">19–25 October</p>
+              <div class="summary-card">
+                <span>Steps this period</span>
+                <strong>53,872</strong>
+                <p>Daily average <b>7,696</b></p>
+                <div class="step-chart" aria-hidden="true">
+                  <div><span style="height: 62%"></span><small>M</small></div>
+                  <div><span style="height: 78%"></span><small>T</small></div>
+                  <div><span style="height: 53%"></span><small>W</small></div>
+                  <div><span style="height: 89%"></span><small>T</small></div>
+                  <div><span style="height: 71%"></span><small>F</small></div>
+                  <div><span style="height: 100%"></span><small>S</small></div>
+                  <div><span style="height: 66%"></span><small>S</small></div>
+                </div>
+              </div>
+              <div class="summary-metrics">
+                <div><span>Workout time</span><strong>157 <small>min</small></strong></div>
+                <div><span>Workouts</span><strong>4</strong></div>
+              </div>
+              <div class="best-day"><span>Best day</span><strong>Saturday · 10,420</strong></div>
+              <div class="app-nav" aria-hidden="true">
+                <span>Today</span><span>Run</span><span>Workouts</span><span class="active">Progress</span><span>Settings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section-copy">
+          <h2 id="progress-title" data-reveal>See your week add up.</h2>
+          <p data-reveal style="--delay: 70ms">Switch between day, week and month views. Compare steps, workout minutes and activity counts without turning your routine into a leaderboard.</p>
+          <dl class="detail-list" data-reveal style="--delay: 140ms">
+            <div>
+              <dt>A useful seven-day view</dt>
+              <dd>Totals, daily average, best day and active days sit alongside a readable step chart.</dd>
+            </div>
+            <div>
+              <dt>Your history stays yours</dt>
+              <dd>Review recent daily totals and workouts directly from the local record on your phone.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="section privacy-section" id="privacy" aria-labelledby="privacy-title">
+      <div class="shell">
+        <div class="privacy-heading">
+          <h2 id="privacy-title" data-reveal>No internet permission. Really.</h2>
+          <p data-reveal style="--delay: 70ms">Motionfit stores its record in a local SQLite database. There are no accounts, analytics, ads, cloud sync or network requests. The app cannot send your fitness data anywhere because it never asks for internet access.</p>
+        </div>
+
+        <div class="privacy-grid">
+          <div class="permission-builder" data-reveal>
+            <h3>Build your setup</h3>
+            <p>Choose optional features to see their Android permissions. Manual steps, workout logging and the run timer need none.</p>
+            <fieldset>
+              <legend class="sr-only">Optional Motionfit features</legend>
+              <label>
+                <input type="checkbox" name="feature" value="automatic">
+                <span><strong>Automatic step counting</strong><small>Sensor steps with background tracking</small></span>
+              </label>
+              <label>
+                <input type="checkbox" name="feature" value="run-metrics">
+                <span><strong>Live run steps and cadence</strong><small>Sensor metrics during a run</small></span>
+              </label>
+              <label>
+                <input type="checkbox" name="feature" value="reminder">
+                <span><strong>Daily reminder</strong><small>A notification scheduled on your phone</small></span>
+              </label>
+            </fieldset>
+            <div class="permission-result" aria-live="polite">
+              <h4>Your setup needs</h4>
+              <ul id="permission-list">
+                <li>No permissions for manual tracking and timer-only runs.</li>
+              </ul>
+            </div>
+            <div class="never-list" aria-label="Permissions Motionfit never requests">
+              <p><span>Internet</span><strong>Never</strong></p>
+              <p><span>Location</span><strong>Never</strong></p>
+            </div>
+          </div>
+
+          <div class="settings-visual" data-reveal style="--delay: 100ms">
+            <div class="device" data-ui role="group" aria-label="Motionfit Settings screen preview with sample data">
+              <div class="app-screen">
+                <div class="app-status"><span>9:41</span><span>Sample data</span></div>
+                <div class="app-heading"><p class="app-title">Settings</p></div>
+                <div class="settings-card">
+                  <p class="app-section-title">Goals</p>
+                  <div><span>Daily steps</span><strong>8,000</strong></div>
+                  <div><span>Workout minutes</span><strong>60</strong></div>
+                </div>
+                <div class="settings-card">
+                  <p class="app-section-title">Automatic step counting</p>
+                  <strong class="settings-status">Active</strong>
+                  <p>Counts from this device’s step-counter sensor.</p>
+                </div>
+                <div class="settings-card">
+                  <p class="app-section-title">Reminders</p>
+                  <div><span>Daily reminder</span><strong>18:30</strong></div>
+                </div>
+                <div class="settings-card local-data-card">
+                  <p class="app-section-title">Local data</p>
+                  <p>Everything stays on this device.</p>
+                </div>
+                <p class="settings-version">Motionfit 2.0.0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq" aria-labelledby="faq-title">
+      <div class="shell faq-grid">
+        <div>
+          <h2 id="faq-title" data-reveal>The honest fine print.</h2>
+          <p data-reveal style="--delay: 70ms">A small tracker should be clear about what it can and cannot do.</p>
+        </div>
+        <div class="faq-list" data-reveal style="--delay: 100ms">
+          <details>
+            <summary>What if my phone has no step-counter sensor?</summary>
+            <p>You can still enter steps manually, log workouts and use the run timer. Live run steps and cadence show an em dash instead of fabricated values.</p>
+          </details>
+          <details>
+            <summary>Does Running include distance, pace or calories?</summary>
+            <p>No. Running records a timer, sensor steps when available and rolling cadence. Motionfit does not request location access or calculate routes, distance, pace or calorie expenditure.</p>
+          </details>
+          <details>
+            <summary>Will automatic steps work in the background?</summary>
+            <p>When the sensor, activity access, notifications and foreground service are available, automatic tracking can run in the background. Battery policies or a force-stop may interrupt it. Motionfit reports “App-open only” or “Unavailable” rather than claiming tracking is active when it is not.</p>
+          </details>
+          <details>
+            <summary>Where is my data stored?</summary>
+            <p>In a local SQLite database on your phone. There is no account or cloud backup. Settings includes a confirmed action to clear all Motionfit data.</p>
+          </details>
+          <details>
+            <summary>Is Motionfit on Google Play?</summary>
+            <p>Not yet. The download here is the existing version 2.0.0 debug APK for Android 8.0 or newer. Android will ask you to allow installation from your browser or file manager before installing it.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" id="closing" aria-labelledby="closing-title">
+      <div class="shell closing-inner">
+        <h2 id="closing-title" data-reveal>Ready when you are.</h2>
+        <p data-reveal style="--delay: 70ms">Download Motionfit 2.0.0 for Android 8.0 or newer. Your first workout needs no sign-up.</p>
+        <a class="button" href="downloads/motionfit-2.0.0-debug.apk" download data-reveal style="--delay: 140ms">Download the debug APK</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <p class="footer-wordmark">Motionfit</p>
+      <div class="footer-bottom">
+        <p>Offline-first. On your phone.</p>
+        <p>Debug build · App previews use sample data.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
