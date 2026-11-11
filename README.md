@@ -34,8 +34,11 @@ server and no internet permission.
 
 ## Screenshots
 
-Screenshots are not checked into this repository yet. The layouts are native XML and can
-be viewed by installing the debug APK.
+Captured from the 2.0.0 debug build on Android.
+
+| Today | Run | Workouts | Progress | Settings |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="docs/screenshots/today.jpeg" width="160" alt="Today dashboard with step ring and workout summary"> | <img src="docs/screenshots/run.jpeg" width="160" alt="Run screen showing timer only and disabled activity access"> | <img src="docs/screenshots/workouts.jpeg" width="160" alt="Workouts list with no workouts yet"> | <img src="docs/screenshots/progress.jpeg" width="160" alt="Progress day view with no activity recorded"> | <img src="docs/screenshots/settings.jpeg" width="160" alt="Settings with automatic step counting and reminders turned off"> |
 
 ## Tech stack
 
